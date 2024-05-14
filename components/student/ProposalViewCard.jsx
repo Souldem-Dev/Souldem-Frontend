@@ -1,11 +1,10 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import VotesCard from './VotesCard';
-import InformationCard from './InformationCard';
-import Image from 'next/image';
+import VotesCard from '@/components/proposal/VotesCard';
+import InformationCard from '@/components/proposal/InformationCard';
 import { LaptopMinimal } from 'lucide-react';
 
-const ViewCard = () => {
+const ProposalViewCard = () => {
   return (
     <main className="flex flex-col md:flex-row gap-x-8  ">
       <div className=" md:w-4/6 h-full  text-black flex flex-col gap-y-4">
@@ -73,7 +72,42 @@ const ViewCard = () => {
             dolor numquam. consectetur adipisicing elit. Maxime dolorem
             explicabo nisi mollitia quae. Dignissimos, iusto? Eveniet officiis
             commodi, sint nostrum voluptatem voluptas? Nam quam quidem
-            dignissimos quasi, dolor numquam.
+            dignissimos quasi, dolor numquam.nissimos quasi, dolor numquam.
+            consectetur adipisicing elit. Maxime dolorem explicabo nisi mollitia
+            quae. Dignissimos, iusto? Eveniet officiis commodi, sint nostrum
+            voluptatem voluptas? Nam quam quidem dignissimos quasi, dolor
+            numquam. consectetur adipisicing elit. Maxime dolorem explicabo nisi
+            mollitia quae. Dignissimos, iusto? Eveniet officiis commodi, sint
+            nostrum voluptatem voluptas? Nam quam quidem dignissimos quasi,
+            dolor numquam. nissimos quasi, dolor numquam. consectetur
+            adipisicing elit. Maxime dolorem explicabo nisi mollitia quae.
+            Dignissimos, iusto? Eveniet officiis commodi, sint nostrum
+            voluptatem voluptas? Nam quam quidem dignissimos quasi, dolor
+            numquam. consectetur adipisicing elit. Maxime dolorem explicabo nisi
+            mollitia quae. Dignissimos, iusto? Eveniet officiis commodi, sint
+            nostrum voluptatem voluptas? Nam quam quidem dignissimos quasi,
+            dolor numquam. nissimos quasi, dolor numquam. consectetur
+            adipisicing elit. Maxime dolorem explicabo nisi mollitia quae.
+            Dignissimos, iusto? Eveniet officiis commodi, sint nostrum
+            voluptatem voluptas? Nam quam quidem dignissimos quasi, dolor
+            numquam. consectetur adipisicing elit. Maxime dolorem explicabo nisi
+            mollitia quae. Dignissimos, iusto? Eveniet officiis commodi, sint
+            nostrum voluptatem voluptas? Nam quam quidem dignissimos quasi,
+            dolor numquam. nissimos quasi, dolor numquam. consectetur
+            adipisicing elit. Maxime dolorem explicabo nisi mollitia quae.
+            Dignissimos, iusto? Eveniet officiis commodi, sint nostrum
+            voluptatem voluptas? Nam quam quidem dignissimos quasi, dolor
+            numquam. consectetur adipisicing elit. Maxime dolorem explicabo nisi
+            mollitia quae. Dignissimos, iusto? Eveniet officiis commodi, sint
+            nostrum voluptatem voluptas? Nam quam quidem dignissimos quasi,
+            dolor numquam. nissimos quasi, dolor numquam. consectetur
+            adipisicing elit. Maxime dolorem explicabo nisi mollitia quae.
+            Dignissimos, iusto? Eveniet officiis commodi, sint nostrum
+            voluptatem voluptas? Nam quam quidem dignissimos quasi, dolor
+            numquam. consectetur adipisicing elit. Maxime dolorem explicabo nisi
+            mollitia quae. Dignissimos, iusto? Eveniet officiis commodi, sint
+            nostrum voluptatem voluptas? Nam quam quidem dignissimos quasi,
+            dolor numquam.
           </p>
         </div>
       </div>
@@ -89,9 +123,13 @@ const ViewCard = () => {
           <VotesCard />
         </div>
 
-        <div>
-          <button className="btn bg-gradient-to-r from-blue to-D_blue rounded-full p-2 px-4 text-white flex gap-2">
-            End Proposal
+        <div className="flex justify-between items-center">
+          <button className="btn bg-gradient-to-r w-1/3 from-blue to-D_blue rounded-full p-2 px-4 text-white flex gap-2">
+            Upvote
+          </button>
+          <p>30</p>
+          <button className="btn bg-gradient-to-r from-blue to-D_blue rounded-full p-2 px-4 text-white flex gap-2 w-1/3">
+            Upvote
           </button>
         </div>
       </div>
@@ -99,4 +137,4 @@ const ViewCard = () => {
   );
 };
 
-export default ViewCard;
+export default ProposalViewCard;

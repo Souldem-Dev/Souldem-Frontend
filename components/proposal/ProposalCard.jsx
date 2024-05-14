@@ -9,7 +9,7 @@ const ProposalCard = ({ user, status, editedTime, content }) => {
   return (
     <main className="flex p-4 static z-0   ">
       {/* Proposal list */}
-      <div className="flex gap-x-4 p-6 h-40  bg-white rounded-xl ">
+      <div className="flex gap-x-4  h-40  bg-white rounded-xl ">
         <div className="flex flex-col items-center">
           <button onClick={() => setCount(count + 1)}>
             <svg
@@ -42,14 +42,14 @@ const ProposalCard = ({ user, status, editedTime, content }) => {
           </button>
         </div>
         <div className="flex flex-col gap-y-2">
-          <div className="flex justify-between gap-y-4">
-            <div className="flex items-center gap-x-2">
+          <div className="flex flex-col md:flex-row  justify-between gap-y-4 ">
+            <div className="flex items-center gap-x-4">
               <Avatar>
                 <AvatarImage src={user.avatarSrc} alt={user.username} />
               </Avatar>
               <address>{user.address}</address>
               <status
-                className={`rounded-full px-2 ${
+                className={`rounded-full px-4 ${
                   status === 'Proposal Pending'
                     ? 'bg-blue text-white'
                     : status === 'Proposal Accepted'
@@ -60,7 +60,9 @@ const ProposalCard = ({ user, status, editedTime, content }) => {
                 {status}
               </status>
             </div>
-            <p>Edited {editedTime}</p>
+            <div>
+              <p className="font-serif">Edited {editedTime}</p>
+            </div>
           </div>
           <div>
             <p>{content}</p>

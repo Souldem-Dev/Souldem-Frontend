@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import close from '@/app/assets/Governance/close.svg';
+import { CircleX } from 'lucide-react';
 
 const GovForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const GovForm = ({ onClose }) => {
   return (
     <main>
       <form
-        className="flex flex-col gap-y-4 w-2/6 m-auto  h-2/4 p-8 bg-white  drop-shadow-xl text-L_black rounded-2xl fixed inset-0  backdrop-blur-xl  "
+        className="flex absolute flex-col gap-y-4 w-4/6 sm:w-5/6 md:w-2/6 m-auto  h-2/4 p-8 bg-white  drop-shadow-xl text-L_black rounded-2xl  inset-0  backdrop-blur-xl  "
         onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center my-4">
@@ -37,7 +38,7 @@ const GovForm = ({ onClose }) => {
             className="p-2 bg-white text-gray-800 absolute  top-6 right-6 rounded-lg mt-4"
             onClick={onClose}
           >
-            <Image src={close} alt="close" />
+            <CircleX />
           </button>
         </div>
 

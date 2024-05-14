@@ -54,7 +54,9 @@ const page = () => {
       {/* Add the search and filter dropdown here */}
 
       <Banner />
-      <FunctionCard />
+      <div className="w-full">
+        <FunctionCard />
+      </div>
     </div>
   );
 };

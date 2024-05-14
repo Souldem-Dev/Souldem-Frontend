@@ -20,7 +20,7 @@ const page = () => {
       {/* Add the search and filter dropdown here */}
       <SearchFilter />
 
-      <Image src={EmptyCert} alt="EmptyCert" className="mx-auto m-20" />
+      <Image src={EmptyCert} alt="EmptyCert" className="m-auto " />
 
       {/* card mapping */}
     </div>

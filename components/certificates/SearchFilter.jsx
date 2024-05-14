@@ -3,29 +3,18 @@ import Image from 'next/image';
 import { useState } from 'react';
 import search from '@/app/assets/searchFilter/search.svg';
 import filter from '@/app/assets/searchFilter/filter.svg';
-import { set } from 'date-fns';
-import GovForm from '@/components/governance/GovForm';
+import Link from 'next/link';
 
 const SearchFilter = () => {
-  const [card, setCard] = useState(false);
-
-  const openCard = () => {
-    setCard(true);
-  };
-
-  const closeCard = () => {
-    setCard(false);
-  };
-
   return (
-    <div className="my-4 flex justify-between items-center w-full gap-x-2">
-      <div className="flex items-center gap-x-2 ">
-        <div className="flex input input-bordered w-96 rounded-3xl gap-x-2">
+    <div className="my-4 flex flex-col md:flex-row  justify-between items-center w-full gap-x-2">
+      <div className="flex w-full items-center gap-x-2 ">
+        <div className="flex input input-bordered w-full rounded-3xl gap-x-2">
           <Image src={search} alt="search" />
 
           <input type="text" placeholder="Search..." />
         </div>
-        <div className="dropdown dropdown-bottom">
+        <div className="dropdown dropdown-bottom w-full">
           <div tabIndex={0} role="button" className="btn m-1">
             <Image src={filter} alt="search" />
             filter
@@ -43,12 +32,11 @@ const SearchFilter = () => {
           </ul>
         </div>
       </div>
-      <div onClick={openCard}>
-        <button className="bg-blue text-white p-2 px-4 rounded-l ">
+      <Link href="/certificates/certificateCreate">
+        <button className="bg-blue text-white p-2 px-4 rounded-l w-96 md:w-60 ">
           &#43; Generate Certificate
         </button>
-        {card && <GovForm onClose={closeCard} />}
-      </div>
+      </Link>
     </div>
   );
 };

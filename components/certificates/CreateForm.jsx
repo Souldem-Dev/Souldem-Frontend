@@ -28,26 +28,26 @@ const CreateForm = () => {
     }
   };
   return (
-    <div className="w-11/12 bg-white drop-shadow-md h-full p-20 flex flex-col gap-y-8 rounded-xl ">
-      <div className="flex ">
-        <div className="w-1/2">
+    <div className=" w-11/12 bg-white drop-shadow-md h-full py-8 px-4 md:p-20  flex flex-col gap-y-8 rounded-xl ">
+      <div className="flex flex-col md:flex-row w-full  gap-y-2 ">
+        <div className="md:w-1/2 ">
           <label className="font-bold text-xl">Authorized Name</label>
           <p className="text-sm text-para">
             Authorized name will be printed under signature.
           </p>
         </div>
-        <div className="w-1/2">
+        <div className="md:w-1/2">
           <input
             type="text"
             id="title"
             name="title"
             placeholder="Enter Authorized Name"
-            className=" rounded-xl h-12 px-2 w-full bg-gray"
+            className=" rounded-xl h-12 px-2 min-w-full bg-gray"
           />
         </div>
       </div>
-      <div className="flex ">
-        <div className="w-1/2">
+      <div className="flex  flex-col md:flex-row w-full  gap-y-2">
+        <div className="md:w-1/2">
           <label className="font-bold text-xl">
             Authorized University Name
           </label>
@@ -55,19 +55,19 @@ const CreateForm = () => {
             Authorized university name will be printed under authorized name.
           </p>
         </div>
-        <div className="w-1/2">
+        <div className="md:w-1/2">
           <input
             type="text"
             id="title"
             name="title"
             placeholder="Enter University Name"
-            className=" rounded-xl h-12 px-2 w-full bg-gray"
+            className=" rounded-xl h-12 px-2 min-w-full bg-gray"
           />
         </div>
       </div>
       <div>
         <label className="font-bold text-xl">Upload Signature</label>
-        <div className="border border-gray w-11/12 h-72 flex p-8 items-center justify-around rounded-lg">
+        <div className="border  border-gray w-11/12 h-full flex flex-col md:flex-row   gap-y-2 p-8 items-center justify-around rounded-lg">
           <div className="bg-gray w-80 h-60 p-4">
             {signaturePreview && (
               <div>
@@ -93,24 +93,24 @@ const CreateForm = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center">
-        <div className="w-1/2">
+      <div className="flex md:items-center flex-col md:flex-row w-full  gap-y-2">
+        <div className="md:w-1/2">
           <label className="font-bold text-xl">
             Color Theme of Certificate{' '}
           </label>
         </div>
-        <div className="w-1/2">
+        <div className="md:w-1/2">
           <input
             type="text"
             id="title"
             name="title"
             placeholder="Enter Authorized Name"
-            className=" rounded-xl h-12 px-2 w-full bg-gray"
+            className=" rounded-xl h-12 px-2 min-w-full bg-gray"
           />
         </div>
       </div>
-      <div className="flex  items-center">
-        <div className="w-1/2">
+      <div className="flex  md:items-center flex-col md:flex-row w-full  gap-y-2">
+        <div className="md:w-1/2">
           <label className="font-bold text-xl">
             Authorized University Address
           </label>
@@ -119,24 +119,24 @@ const CreateForm = () => {
             university name.{' '}
           </p>
         </div>
-        <div className="w-1/2">
+        <div className="md:w-1/2">
           <input
             type="text"
             id="title"
             name="title"
             placeholder="Enter University Address"
-            className=" rounded-xl h-28 px-2 w-full bg-gray"
+            className=" rounded-xl h-28 px-2 min-w-full bg-gray"
           />
         </div>
       </div>
-      <div className="flex  items-center justify-between">
-        <div className="w-1/2">
+      <div className="flex  md:items-center md:justify-between flex-col md:flex-row w-full  gap-y-2">
+        <div className="md:w-1/2">
           <label className="font-bold text-xl">Choose Type </label>
           <p className="text-sm text-para ">
             Choose which type of Document to Generate
           </p>
         </div>
-        <div className="w-1/2 flex gap-x-2 ">
+        <div className="md:w-1/2 flex gap-x-2 ">
           <button className="btn bg-gradient-to-r from-blue to-D_blue rounded-xl p-2 px-8 text-white flex gap-2">
             <input type="radio" name="type" value="certificate" />
             Certificate
@@ -149,7 +149,7 @@ const CreateForm = () => {
       </div>
       <div>
         <label className="font-bold text-xl">Upload logo</label>
-        <div className="border border-gray w-11/12 h-72 flex p-8 items-center justify-around rounded-lg">
+        <div className="border border-gray w-11/12 h-full flex p-8 flex-col md:flex-row   gap-y-2 items-center justify-around rounded-lg">
           <div className="bg-gray w-80 h-60 p-4">
             {logoPreview && (
               <div>

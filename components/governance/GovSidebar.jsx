@@ -1,30 +1,29 @@
 'use client';
 import Image from 'next/image';
-import logo from '@/app/assets/logo.svg';
-import squares from '@/app/assets/sidebar/squares.svg';
-import certificate from '@/app/assets/sidebar/certificates.svg';
-import Db from '@/app/assets/sidebar/Db.svg';
-import setting from '@/app/assets/sidebar/setting.svg';
-import logout from '@/app/assets/sidebar/logout.svg';
-import token from '@/app/assets/sidebar/token.svg';
 import { useState } from 'react';
-import closeArrow from '@/app/assets/sidebar/closeArrow.svg';
 import Link from 'next/link';
 import books from '@/app/assets/sidebar/books.svg';
+import { Home } from 'lucide-react';
+import { HandCoins } from 'lucide-react';
+import { Award } from 'lucide-react';
+import { Folder } from 'lucide-react';
+import { useMediaQuery } from 'react-responsive';
 
 const GovSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const isTabletOrMobile = useMediaQuery({ minWidth: 720 });
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
   return (
     <div>
       {/* Full Side Bar */}
       <main
-        className={`    w-60 h-full bg-white drop-shadow-md py-4 ${
+        className={`  md:static  w-60 h-full bg-white drop-shadow-md py-4 fixed ${
           isOpen ? '' : 'hidden'
-        }`}
+        }${isTabletOrMobile ? '' : 'hidden'}`}
       >
         <div className="flex   justify-center items-center py-16  ">
           <div className=" flex flex-col gap-y-4 justify-start items-start">
@@ -33,28 +32,30 @@ const GovSidebar = () => {
                 href="/governance"
                 className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
               >
-                <Image src={squares} alt="sqaure" />
+                <Home className="hover:text-white" />
+
                 <span>Governance</span>
               </Link>
               <Link
                 href="/"
                 className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
               >
-                <Image src={token} alt="sqaure" />
+                <HandCoins className="hover:text-white" />
                 <span>Buy tokens</span>{' '}
               </Link>
               <Link
                 href="/certificates"
                 className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
               >
-                <Image src={certificate} alt="sqaure" />
+                <Award className="hover:text-white" />
+
                 <span> Certificates</span>
               </Link>
               <Link
                 href="/marksDatabase"
                 className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
               >
-                <Image src={Db} alt="sqaure" />
+                <Folder className="hover:text-white" />
                 <span>Marks database </span>{' '}
               </Link>
             </ul>
@@ -88,34 +89,31 @@ const GovSidebar = () => {
       {/* Small Side Bar */}
       <main
         className={`   w-full h-full   bg-white drop-shadow-md py-4  ${
-          isOpen ? 'hidden' : ''
-        } `}
+          isOpen ? '' : ''
+        } ${isTabletOrMobile ? 'hidden' : ''}`}
       >
         <div className="flex  justify-center items-center py-16  ">
           <div className=" flex flex-col gap-y-4 justify-start items-start">
             <ul className=" flex flex-col  ">
-              <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer  p-4 rounded-r-3xl flex gap-x-2">
-                <Image src={squares} alt="sqaure" />
+              <li className="hover:bg-blue  hover:text-white active:bg-blue cursor-pointer  p-4 rounded-r-3xl flex gap-x-2">
+                <Home className="hover:text-white" />
               </li>
               <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex gap-x-2">
-                <Image src={token} alt="sqaure" />
+                <HandCoins className="hover:text-white" />
               </li>
               <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex gap-x-2">
-                <Image src={certificate} alt="sqaure" />
+                <Award className="hover:text-white" />
               </li>
-              <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer  p-4 rounded-r-3xl flex gap-x-2">
-                <Image src={Db} alt="sqaure" />
+              <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex gap-x-2">
+                <Folder className="hover:text-white" />
               </li>
             </ul>
           </div>
         </div>
 
-        <div>
-          <Image />
-        </div>
         <button
           onClick={toggleSidebar}
-          className="absolute top-4 left-8 bg-blue text-white rounded-full p-1"
+          className="absolute top-4 left-8 bg-blue bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full p-1"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 const ProposalFilter = () => {
   return (
-    <div className="w-60">
+    <div className="w-full">
       <div className="flex input input-bordered w-60 h-8 rounded-3xl gap-x-2 my-4">
         <Image src={search} alt="search" />
 
@@ -21,7 +21,7 @@ const ProposalFilter = () => {
           <Checkbox className="text-white" />
         </div>{' '}
         <div className="flex justify-between items-center">
-          <p>Proposal Accepted</p>
+          <p className="text-lg">Proposal Accepted</p>
           <Checkbox className="text-white" />
         </div>
       </div>

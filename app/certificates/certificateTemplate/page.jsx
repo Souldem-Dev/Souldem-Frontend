@@ -5,6 +5,7 @@ import certificate from '@/app/assets/certificates/certificate.svg';
 import EmptyCert from '@/app/assets/certificates/EmptyCert.svg';
 import SearchFilter from '@/components/certificates/SearchFilter';
 import GovForm from '@/components/governance/GovForm';
+import DriveCard from '@/components/certificates/DriveCard';
 
 const page = () => {
   return (
@@ -21,6 +22,7 @@ const page = () => {
       <SearchFilter />
 
       {/* card mapping */}
+      <DriveCard />
     </div>
   );
 };

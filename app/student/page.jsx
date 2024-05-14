@@ -4,6 +4,7 @@ import dashboard from '@/app/assets/Governance/dashboard.svg';
 
 import Card from '@/components/governance/Card';
 import CertificateCard from '@/components/student/CertificateCard';
+import Link from 'next/link';
 
 const data = [
   {
@@ -71,14 +72,14 @@ const dummyCertificates = [
     university: 'Tech Institute',
     specialization: 'Computer Scientist',
   },
-  {
-    id: 4,
-    logo: '/app/assets/logo.svg',
-    degree: 'Degree Certificate',
-    number: '345678901',
-    university: 'Tech Institute',
-    specialization: 'Computer Scientist',
-  },
+  // {
+  //   id: 4,
+  //   logo: '/app/assets/logo.svg',
+  //   degree: 'Degree Certificate',
+  //   number: '345678901',
+  //   university: 'Tech Institute',
+  //   specialization: 'Computer Scientist',
+  // },
 ];
 const page = () => {
   return (
@@ -91,11 +92,18 @@ const page = () => {
 
       {/* Add the search and filter dropdown here */}
       <div className="flex flex-col">
-        <h1 className="font-light text-blue  text-xl">Issued Certificates</h1>
+        <div className="flex justify-between mr-20">
+          <h1 className="font-light text-blue  text-xl">Issued Certificates</h1>
+
+          <Link href="student/certificates">
+            <p className='className="font-light text-blue  '>View All</p>
+          </Link>
+        </div>
+
         <CertificateCard certificates={dummyCertificates} />
       </div>
       {/* card mapping */}
-      <div className="flex ">
+      <div className="flex flex-col">
         <h1 className="font-light text-blue  text-xl">Dashboard</h1>
 
         <Card data={data} />

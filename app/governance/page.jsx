@@ -91,16 +91,10 @@ const page = () => {
         <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
       </div>
 
-      {/* <div className="bg-[#FF9D9D] p-2 px-4 rounded-xl w-fit">
-        <p className="text-red-600">
-          &#9888; Add Nominee account integration to Souldem for enhanced user
-          management and security.<span className="text-blue">Add Now</span>
-        </p>
-      </div> */}
       {/* Add the search and filter dropdown here */}
       <SearchFilter />
 
-      <Image src={EmptyGov} alt="EmptyGov" className="mx-auto m-20" />
+      {/* <Image src={EmptyGov} alt="EmptyGov" className="mx-auto m-20" /> */}
 
       {/* card mapping */}
 

@@ -6,10 +6,7 @@ export default function StudentLayout({ children }) {
   return (
     <main className="bg-[#F9FBFC] ">
       <Navbar />
-      <div className="flex">
-        <StudentSidebar />
-        {children}
-      </div>
+      <div className="flex">{children}</div>
 
       <Footer />
     </main>

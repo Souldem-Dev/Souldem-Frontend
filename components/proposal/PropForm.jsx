@@ -26,7 +26,7 @@ const PropForm = ({ onClose }) => {
   return (
     <main>
       <form
-        className="flex flex-col gap-y-4 w-3/6  mt-20 m-auto  h-max 	 p-6  bg-white  backdrop-blur-xl  z-50 drop-shadow-xl text-L_black rounded-2xl fixed inset-0"
+        className="flex flex-col gap-y-4 w-5/6 md:w-3/6  mt-20 m-auto  h-max 	 p-6  bg-white  backdrop-blur-xl  z-50 drop-shadow-xl text-L_black rounded-2xl fixed inset-0"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center my-4">
@@ -75,7 +75,7 @@ const PropForm = ({ onClose }) => {
         <div className="flex flex-row ">
           <button
             type="submit"
-            className="btn bg-gradient-to-r from-blue to-D_blue focus:outline-none focus:ring  w-1/2 text-white  py-2 px-4 mr-2  rounded-xl"
+            className="btn bg-gradient-to-r from-blue to-cyan focus:outline-none focus:ring  w-1/2 text-white  py-2 px-4 mr-2  rounded-xl"
           >
             Confirm
           </button>

@@ -2,9 +2,6 @@ import React from 'react';
 
 import Image from 'next/image';
 import certificate from '@/app/assets/certificates/certificate.svg';
-import EmptyCert from '@/app/assets/certificates/EmptyCert.svg';
-import SearchFilter from '@/components/certificates/SearchFilter';
-import GovForm from '@/components/governance/GovForm';
 import CreateForm from '@/components/certificates/CreateForm';
 
 const page = () => {

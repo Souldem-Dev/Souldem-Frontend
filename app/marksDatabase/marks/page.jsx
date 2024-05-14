@@ -7,7 +7,7 @@ import SearchFilter from '@/components/marksDatabase/SearchFilter';
 import 
 
 
-const page = () => {
+const Page = () => {
   return (
     <main className=" m-8  w-full	">
       <div className="flex mb-8">

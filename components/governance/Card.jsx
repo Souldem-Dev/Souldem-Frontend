@@ -2,9 +2,12 @@ import React from 'react';
 
 const Card = ({ data }) => {
   return (
-    <main className="  grid   md:grid-cols-4 w-full gap-x-4  gap-y-8 m-4">
+    <main className="  grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 w-full  gap-y-8 m-4 gap-x-4 ">
       {data.map((item, index) => (
-        <div key={index} className=" w-72 h-64  bg-white  text-black ">
+        <div
+          key={index}
+          className=" w-auto h-64  bg-white  text-black  rounded-xl "
+        >
           <div className=" p-6  flex flex-col gap-y-4">
             <div>
               <div>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const VotesCard = () => {
   // Dummy data for 10 votes
-  const votes = Array.from({ length: 4 }, (_, index) => ({
+  const votes = Array.from({ length: 10 }, (_, index) => ({
     id: index + 1,
     user: {
       avatarSrc: 'https://github.com/shadcn.png',
@@ -15,16 +16,18 @@ const VotesCard = () => {
 
   return (
     <div>
-      <div className="bg-white  h-full  p-4 rounded-xl text-black ">
-        <h1 className="text-center text-xl">Votes</h1>
+      <Card className="bg-white border-0 min-w-full ">
+        <CardHeader>
+          <CardTitle className="text-center text-xl">Votes</CardTitle>
+        </CardHeader>
 
-        <div className="flex flex-col justify-center ">
+        <div className=" ">
           {votes.map((vote) => (
-            <div
+            <CardContent
               key={vote.id}
-              className="flex justify-between items-center mb-2"
+              className="flex  justify-between items-center"
             >
-              <div className="flex justify-between items-center gap-x-2">
+              <div className="flex  gap-x-2 items-center">
                 <Avatar>
                   <AvatarImage
                     src={vote.user.avatarSrc}
@@ -34,11 +37,13 @@ const VotesCard = () => {
                 </Avatar>
                 <p>{vote.user.address}</p>
               </div>
-              <p>{vote.action}</p>
-            </div>
+              <div>
+                <p>{vote.action}</p>
+              </div>
+            </CardContent>
           ))}
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

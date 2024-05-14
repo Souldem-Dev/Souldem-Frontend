@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProposalCard from './ProposalCard';
 import ProposalFilter from './ProposalFilter';
 import Invite from './Invite';
+import Settings from '@/components/proposal/Settings';
 
 const proposalList = [
   {
@@ -61,36 +62,50 @@ const FunctionCard = () => {
     setCard(false);
   };
   return (
-    <div className="flex justify-between relative bg-white   mx-20 p-6">
-      <div className="flex  gap-x-20 ">
+    <div className="flex  relative bg-white   mx-4 lg:mx-20 ">
+      <div className="flex   ">
         <Tabs defaultValue="Proposal">
-          <TabsList>
-            <TabsTrigger value="Proposal">Proposal</TabsTrigger>
-            <TabsTrigger value="Invite">Invite</TabsTrigger>
-          </TabsList>
-          <TabsContent value="Proposal" className="flex p-4 w-3/3">
-            <div className="w-5/6">
+          <div className="flex  justify-around lg:justify-between">
+            <TabsList>
+              <TabsTrigger value="Proposal">Proposal</TabsTrigger>
+              <TabsTrigger value="Invite">Invite</TabsTrigger>
+              <TabsTrigger value="Settings">Settings</TabsTrigger>
+            </TabsList>
+
+            <TabsList>
+              <button
+                className="bg-blue text-white p-2 w-40 px-4 rounded-l "
+                onClick={openCard}
+              >
+                &#43; Create Proposal
+              </button>
+              {Card && <PropForm onClose={closeCard} />}
+            </TabsList>
+          </div>
+
+          <TabsContent
+            value="Proposal"
+            className="flex flex-col-reverse lg:flex-row p-4 "
+          >
+            <div className="lg:w-5/6">
               {proposalList.map((proposal) => (
                 <ProposalCard key={proposal.id} {...proposal} />
               ))}
             </div>
-            <div className="w-1/6 ">
+            <div className="lg:w-2/6 ">
               <ProposalFilter />
             </div>
           </TabsContent>
-          <TabsContent value="Invite">
+          <TabsContent value="Invite" className="w-5/6">
             <Invite />
           </TabsContent>
+
+          <TabsContent value="Settings" className="w-full">
+            <div>
+              <Settings />
+            </div>
+          </TabsContent>
         </Tabs>
-      </div>
-      <div>
-        <button
-          className="bg-blue text-white p-2 w-40 px-4 rounded-l "
-          onClick={openCard}
-        >
-          &#43; Create Proposal
-        </button>
-        {Card && <PropForm onClose={closeCard} />}
       </div>
     </div>
   );
