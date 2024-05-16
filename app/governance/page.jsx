@@ -83,12 +83,15 @@ const data = [
 ];
 
 const page = () => {
+
+
+
   return (
     <div className=" m-8  w-full	">
       <div className="flex mb-8">
         <Image src={dashboard} alt="dashbopard" />
 
-        <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
+        <h1 className="font-light text-blue  text-3xl" >Dashboard</h1>
       </div>
 
       {/* Add the search and filter dropdown here */}

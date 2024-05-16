@@ -7,15 +7,7 @@ import { set } from 'date-fns';
 import GovForm from '@/components/governance/GovForm';
 
 const SearchFilter = () => {
-  const [Card, setCard] = useState(false);
-
-  const openCard = () => {
-    setCard(true);
-  };
-
-  const closeCard = () => {
-    setCard(false);
-  };
+ 
 
   return (
     <div className="my-4 flex flex-col md:flex-row justify-between items-center w-full gap-x-2 gap-y-4">
@@ -43,11 +35,9 @@ const SearchFilter = () => {
           </ul>
         </div>
       </div>
-      <div onClick={openCard}>
-        <button className="bg-blue text-white p-2 px-4 rounded-l w-96 md:w-60">
-          &#43; Create Governance
-        </button>
-        {Card && <GovForm onClose={closeCard} />}
+      <div >
+       
+        <GovForm  />
       </div>
     </div>
   );

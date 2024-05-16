@@ -4,7 +4,7 @@ import Image from 'next/image';
 import db from '@/app/assets/marksDB/db.svg';
 import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 import SearchFilter from '@/components/marksDatabase/SearchFilter';
-import 
+
 
 
 const Page = () => {
@@ -22,6 +22,6 @@ const Page = () => {
 
     </main>
   );
-};
+}
 
-export default page;
+export default Page;
