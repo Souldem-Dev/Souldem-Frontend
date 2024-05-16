@@ -5,6 +5,7 @@ import dashboard from '@/app/assets/Governance/dashboard.svg';
 import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 import SearchFilter from '@/components/governance/SearchFilter';
 import Card from '@/components/governance/Card';
+import { Home } from 'lucide-react';
 
 const data = [
   {
@@ -85,8 +86,8 @@ const data = [
 const page = () => {
   return (
     <div className=" m-8  w-full	">
-      <div className="flex mb-8">
-        <Image src={dashboard} alt="dashbopard" />
+      <div className="flex mb-8 items-center">
+        <Home className="text-blue" />
 
         <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
       </div>

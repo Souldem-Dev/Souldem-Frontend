@@ -30,7 +30,7 @@ module.exports = {
     extend: {
       colors: {
         blue: '#3E68FC',
-        gray: '#F2F2F3',
+        gray: '#C8CDD0',
         para: '#415058',
         cyan: '#00AEE6',
       },

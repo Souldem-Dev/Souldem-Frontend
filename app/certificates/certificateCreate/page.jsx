@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Image from 'next/image';
-import certificate from '@/app/assets/certificates/certificate.svg';
+import certificate from '@/app/assets/certificates/Certificate.svg';
 import CreateForm from '@/components/certificates/CreateForm';
 
 const page = () => {

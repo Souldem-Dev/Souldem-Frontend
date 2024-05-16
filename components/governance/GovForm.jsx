@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import Image from 'next/image';
-import close from '@/app/assets/Governance/close.svg';
+
 import { CircleX } from 'lucide-react';
 
 const GovForm = ({ onClose }) => {
