@@ -46,27 +46,13 @@
   --ring: 227 96.9% 61.6%;
   --radius: 0.5rem;
 }
-
 /* 
-.sidebar {
-  width: 60px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: width 0.3s ease;
-}
-
-.smallSidebar {
-  width: 0;
-  overflow: hidden;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: width 0.3s ease;
-}
-
-.open {
-  width: 60px;
-}
-
-.closed {
-  width: 0;
+.button {
+  border-radius: 25%;
+  :hover {
+    background-color: blue;
+    color: white;
+    border-color: white;
+  }
+  color: #415058;
 } */

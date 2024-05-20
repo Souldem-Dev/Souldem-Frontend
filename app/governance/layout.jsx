@@ -7,7 +7,7 @@ export default function GovernanceLayout({ children }) {
   return (
     <main>
       <Navbar />
-      <div className="flex">
+      <div className="flex  bg-[#FAFAFD]">
         <GovSidebar />
         {children}
       </div>

@@ -28,14 +28,7 @@ const data = [
 const page = () => {
   return (
     <div className="m-8">
-      <div className="flex my-4 ">
-        <Image src={icon} alt="dashbopard" />
-
-        <h1 className="font-light text-blue  text-3xl">
-          Would hosting a seminar on Artificial Intelligence..
-        </h1>
-      </div>{' '}
-      <ViewCard data={} />
+      <ViewCard />
     </div>
   );
 };

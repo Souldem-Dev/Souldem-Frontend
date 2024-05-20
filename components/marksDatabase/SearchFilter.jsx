@@ -1,32 +1,29 @@
-import Image from 'next/image';
-import React from 'react';
-import search from '@/app/assets/searchFilter/search.svg';
-import filter from '@/app/assets/searchFilter/filter.svg';
+'use client';
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
 
 const SearchFilter = () => {
   return (
-    <div className="my-4 flex  items-center w-full gap-x-2">
-      <div className="flex input input-bordered w-96 rounded-3xl gap-x-2">
-        <Image src={search} alt="search" />
+    <div className="my-4 flex flex-col md:flex-row justify-between items-center w-full gap-x-2 gap-y-4">
+      <div className="flex xl:w-3/6 w-full items-center gap-x-2 ">
+        <div className="flex   border-para border rounded-3xl gap-x-2 items-center w-3/4 p-2 focus:ring-1 ">
+          <Search className="text-para" />
 
-        <input type="text" placeholder="Search..." />
-      </div>
-      <div className="dropdown dropdown-bottom">
-        <div tabIndex={0} role="button" className="btn m-1">
-          <Image src={filter} alt="search" />
-          filter
+          <input
+            type="text"
+            placeholder="Search by Address or Batch Name"
+            className="w-full text-para border-0 focus:ring-0 focus:outline-none bg-white"
+          />
         </div>
-        <ul
-          tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+
+        <Button
+          variant="outline"
+          className=" border-para  w-1/4 rounded-3xl hover:bg-blue  text-para hover:text-white hover:border-white "
         >
-          <li>
-            <a>Item 1</a>
-          </li>
-          <li>
-            <a>Item 2</a>
-          </li>
-        </ul>
+          Search
+        </Button>
       </div>
     </div>
   );

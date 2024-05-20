@@ -31,7 +31,7 @@ const proposalList = [
     status: 'Proposal Accepted',
     editedTime: '1 hour',
     content:
-      'Proposing to allocate funds for a community garden project to promote sustainability and healthy living on campus.',
+      'Proposing to allocate funds for a community garden project to promote sustainability and healthy living on campus.Would hosting a seminar on Artificial Intelligence to enlighten students and faculty about its applications and impacts, featuring experts and fostering interdisciplinary discourse, encourage innovation and broad participation',
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ const proposalList = [
     status: 'Proposal Rejected',
     editedTime: '2 days',
     content:
-      'Suggesting a monthly hackathon to encourage collaboration and creativity among students in the computer science department.',
+      'Suggesting a monthly hackathon to encourage collaboration and creativity among students in the computer science department. Would hosting a seminar on Artificial Intelligence to enlighten students and faculty about its applications and impacts, featuring experts and fostering interdisciplinary discourse, encourage innovation and broad participation',
   },
 ];
 
@@ -54,9 +54,8 @@ const page = () => {
       {/* Add the search and filter dropdown here */}
 
       <Banner />
-      <div className="w-full">
-        <FunctionCard />
-      </div>
+
+      <FunctionCard />
     </div>
   );
 };
