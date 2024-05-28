@@ -16,7 +16,7 @@ const VotesCard = () => {
 
   return (
     <div>
-      <Card className="bg-white border-0 min-w-full ">
+      <Card className="bg-white border-0 min-w-full shadow-md rounded-3xl ">
         <CardHeader>
           <CardTitle className="text-center text-xl">Votes</CardTitle>
         </CardHeader>
@@ -25,20 +25,21 @@ const VotesCard = () => {
           {votes.map((vote) => (
             <CardContent
               key={vote.id}
-              className="flex  justify-between items-center"
+              className="flex  justify-between items-center py-1 md:py-2"
             >
               <div className="flex  gap-x-2 items-center">
-                <Avatar>
+                <Avatar className="w-4 h-4 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full overflow-hidden">
                   <AvatarImage
                     src={vote.user.avatarSrc}
                     alt={vote.user.username}
+                    className="w-full h-full object-cover"
                   />
                   <AvatarFallback>{vote.user.username}</AvatarFallback>
                 </Avatar>
-                <p>{vote.user.address}</p>
+                <p className="text-xs md:text-base">{vote.user.address}</p>
               </div>
               <div>
-                <p>{vote.action}</p>
+                <p className="text-xs md:text-base">{vote.action}</p>
               </div>
             </CardContent>
           ))}

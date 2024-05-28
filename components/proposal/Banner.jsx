@@ -9,10 +9,10 @@ const Banner = () => {
       <div className="absolute inset-0 bg-banner-img opacity-90 "></div>
 
       <div className=" flex flex-col  py-8 px-4  md:px-20 gap-y-6 relative    ">
-        <div className="flex ">
-          <Airplay />
+        <div className="flex items-center gap-x-2">
+          <Airplay className="text-blue" />
 
-          <h1 className="font-light text-blue  text-3xl ">Marks Database</h1>
+          <h1 className="font-light text-blue  text-3xl ">CSE 2022 Batch</h1>
         </div>{' '}
         <div>
           <p className="text-white text-balance ">

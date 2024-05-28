@@ -62,7 +62,7 @@ const FunctionCard = () => {
   };
 
   return (
-    <div className="flex flex-col relative bg-white  p-4 mx-4 lg:mx-20">
+    <div className="flex flex-col relative bg-white  md:p-4 md:mx-4 mx-2 lg:mx-20">
       <div className="flex justify-between mb-4">
         <div>
           <button
@@ -95,7 +95,7 @@ const FunctionCard = () => {
           </button>
         </div>
         <button
-          className="bg-blue text-white p-2 px-4 rounded-l"
+          className="bg-blue text-white w-40 h-10 rounded-l"
           onClick={openCard}
         >
           &#43; Create Proposal

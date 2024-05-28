@@ -10,12 +10,12 @@ const ViewCard = () => {
     <main className="flex flex-col lg:flex-row gap-x-8  ">
       <div className=" lg:w-4/6  h-full  text-black flex flex-col gap-y-4">
         <div className="flex my-4 items-center gap-x-2">
-          <LaptopMinimal className="text-blue" />
-
-          <h1 className="font-light text-wrap text-blue  text-3xl">
+          <LaptopMinimal className="text-blue text-3xl w-auto h-20 lg:h-14" />
+          <h1 className="font-light text-wrap text-blue text-3xl ">
             Would hosting a seminar on Artificial Intelligence..
           </h1>
-        </div>{' '}
+        </div>
+
         <div className="flex justify-between items-center">
           <div className="flex justify-between items-center gap-x-2">
             <Avatar>
