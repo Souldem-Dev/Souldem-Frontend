@@ -1,12 +1,8 @@
 import React from 'react';
 
-<<<<<<< HEAD
-
-=======
 import { Award, Search } from 'lucide-react';
 import DriveCard from '@/components/certificates/DriveCard.jsx';
 import SearchFilter from '@/components/certificates/SearchFilter.jsx';
->>>>>>> main
 
 const page = () => {
   return (

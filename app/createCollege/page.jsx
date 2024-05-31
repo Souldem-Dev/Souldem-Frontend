@@ -1,8 +1,59 @@
+"use client"
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { ethers } from 'ethers';
+import {toast,ToastContainer} from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
+import axios from 'axios'
 const page = () => {
+  
+let createCollege = async()=>{
+let collegeName = document.getElementById("collegeName")
+  if(collegeName.value.length >= 3){
+    let provider = new ethers.BrowserProvider(window.ethereum);
+  let signer = await provider.getSigner();
+
+let domain = {
+  name: 'BASE_FACTORY',
+  version: '1',
+  chainId: 80002,
+  verifyingContract: "0x5798346f82b98a0e6a7Cd8d7c34D087BBE3A37c6"
+}
+
+let types = {
+  Create:[
+    {name:"wallet",type:"address"},
+    {name:"universityName",type:"string"},
+    
+    ]
+}
+let value = {
+  wallet:signer.address,
+ universityName:collegeName.value
+  }
+try{
+  let signature = await signer.signTypedData(domain,types,value);
+  console.log(signature)
+  axios.post(process.env.NEXT_PUBLIC_BACKEND_URL+"factory/createUniversity",{owner:signer.address,signature,universityName:collegeName.value}).then(res=>{
+   console.log(res.data)
+    if(res.data._type == "TransactionResponse"){
+toast.success("College Created!")
+   }
+  }).catch(err=>{
+    console.log(err)
+toast.error(err.response.data.reason)
+  })
+
+}catch(err){
+ console.log(err)
+}
+
+  }else{
+    alert("enter college name!")
+  }
+  }
   return (
     <main className=" flex">
       <div className="w-4/6 h-screen bg-gray">hello</div>
@@ -10,7 +61,7 @@ const page = () => {
         <div>
           <h3 className="text-3xl font-bold">Create a college in </h3>
           <h1 className="text-blue text-4xl font-extrabold ">Souldem</h1>
-          <p className="text-gray">
+          <p className="text-gray-300">
             have your college on Souldem network for Easier management of
             examination{' '}
           </p>
@@ -18,9 +69,10 @@ const page = () => {
         <Input
           type="email"
           placeholder="Enter College Name"
-          className="text-gray"
+          className="text-dark"
+          id="collegeName"
         />
-        <Button className="bg-blue text-white p-2 px-4 rounded-l w-full">
+        <Button className="bg-blue text-white p-2 px-4 rounded-l w-full" onClick={createCollege}>
           Create College{' '}
         </Button>
         <p className="text-gray">------if already created------</p>
@@ -28,6 +80,7 @@ const page = () => {
           Connect Wallet{' '}
         </Button>
       </div>
+      <ToastContainer />
     </main>
   );
 };

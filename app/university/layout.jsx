@@ -2,8 +2,10 @@
 import Footer from '@/components/Footer';
 import GovSidebar from '@/components/governance/GovSidebar';
 import Navbar from '@/components/Navbar';
+
 import { createContext, useState } from 'react';
 import '../globals.css';
+
 export const WalletContext = createContext()
 export default function GovernanceLayout({ children }) {
 let [signer,setSigner] = useState(null);
@@ -22,6 +24,7 @@ let [walletAdd,setWalletAdd] = useState("")
 
       <Footer />
     </main>
+    <ToastContainer />
  </WalletContext.Provider>
   );
 }
