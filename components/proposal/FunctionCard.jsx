@@ -62,7 +62,7 @@ const FunctionCard = () => {
   };
 
   return (
-    <div className="flex flex-col relative bg-white  md:p-4 md:mx-4 mx-2 lg:mx-20">
+    <div className="flex flex-col relative bg-white  p-2 md:p-4 md:mx-4 mx-2 lg:mx-20">
       <div className="flex justify-between mb-4">
         <div>
           <button
