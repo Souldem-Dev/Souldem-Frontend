@@ -71,12 +71,15 @@ const data = [
 ];
 
 const page = () => {
+
+
+
   return (
     <div className=" mx-6 md:mx-12 my-4 w-full	">
       <div className="flex mb-8 items-center">
         <Home className="text-blue" />
 
-        <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
+        <h1 className="font-light text-blue  text-3xl" >Dashboard</h1>
       </div>
 
       {/* Add the search and filter dropdown here */}

@@ -27,7 +27,7 @@ const GovForm = ({ onClose }) => {
   return (
     <main>
       <form
-        className="flex absolute z-10 flex-col gap-y-4 w-4/6 sm:w-5/6 md:w-2/6 m-auto h-max  p-8 bg-white  drop-shadow-xl text-L_black rounded-2xl  inset-0  backdrop-blur-xl  "
+        className="flex absolute z-10 flex-col gap-y-4 w-4/6 sm:w-5/6 md:w-2/6 m-auto h-full sm:h-2/4 p-8 bg-white  drop-shadow-xl text-L_black rounded-2xl  inset-0  backdrop-blur-xl  "
         onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center my-4">
