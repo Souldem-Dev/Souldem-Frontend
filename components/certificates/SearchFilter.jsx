@@ -1,42 +1,35 @@
-'use client';
-import Image from 'next/image';
-import { useState } from 'react';
-import search from '@/app/assets/searchFilter/search.svg';
-import filter from '@/app/assets/searchFilter/filter.svg';
+import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
 
 const SearchFilter = () => {
   return (
-    <div className="my-4 flex flex-col md:flex-row  justify-between items-center w-full gap-x-2">
-      <div className="flex w-full items-center gap-x-2 ">
-        <div className="flex input input-bordered w-full rounded-3xl gap-x-2">
-          <Image src={search} alt="search" />
+    <div className="my-4 flex flex-col md:flex-row justify-between items-center w-full gap-x-2 gap-y-4">
+      <div className="flex xl:w-3/6 w-full items-center gap-x-2 ">
+        <div className="flex   border-para border rounded-3xl gap-x-2 items-center w-3/4 p-2 focus:ring-1 ">
+          <Search className="text-para" />
 
-          <input type="text" placeholder="Search..." />
+          <input
+            type="text"
+            placeholder="Search by Address or Batch Name"
+            className="w-full text-para border-0 focus:ring-0 focus:outline-none bg-white"
+          />
         </div>
-        <div className="dropdown dropdown-bottom w-full">
-          <div tabIndex={0} role="button" className="btn m-1">
-            <Image src={filter} alt="search" />
-            filter
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
-          </ul>
-        </div>
+
+        <Button
+          variant="outline"
+          className=" border-para  w-1/4 rounded-3xl hover:bg-blue  text-para hover:text-white hover:border-white "
+        >
+          Search
+        </Button>
       </div>
-      <Link href="/certificates/certificateCreate">
-        <button className="bg-blue text-white p-2 px-4 rounded-l w-96 md:w-60 ">
-          &#43; Generate Certificate
-        </button>
-      </Link>
+      <div className="xl:w-2/6 w-full">
+        <Link href="/certificates/certificateCreate">
+          <button className="bg-blue text-white p-2 px-4 rounded-l w-full">
+            &#43; Create Certificate
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };

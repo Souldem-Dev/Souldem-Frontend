@@ -1,27 +1,27 @@
 import React from 'react';
 
-import Image from 'next/image';
-import certificate from '@/app/assets/Certificates/Certificate.svg';
-//import EmptyCert from '@/app/assets/certificates/EmptyCert.svg';
-import SearchFilter from '@/components/certificates/SearchFilter.jsx';
-import GovForm from '@/components/governance/GovForm';
+<<<<<<< HEAD
+
+=======
+import { Award, Search } from 'lucide-react';
 import DriveCard from '@/components/certificates/DriveCard.jsx';
+import SearchFilter from '@/components/certificates/SearchFilter.jsx';
+>>>>>>> main
 
 const page = () => {
   return (
-    <div className=" m-8  w-full	">
-      <div className="flex mb-8">
-        <Image src={certificate} alt="dashbopard" />
-
+    <div className=" m-8 w-full	">
+      <div className="flex   items-center">
+        <Award className="text-blue " />
         <h1 className="font-light text-blue  text-3xl">
           Certificates Template
         </h1>
       </div>
 
-      {/* Add the search and filter dropdown here */}
       <SearchFilter />
+      {/* Add the search and filter dropdown here */}
 
-      {/* card mapping */}
+      {/* Form */}
       <DriveCard />
     </div>
   );

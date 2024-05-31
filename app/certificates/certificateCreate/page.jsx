@@ -1,17 +1,15 @@
 import React from 'react';
 
-import Image from 'next/image';
-import certificate from '@/app/assets/Certificates/Certificate.svg';
-import CreateForm from '@/components/certificates/CreateForm.jsx';
+import CreateForm from '@/components/certificates/CreateForm';
+import { Award } from 'lucide-react';
 
 const page = () => {
   return (
-    <div className=" m-8  w-full	">
-      <div className="flex mb-8">
-        <Image src={certificate} alt="dashbopard" />
-
-        <h1 className="font-light text-blue  text-3xl">
-          Create Certificates Template
+    <div className=" mx-6 md:mx-12 my-4 w-full	">
+      <div className="flex  mb-8 items-center">
+        <Award className="text-blue " />
+        <h1 className="font-light text-blue  text-2xl md:text-3xl">
+          Create Certificate Template
         </h1>
       </div>
 

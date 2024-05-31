@@ -5,8 +5,6 @@ import db from '@/app/assets/marksDB/db.svg';
 import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 import SearchFilter from '@/components/marksDatabase/SearchFilter';
 
-
-
 const Page = () => {
   return (
     <main className=" m-8  w-full	">
@@ -19,9 +17,8 @@ const Page = () => {
       {/* Add the search and filter dropdown here */}
       <SearchFilter />
       <Image src={EmptyGov} alt="EmptyGov" className="mx-auto m-20" />
-
     </main>
   );
-}
+};
 
 export default Page;

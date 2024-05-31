@@ -14,7 +14,7 @@ let [walletAdd,setWalletAdd] = useState("")
  <WalletContext.Provider value={{walletSigner :[signer,setSigner],connection:[isConnected,setIsConnected],walletAddr:[walletAdd,setWalletAdd]}}>
      <main>
       <Navbar />
-      <div className="flex">
+      <div className="flex  bg-[#FAFAFD]">
         <GovSidebar />
 
         {children}

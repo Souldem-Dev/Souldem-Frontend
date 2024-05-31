@@ -54,8 +54,8 @@ const GovForm = ({ onClose }) => {
           />
         </div>
 
-        <div className="flex gap-x-4 ">
-          <div className="flex flex-col  w-1/2 ">
+        <div className="flex flex-col md:flex-row gap-y-4 gap-x-2">
+          <div className="flex flex-col  md:w-1/2 ">
             <label htmlFor="batch">Governance Batch:</label>
             <input
               type="text"
@@ -67,7 +67,7 @@ const GovForm = ({ onClose }) => {
               className="rounded-xl h-12 px-2 bg-gray "
             />
           </div>
-          <div className="w-1/2 flex flex-col ">
+          <div className=" flex flex-col md:w-1/2 ">
             <label htmlFor="semester">Total Semesters:</label>
             <input
               type="text"

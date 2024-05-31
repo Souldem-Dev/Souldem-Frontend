@@ -1,9 +1,7 @@
 'use client';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import PropForm from './PropForm';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProposalCard from './ProposalCard';
 import ProposalFilter from './ProposalFilter';
 import Invite from './Invite';
@@ -34,7 +32,7 @@ const proposalList = [
     status: 'Proposal Accepted',
     editedTime: '1 hour',
     content:
-      'Proposing to allocate funds for a community garden project to promote sustainability and healthy living on campus.',
+      'Proposing to allocate funds for a community garden project to promote sustainability and healthy living on campus.Would hosting a seminar on Artificial Intelligence to enlighten students and faculty about its applications and impacts, featuring experts and fostering interdisciplinary discourse, encourage innovation and broad participation',
   },
   {
     id: 3,
@@ -47,12 +45,13 @@ const proposalList = [
     status: 'Proposal Rejected',
     editedTime: '2 days',
     content:
-      'Suggesting a monthly hackathon to encourage collaboration and creativity among students in the computer science department.',
+      'Suggesting a monthly hackathon to encourage collaboration and creativity among students in the computer science department. Would hosting a seminar on Artificial Intelligence to enlighten students and faculty about its applications and impacts, featuring experts and fostering interdisciplinary discourse, encourage innovation and broad participation',
   },
 ];
 
 const FunctionCard = () => {
   const [Card, setCard] = useState(false);
+  const [activeSection, setActiveSection] = useState('Proposal');
 
   const openCard = () => {
     setCard(true);
@@ -61,52 +60,73 @@ const FunctionCard = () => {
   const closeCard = () => {
     setCard(false);
   };
+
   return (
-    <div className="flex  relative bg-white   mx-4 lg:mx-20 ">
-      <div className="flex   ">
-        <Tabs defaultValue="Proposal">
-          <div className="flex  justify-around lg:justify-between">
-            <TabsList>
-              <TabsTrigger value="Proposal">Proposal</TabsTrigger>
-              <TabsTrigger value="Invite">Invite</TabsTrigger>
-              <TabsTrigger value="Settings">Settings</TabsTrigger>
-            </TabsList>
-
-            <TabsList>
-              <button
-                className="bg-blue text-white p-2 w-40 px-4 rounded-l "
-                onClick={openCard}
-              >
-                &#43; Create Proposal
-              </button>
-              {Card && <PropForm onClose={closeCard} />}
-            </TabsList>
-          </div>
-
-          <TabsContent
-            value="Proposal"
-            className="flex flex-col-reverse lg:flex-row p-4 "
+    <div className="flex flex-col relative bg-white  p-2 md:p-4 md:mx-4 mx-2 lg:mx-20">
+      <div className="flex justify-between mb-4">
+        <div>
+          <button
+            className={`px-4 py-2 ${
+              activeSection === 'Proposal'
+                ? 'bg-blue text-white'
+                : 'bg-gray-200'
+            } rounded-l`}
+            onClick={() => setActiveSection('Proposal')}
           >
-            <div className="lg:w-5/6">
-              {proposalList.map((proposal) => (
-                <ProposalCard key={proposal.id} {...proposal} />
-              ))}
-            </div>
-            <div className="lg:w-2/6 ">
-              <ProposalFilter />
-            </div>
-          </TabsContent>
-          <TabsContent value="Invite" className="w-5/6">
-            <Invite />
-          </TabsContent>
-
-          <TabsContent value="Settings" className="w-full">
-            <div>
-              <Settings />
-            </div>
-          </TabsContent>
-        </Tabs>
+            Proposal
+          </button>
+          <button
+            className={`px-4 py-2 ${
+              activeSection === 'Invite' ? 'bg-blue text-white' : 'bg-gray-200'
+            } rounded-l`}
+            onClick={() => setActiveSection('Invite')}
+          >
+            Invite
+          </button>
+          <button
+            className={`px-4 py-2 ${
+              activeSection === 'Settings'
+                ? 'bg-blue text-white'
+                : 'bg-gray-200'
+            } rounded-l`}
+            onClick={() => setActiveSection('Settings')}
+          >
+            Settings
+          </button>
+        </div>
+        <button
+          className="bg-blue text-white w-40 h-10 rounded-l"
+          onClick={openCard}
+        >
+          &#43; Create Proposal
+        </button>
+        {Card && <PropForm onClose={closeCard} />}
       </div>
+
+      {activeSection === 'Proposal' && (
+        <div className="flex flex-col-reverse lg:flex-row p-2">
+          <div className="lg:w-5/6">
+            {proposalList.map((proposal) => (
+              <ProposalCard key={proposal.id} {...proposal} />
+            ))}
+          </div>
+          <div className="lg:w-1/6">
+            <ProposalFilter />
+          </div>
+        </div>
+      )}
+
+      {activeSection === 'Invite' && (
+        <div className="p-2">
+          <Invite />
+        </div>
+      )}
+
+      {activeSection === 'Settings' && (
+        <div className="p-2">
+          <Settings />
+        </div>
+      )}
     </div>
   );
 };

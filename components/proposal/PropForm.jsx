@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import Image from 'next/image';
-import close from '@/app/assets/Governance/close.svg';
+
+import { CircleX } from 'lucide-react';
 
 const PropForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -31,13 +31,13 @@ const PropForm = ({ onClose }) => {
       >
         <div className="flex justify-between items-center my-4">
           <h1 className="text-2xl font-semibold text-center">
-            Create Governance
+            Create Proposal
           </h1>
           <button
             className="p-2 bg-white text-gray-800 absolute  top-6 right-6 rounded-lg mt-4"
             onClick={onClose}
           >
-            <Image src={close} alt="close" />
+            <CircleX />
           </button>
         </div>
         <div className="flex flex-col">

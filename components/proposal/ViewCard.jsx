@@ -7,15 +7,15 @@ import { LaptopMinimal } from 'lucide-react';
 
 const ViewCard = () => {
   return (
-    <main className="flex flex-col md:flex-row gap-x-8  ">
-      <div className=" md:w-4/6 h-full  text-black flex flex-col gap-y-4">
+    <main className="flex flex-col lg:flex-row gap-x-8  ">
+      <div className=" lg:w-4/6  h-full  text-black flex flex-col gap-y-4">
         <div className="flex my-4 items-center gap-x-2">
-          <LaptopMinimal className="text-blue" />
-
-          <h1 className="font-light text-wrap text-blue  text-3xl">
+          <LaptopMinimal className="text-blue text-3xl w-auto h-20 lg:h-14" />
+          <h1 className="font-light text-wrap text-blue text-3xl ">
             Would hosting a seminar on Artificial Intelligence..
           </h1>
-        </div>{' '}
+        </div>
+
         <div className="flex justify-between items-center">
           <div className="flex justify-between items-center gap-x-2">
             <Avatar>
@@ -78,7 +78,7 @@ const ViewCard = () => {
         </div>
       </div>
 
-      <div className="md:w-2/6 flex flex-col  gap-y-12">
+      <div className="lg:w-2/6 flex flex-col  gap-y-12">
         {/* Information Card */}
         <div>
           <InformationCard />

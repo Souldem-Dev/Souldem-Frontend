@@ -1,16 +1,15 @@
 import React from 'react';
 
 import Image from 'next/image';
-import certificate from '@/app/assets/Certificates/Certificate.svg';
 import EmptyCert from '@/app/assets/Certificates/EmptyCert.svg';
 import SearchFilter from '@/components/certificates/SearchFilter.jsx';
-import GovForm from '@/components/governance/GovForm.jsx';
+import { Award } from 'lucide-react';
 
 const page = () => {
   return (
-    <div className=" m-8  w-full	">
-      <div className="flex mb-8">
-        <Image src={certificate} alt="dashbopard" />
+    <div className=" mx-6 md:mx-12 my-4 w-full	">
+      <div className="flex mb-8 items-center">
+        <Award className="text-blue " />
 
         <h1 className="font-light text-blue  text-3xl">
           Certificates Template
