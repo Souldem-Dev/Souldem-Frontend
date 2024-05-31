@@ -24,7 +24,7 @@ import { Home, HandCoins, Award, Folder } from 'lucide-react';
 import {ethers} from "ethers"
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { WalletContext } from '@/app/governance/layout';
+import { WalletContext } from '@/app/university/layout';
 const Navbar = () => {
   const {walletSigner,connection,walletAddr}= useContext(WalletContext)
 let [isConnected,setIsConnected] = connection;
@@ -93,8 +93,7 @@ console.log({walletAddress: address})
         </div>
       </Link>
 
-      <Button className="bg-black max-md:hidden text-white ">
-        <Wallet /> Connect Wallet
+  
      
 
      <div>
@@ -116,7 +115,7 @@ console.log({walletAddress: address})
             <div className="flex flex-col gap-y-4 justify-start items-start">
               <ul className="flex flex-col">
                 <Link
-                  href="/governance"
+                  href="/university/governance"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Home className="hover:text-white" />
@@ -130,14 +129,14 @@ console.log({walletAddress: address})
                   <span>Buy tokens</span>
                 </Link>
                 <Link
-                  href="/certificates"
+                  href="/university/certificates"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Award className="hover:text-white" />
                   <span>Certificates</span>
                 </Link>
                 <Link
-                  href="/marksDatabase"
+                  href="/university/marksDatabase"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Folder className="hover:text-white" />

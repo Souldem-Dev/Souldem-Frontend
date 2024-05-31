@@ -24,7 +24,7 @@ const SearchFilter = () => {
         </Button>
       </div>
       <div className="xl:w-2/6 w-full">
-        <Link href="/certificates/certificateCreate">
+        <Link href="/university/certificates/certificateCreate">
           <button className="bg-blue text-white p-2 px-4 rounded-l w-full">
             &#43; Create Certificate
           </button>

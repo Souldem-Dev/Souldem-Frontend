@@ -21,7 +21,7 @@ const GovSidebar = () => {
             <div className="flex flex-col gap-y-4 justify-start items-start">
               <ul className="flex flex-col">
                 <Link
-                  href="/governance"
+                  href="/university/governance"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Home className="hover:text-white" />
@@ -35,14 +35,14 @@ const GovSidebar = () => {
                   <span>Buy tokens</span>
                 </Link>
                 <Link
-                  href="/certificates"
+                  href="/university/certificates"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Award className="hover:text-white" />
                   <span>Certificates</span>
                 </Link>
                 <Link
-                  href="/marksDatabase"
+                  href="/university/marksDatabase"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Folder className="hover:text-white" />
