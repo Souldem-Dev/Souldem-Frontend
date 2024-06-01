@@ -24,7 +24,6 @@ let [walletAdd,setWalletAdd] = useState("")
 
       <Footer />
     </main>
-    <ToastContainer />
  </WalletContext.Provider>
   );
 }
