@@ -1,11 +1,15 @@
 'use client';
 import React, { useState } from 'react';
+import { ethers } from 'ethers';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { CircleX } from 'lucide-react';
 
 const GovForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
-    title: '',
+    governanceName: '',
     batch: '',
     semester: '',
   });
@@ -18,10 +22,80 @@ const GovForm = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle form submission here, for example, send data to backend or perform some action with formData
-    console.log(formData);
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const publicAddress = await signer.getAddress();
+
+      const { data: getData } = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/getData/' + publicAddress
+      );
+      const { nonce, name, collegeAddress, relayer } = getData;
+      const currentNonce = parseInt(nonce, 10);
+
+      const domain = {
+        name: name,
+        version: '1',
+        chainId: 80002,
+        verifyingContract: collegeAddress,
+      };
+
+      const types = {
+        CreateGovernance: [
+          { name: 'wallet', type: 'address' },
+          { name: 'governanceName', type: 'string' },
+          { name: 'totalEndExamination', type: 'uint256' },
+          { name: 'batch', type: 'string' },
+          { name: 'nonces', type: 'uint256' },
+          { name: 'relayer', type: 'address' },
+        ],
+      };
+
+      const value = {
+        wallet: signer.address,
+        governanceName: formData.governanceName,
+        totalEndExamination: formData.semester,
+        batch: formData.batch,
+        nonces: currentNonce,
+        relayer: relayer,
+      };
+
+      const signature = await signer.signTypedData(domain, types, value);
+      console.log(signature);
+
+      // Log the data to be sent to the backend
+      console.log({
+        owner: signer.address,
+        signature,
+        governanceName: formData.governanceName,
+        batch: formData.batch,
+        semester: formData.semester,
+        nonce: currentNonce,
+      });
+
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/createGovernance',
+        {
+          owner: signer.address,
+          signature,
+          governanceName: formData.governanceName,
+          batch: formData.batch,
+          totalEndExamination: formData.semester,
+          nonce: currentNonce,
+        }
+      );
+
+      console.log(response.data);
+      if (response.data._type === 'TransactionResponse') {
+        toast.success('Governance Created!');
+      }
+    } catch (error) {
+      console.error('Error creating governance:', error);
+      toast.error(error.response?.data?.reason || 'An error occurred');
+    }
   };
 
   return (
@@ -46,9 +120,9 @@ const GovForm = ({ onClose }) => {
           <label htmlFor="title">Governance Title:</label>
           <input
             type="text"
-            id="title"
-            name="title"
-            value={formData.title}
+            id="governanceName"
+            name="governanceName"
+            value={formData.governanceName}
             onChange={handleChange}
             className=" rounded-xl h-12 px-2 bg-gray"
           />

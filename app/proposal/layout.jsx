@@ -6,7 +6,7 @@ import '../globals.css';
 export default function GovernanceLayout({ children }) {
   return (
     <main className="bg-[#FBFBFD] ">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex">
         <GovSidebar />
         {children}

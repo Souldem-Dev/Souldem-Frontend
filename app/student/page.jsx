@@ -9,42 +9,28 @@ import Link from 'next/link';
 const data = [
   {
     id: 1,
-    semester: 'Current Semester',
     batch: 'CSE batch 2024',
-    students: 3000,
-    graders: 20,
-    others: 10,
+    address: '0x1a2b3C4D5e6F7G8H9I0JkLmNoPQr',
     university: 'Chandigarh University',
   },
   {
     id: 2,
-    semester: 'Current Semester',
     batch: 'CSE batch 2024',
-    students: 200,
-    graders: 20,
-    others: 10,
+    address: '0x2b3cD4E5F6G7H8I9J0K1lMnOpQrS',
     university: 'Chandigarh University',
   },
   {
     id: 3,
-    semester: 'Current Semester',
     batch: 'CSE batch 2024',
-    students: 3000,
-    graders: 20,
-    others: 10,
+    address: '0x3c4dE5F6G7H8I9J0K1L2mNoPqRsT',
     university: 'Chandigarh University',
   },
   {
     id: 4,
-    semester: 'Current Semester',
     batch: 'CSE batch 2024',
-    students: 3000,
-    graders: 20,
-    others: 10,
+    address: '0x4d5eF6G7H8I9J0K1L2M3nOpQrStU',
     university: 'Chandigarh University',
   },
-
-  // Add more objects as needed
 ];
 
 const dummyCertificates = [
