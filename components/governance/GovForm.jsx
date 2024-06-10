@@ -91,6 +91,7 @@ const GovForm = ({ onClose }) => {
       console.log(response.data);
       if (response.data._type === 'TransactionResponse') {
         toast.success('Governance Created!');
+        onClose();
       }
     } catch (error) {
       console.error('Error creating governance:', error);
@@ -101,7 +102,7 @@ const GovForm = ({ onClose }) => {
   return (
     <main>
       <form
-        className="flex absolute z-10 flex-col gap-y-4 w-4/6 sm:w-5/6 md:w-2/6 m-auto h-full sm:h-2/4 p-8 bg-white  drop-shadow-xl text-L_black rounded-2xl  inset-0  backdrop-blur-xl  "
+        className="flex flex-col gap-y-4 w-5/6 md:w-2/6  mt-40 m-auto  h-max 	 p-6  bg-white  backdrop-blur-xl  z-50 drop-shadow-xl text-L_black rounded-2xl fixed inset-0"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center my-4">
@@ -156,7 +157,8 @@ const GovForm = ({ onClose }) => {
         </div>
         <button
           type="submit"
-          className="btn bg-gradient-to-r from-blue to-D_blue focus:outline-none focus:ring  w-28 text-white  py-2 px-4  mr-6  rounded-xl"
+          className="bg-blue  hover:bg-blue hover:text-white hover:cursor-pointer focus:outline-none focus:ring  w-28 text-white  py-2 px-4  mr-6  rounded-xl"
+          onSubmit={onClose}
         >
           Submit
         </button>
