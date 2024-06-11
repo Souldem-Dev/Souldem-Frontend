@@ -24,7 +24,8 @@ import { Home, HandCoins, Award, Folder } from 'lucide-react';
 import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { WalletContext } from '@/app/university/layout';
+import { WalletContext } from '@/app/university/WalletContext';
+
 const Navbar = () => {
   const { walletSigner, connection, walletAddr } = useContext(WalletContext);
   let [isConnected, setIsConnected] = connection;

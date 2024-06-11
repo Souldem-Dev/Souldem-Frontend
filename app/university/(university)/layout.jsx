@@ -1,21 +1,19 @@
-'use client';
 import Footer from '@/components/Footer';
 import GovSidebar from '@/components/governance/GovSidebar';
 import Navbar from '@/components/Navbar';
-import WalletProvider from '@/app/university/WalletContext';
+import NextAuth from '@auth-kit/next/NextAuth';
 
-export default function UniversityLayout({ children }) {
+export default function Layout({ children }) {
   return (
-    <WalletProvider>
-      <main className="bg-[#FBFBFD] ">
-        <Navbar />
-        <div className="flex">
-          <GovSidebar />
-          {children}
-        </div>
+    <main>
+      <Navbar />
+      <div className="flex  bg-[#FAFAFD]">
+        <GovSidebar />
 
-        <Footer />
-      </main>
-    </WalletProvider>
+        {children}
+      </div>
+
+      <Footer />
+    </main>
   );
 }

@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ethers } from 'ethers';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Home } from 'lucide-react';
+import { Home, University } from 'lucide-react';
 import SearchFilter from '@/components/governance/SearchFilter';
 import Card from '@/components/governance/Card';
 import {
@@ -15,7 +15,6 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from '@/components/ui/pagination';
-import PrivateRoute from '@/components/PrivateRoute';
 
 const Page = ({ onClose }) => {
   // Add onClose as a prop
@@ -74,52 +73,50 @@ const Page = ({ onClose }) => {
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <PrivateRoute>
-      <div className="mx-6 md:mx-12 my-4 mb-16 w-full relative">
-        <div className="flex mb-8 items-center">
-          <Home className="text-blue" />
-          <h1 className="font-light text-blue text-3xl">Dashboard</h1>
-        </div>
-        {/* Add the search and filter dropdown here */}
-        <SearchFilter data={data} />
-        {/* card mapping */}
-        <Card data={currentGovernance} name={name} />
-        <ToastContainer /> {/* Pagination buttons */}
-        <Pagination className="bottom absolute my-2 ">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className="hover:bg-blue hover:text-white hover:cursor-pointer 
-              "
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              />
-            </PaginationItem>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-              (pageNumber) => (
-                <PaginationItem key={pageNumber}>
-                  <PaginationLink
-                    href="#"
-                    isActive={pageNumber === currentPage}
-                    onClick={() => handlePageChange(pageNumber)}
-                    className="hover:bg-blue hover:text-white"
-                  >
-                    {pageNumber}
-                  </PaginationLink>
-                </PaginationItem>
-              )
-            )}
-            <PaginationItem>
-              <PaginationNext
-                className="hover:bg-blue hover:text-white hover:cursor-pointer "
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+    <div className="mx-6 md:mx-12 my-4 mb-16 w-full relative">
+      <div className="flex mb-8 items-center">
+        <Home className="text-blue" />
+        <h1 className="font-light text-blue text-3xl">Dashboard</h1>
       </div>
-    </PrivateRoute>
+      {/* Add the search and filter dropdown here */}
+      <SearchFilter data={data} />
+      {/* card mapping */}
+      <Card data={currentGovernance} name={name} />
+      <ToastContainer /> {/* Pagination buttons */}
+      <Pagination className="bottom absolute my-2 ">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className="hover:bg-blue hover:text-white hover:cursor-pointer 
+              "
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            />
+          </PaginationItem>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+            (pageNumber) => (
+              <PaginationItem key={pageNumber}>
+                <PaginationLink
+                  href="#"
+                  isActive={pageNumber === currentPage}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className="hover:bg-blue hover:text-white"
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          )}
+          <PaginationItem>
+            <PaginationNext
+              className="hover:bg-blue hover:text-white hover:cursor-pointer "
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 };
 
