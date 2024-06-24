@@ -1,7 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { CircleX } from 'lucide-react';
+import axios from 'axios';
 
 const PropForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -18,10 +20,33 @@ const PropForm = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle form submission here, for example, send data to backend or perform some action with formData
-    console.log(formData);
+    try {
+      const proposalData = {
+        title: formData.Title,
+        description: formData.description,
+        content: formData.Summary,
+        createdBy: '0x99D39cdB450Fca08f759E775Bb28b98215fABECa',
+        contractAdd: '0xabcdef1234567890abcdef1234567890abcdef12', // Replace with your actual contract address
+      };
+
+      console.log('Sending Proposal Data:', proposalData); // Debugging log
+
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'proposals',
+        proposalData
+      );
+      const data = response.data;
+      console.log('Success:', data);
+      if (data.ipfsCid) {
+        toast.success('Proposal Created!');
+        router.push('/proposals'); // Redirect to a page showing proposals
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to create proposal.');
+    }
   };
   return (
     <main>
@@ -88,6 +113,7 @@ const PropForm = ({ onClose }) => {
           </button>
         </div>
       </form>
+      <ToastContainer />
     </main>
   );
 };

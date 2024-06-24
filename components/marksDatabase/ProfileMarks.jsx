@@ -72,9 +72,9 @@ const profileMarks = [
 export function ProfileMarks() {
   return (
     <main>
-      <h1 className="text-xl font-bold text-center my-4"> Semester 1</h1>
+      <h1 className="text-xl font-bold text-center "> Semester 1</h1>
 
-      <Table className="w-5/6 mx-2 ">
+      <Table className="w-5/6  mx-12 rounded-2xl">
         <TableHeader className="border-gray border bg-white">
           <TableRow>
             <TableHead className="font-bold">Subject_code</TableHead>

@@ -1,27 +1,26 @@
 import React from 'react';
 
-import Image from 'next/image';
-import db from '@/app/assets/marksDB/db.svg';
-import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
-import SearchFilter from '@/components/marksDatabase/SearchFilter';
-import GovForm from '@/components/governance/GovForm';
-import { GovernanceTable } from '@/components/marksDatabase/GovernanceTable';
 import { Folder } from 'lucide-react';
+import Searchbox from '@/components/grader/Searchbox';
+import StudentInfo from '@/components/grader/StudentInfo';
+import { ProfileMarks } from '@/components/marksDatabase/ProfileMarks';
 
 const page = () => {
   return (
-    <div className=" m-8  w-full	">
-      <div className="flex mb-8 items-center">
-        <Folder className="text-blue" />
+    <div className=" my-8  w-full	">
+      <div className="flex mb-8 items-center  justify-center gap-x-1">
+        <Folder className="text-blue font-bold" />
 
-        <h1 className="font-light text-blue  text-3xl">Marks Database</h1>
+        <h1 className=" text-blue font-bold  text-3xl ">AcadHub</h1>
       </div>
 
       {/* Add the search and filter dropdown here */}
-      <SearchFilter />
+      <Searchbox />
+
+      <StudentInfo />
+      <ProfileMarks />
 
       {/* card mapping */}
-      <GovernanceTable />
     </div>
   );
 };

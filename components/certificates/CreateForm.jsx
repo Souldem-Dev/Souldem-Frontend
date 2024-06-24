@@ -1,14 +1,21 @@
 'use client';
 
 import Image from 'next/image';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const CreateForm = () => {
   const [signatureFile, setSignatureFile] = useState(null);
   const [signaturePreview, setSignaturePreview] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+
+  const [formData, setFormData] = useState({
+    authorizedName: '',
+    universityName: '',
+    colorTheme: '',
+    universityAddress: '',
+    documentType: '',
+  });
 
   const handleSignatureChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -28,8 +35,34 @@ const CreateForm = () => {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const dataToSubmit = {
+      ...formData,
+      signatureFile,
+      logoFile,
+    };
+
+    // Perform your submission logic here (e.g., sending data to a backend server)
+    console.log('Submitted data:', dataToSubmit);
+
+    // You can clear the form or show a success message here
+  };
+
   return (
-    <div className="w-11/12 bg-white drop-shadow-md h-full py-8 px-4 md:p-20  my-8 flex flex-col gap-y-12 rounded-xl">
+    <form
+      onSubmit={handleSubmit}
+      className="w-11/12 bg-white drop-shadow-md h-full py-8 px-4 md:p-20 my-8 flex flex-col gap-y-12 rounded-xl"
+    >
       <div className="flex flex-col md:flex-row w-full gap-y-2">
         <div className="md:w-1/2">
           <label className="font-bold text-lg md:text-xl">
@@ -42,10 +75,12 @@ const CreateForm = () => {
         <div className="md:w-1/2">
           <input
             type="text"
-            id="title"
-            name="title"
+            id="authorizedName"
+            name="authorizedName"
             placeholder="Enter Authorized Name"
             className="rounded-xl h-12 px-2 min-w-full bg-gray text-sm md:text-base"
+            value={formData.authorizedName}
+            onChange={handleChange}
           />
         </div>
       </div>
@@ -62,17 +97,19 @@ const CreateForm = () => {
         <div className="md:w-1/2">
           <input
             type="text"
-            id="title"
-            name="title"
+            id="universityName"
+            name="universityName"
             placeholder="Enter University Name"
             className="rounded-xl h-12 px-2 min-w-full bg-gray text-sm md:text-base"
+            value={formData.universityName}
+            onChange={handleChange}
           />
         </div>
       </div>
 
       <div>
         <label className="font-bold text-lg md:text-xl">Upload Signature</label>
-        <div className="border-2  border-gray w-full md:w-11/12 h-full flex flex-col md:flex-row gap-y-2  items-center justify-around rounded-lg ">
+        <div className="border-2 border-gray w-full md:w-11/12 h-full flex flex-col md:flex-row gap-y-2 items-center justify-around rounded-lg">
           <div className="bg-gray w-full md:w-80 h-40 md:h-60 p-4">
             {signaturePreview && (
               <div>
@@ -110,10 +147,12 @@ const CreateForm = () => {
         <div className="md:w-1/2">
           <input
             type="text"
-            id="title"
-            name="title"
-            placeholder="Enter Authorized Name"
+            id="colorTheme"
+            name="colorTheme"
+            placeholder="Enter Color Theme"
             className="rounded-xl h-12 px-2 min-w-full bg-gray text-sm md:text-base"
+            value={formData.colorTheme}
+            onChange={handleChange}
           />
         </div>
       </div>
@@ -131,10 +170,12 @@ const CreateForm = () => {
         <div className="md:w-1/2">
           <input
             type="text"
-            id="title"
-            name="title"
+            id="universityAddress"
+            name="universityAddress"
             placeholder="Enter University Address"
             className="rounded-xl h-20 md:h-28 px-2 min-w-full bg-gray text-sm md:text-base"
+            value={formData.universityAddress}
+            onChange={handleChange}
           />
         </div>
       </div>
@@ -147,14 +188,26 @@ const CreateForm = () => {
           </p>
         </div>
         <div className="md:w-1/2 flex gap-x-2">
-          <button className="btn bg-gradient-to-r from-blue to-D_blue rounded-xl p-2 px-4 md:px-8 text-white flex gap-2 text-sm md:text-base">
-            <input type="radio" name="type" value="certificate" />
+          <label className="btn bg-gradient-to-r from-blue to-D_blue rounded-xl p-2 px-4 md:px-8 text-white flex gap-2 text-sm md:text-base">
+            <input
+              type="radio"
+              name="documentType"
+              value="certificate"
+              checked={formData.documentType === 'certificate'}
+              onChange={handleChange}
+            />
             Certificate
-          </button>
-          <button className="btn bg-gradient-to-r from-gray to-white rounded-xl p-2 px-4 md:px-8 text-black flex gap-2 text-sm md:text-base">
-            <input type="radio" name="type" value="degree" />
+          </label>
+          <label className="btn bg-gradient-to-r from-gray to-white rounded-xl p-2 px-4 md:px-8 text-black flex gap-2 text-sm md:text-base">
+            <input
+              type="radio"
+              name="documentType"
+              value="marksheet"
+              checked={formData.documentType === 'marksheet'}
+              onChange={handleChange}
+            />
             Marksheet
-          </button>
+          </label>
         </div>
       </div>
 
@@ -195,7 +248,7 @@ const CreateForm = () => {
       >
         Submit
       </button>
-    </div>
+    </form>
   );
 };
 
