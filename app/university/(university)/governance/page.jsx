@@ -15,6 +15,7 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from '@/components/ui/pagination';
+import { set } from 'date-fns';
 
 const Page = ({ onClose }) => {
   // Add onClose as a prop
@@ -24,15 +25,17 @@ const Page = ({ onClose }) => {
   const [loadingToastShown, setLoadingToastShown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [governancePerPage] = useState(8);
+  const [publicAddress, setPublicAddress] = useState(null);
+
+  useEffect(() => {
+    const address = localStorage.getItem('publicAddress');
+    setPublicAddress(address);
+  }, []);
 
   const fetchData = async () => {
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const publicAddress = await signer.getAddress();
-
       const { data: getData } = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publicAddress}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${address}`
       );
       const { collegeAddress, name } = getData;
 

@@ -27,7 +27,17 @@ const Page = () => {
       );
 
       if (response.status === 200) {
+        // Assuming the backend sends the public address, email, and JWT token in the response
+        const { publickey, token } = response.data;
+
+        // Save the public address, email, and JWT token to local storage
+        localStorage.setItem('publicAddress', publickey);
+        localStorage.setItem('email', email);
+        localStorage.setItem('jwt', token);
+
+        console.log(publickey, email, token);
         toast.success('Login successful');
+
         router.push('/university/governance'); // Adjust this route as needed
       }
     } catch (error) {
@@ -36,7 +46,9 @@ const Page = () => {
         if (status === 400) {
           toast.error(data || 'Invalid email or password');
         } else if (status === 500) {
-          toast.error('An internal server error occurred. Please try again later.');
+          toast.error(
+            'An internal server error occurred. Please try again later.'
+          );
         } else {
           toast.error('An error occurred. Please try again.');
         }

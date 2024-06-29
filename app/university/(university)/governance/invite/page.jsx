@@ -11,6 +11,7 @@ const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
   const [id, setId] = useState('');
+  const [role, setRole] = useState('mentor');
 
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
@@ -35,7 +36,7 @@ const Page = () => {
         process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
         {
           url: 'https://souldem.com/invite',
-          role: 'Member',
+          role: role,
           universityName: 'Your University Name',
           GovName: 'Governance Name',
           toEmails: emails,
@@ -57,6 +58,20 @@ const Page = () => {
   return (
     <div className="m-4 w-11/12 flex flex-col">
       <div className="mt-4 flex flex-col justify-between gap-y-2">
+        <div className="flex w-full max-w-sm items-center gap-3">
+          <Label htmlFor="role" className=" text-xl">
+            Role:{' '}
+          </Label>
+          <select
+            id="role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="bg-blue text-white w-24 p-2 border rounded-md"
+          >
+            <option value="mentor">Mentor</option>
+            <option value="hod">HOD</option>
+          </select>
+        </div>
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="email">Email</Label>

@@ -18,7 +18,7 @@ const Page = () => {
 
   const handleCreateAccount = async () => {
     try {
-      const response = await axios.post(
+      const createAccountResponse = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}register/createUniversityAccount`,
         {
           email,
@@ -27,14 +27,73 @@ const Page = () => {
         }
       );
 
-      if (response.status === 200) {
-        toast.success('Account successfully created');
-        setTimeout(() => {
-          router.push('/university/login');
-        }, 3000);
-      } else {
-        toast.error(response.data.resp || 'Error creating account');
+      if (createAccountResponse.status !== 200) {
+        toast.error(
+          createAccountResponse.data.resp || 'Error creating account'
+        );
+        return;
       }
+
+      const publickey = createAccountResponse.data.publickey;
+
+      // Prepare data for signing
+      const domain = {
+        name: 'BASE_FACTORY',
+        version: '1',
+        chainId: 80002,
+        verifyingContract: '0x4D6a18A04DA817c09e456E2e2040C9411949F6dA',
+      };
+      const types = {
+        Create: [
+          { name: 'wallet', type: 'address' },
+          { name: 'universityName', type: 'string' },
+        ],
+      };
+      const value = {
+        wallet: publickey, // Replace with actual wallet address or pass it dynamically
+        universityName,
+      };
+      const signResponse = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'signature/signWithUniv',
+        {
+          email,
+          domain,
+          types,
+          value,
+        }
+      );
+      console.log(signResponse);
+
+      const signature = signResponse.data.signature;
+      if (signResponse.status !== 200) {
+        toast.error('Error signing data');
+        return;
+      }
+
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/createUniversity',
+        {
+          owner: publickey,
+          signature,
+          universityName,
+        }
+      );
+
+      console.log(response);
+
+      const contractAddress = response.data.contractAddress;
+
+      console.log(contractAddress);
+
+      if (response.status !== 200) {
+        toast.error(response.data.resp || 'Error creating account');
+        return;
+      }
+
+      toast.success('Account successfully created');
+      setTimeout(() => {
+        router.push('/university/login');
+      }, 3000);
     } catch (error) {
       toast.error('An error occurred. Please try again.');
     }

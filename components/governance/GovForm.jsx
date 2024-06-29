@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { CircleX } from 'lucide-react';
 
-const GovForm = ({ onClose }) => {
+const GovForm = ({ onClose, publickey }) => {
   const [formData, setFormData] = useState({
     governanceName: '',
     batch: '',
@@ -26,13 +26,40 @@ const GovForm = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const publicAddress = await signer.getAddress();
+      const publickey = localStorage.getItem('publicAddress');
+      console.log(publickey);
 
-      const { data: getData } = await axios.get(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/getData/' + publicAddress
-      );
+      if (!publickey) {
+        console.error('Public key is missing');
+        toast.error('Public key is missing');
+        return;
+      }
+
+      let getData;
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publickey}`
+        );
+
+        if (response.status !== 200) {
+          toast.error('Error fetching data');
+          return;
+        }
+
+        getData = response.data;
+        console.log('Data retrieved:', getData);
+      } catch (error) {
+        console.error(
+          'Error fetching data:',
+          error.response ? error.response.data : error
+        );
+        toast.error(
+          error.response?.data?.reason ||
+            'An error occurred while fetching data'
+        );
+        return;
+      }
+
       const { nonce, name, collegeAddress, relayer } = getData;
       const currentNonce = parseInt(nonce, 10);
 
@@ -55,7 +82,7 @@ const GovForm = ({ onClose }) => {
       };
 
       const value = {
-        wallet: signer.address,
+        wallet: publickey,
         governanceName: formData.governanceName,
         totalEndExamination: formData.semester,
         batch: formData.batch,
@@ -63,12 +90,30 @@ const GovForm = ({ onClose }) => {
         relayer: relayer,
       };
 
-      const signature = await signer.signTypedData(domain, types, value);
+      const email = localStorage.getItem('email');
+
+      const signResponse = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'signature/signWithUniv',
+        {
+          email,
+          domain,
+          types,
+          value,
+        }
+      );
+      console.log(signResponse);
+
+      if (signResponse.status !== 200) {
+        toast.error('Error signing data');
+        return;
+      }
+
+      const signature = signResponse.data.signature;
       console.log(signature);
 
       // Log the data to be sent to the backend
       console.log({
-        owner: signer.address,
+        owner: publickey,
         signature,
         governanceName: formData.governanceName,
         batch: formData.batch,
@@ -79,7 +124,7 @@ const GovForm = ({ onClose }) => {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/createGovernance',
         {
-          owner: signer.address,
+          owner: publickey,
           signature,
           governanceName: formData.governanceName,
           batch: formData.batch,
