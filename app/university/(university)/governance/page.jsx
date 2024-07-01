@@ -25,17 +25,14 @@ const Page = ({ onClose }) => {
   const [loadingToastShown, setLoadingToastShown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [governancePerPage] = useState(8);
-  const [publicAddress, setPublicAddress] = useState(null);
 
-  useEffect(() => {
-    const address = localStorage.getItem('publicAddress');
-    setPublicAddress(address);
-  }, []);
+  const publickey = localStorage.getItem('publicAddress');
+  console.log(publickey);
 
   const fetchData = async () => {
     try {
       const { data: getData } = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${address}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publickey}`
       );
       const { collegeAddress, name } = getData;
 

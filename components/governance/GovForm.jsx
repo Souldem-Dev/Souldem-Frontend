@@ -24,41 +24,22 @@ const GovForm = ({ onClose, publickey }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const publickey = localStorage.getItem('publicAddress');
       console.log(publickey);
 
-      if (!publickey) {
-        console.error('Public key is missing');
-        toast.error('Public key is missing');
+      // Fetching data
+      let response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publickey}`
+      );
+
+      if (response.status !== 200) {
+        toast.error('Error fetching data');
         return;
       }
 
-      let getData;
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publickey}`
-        );
-
-        if (response.status !== 200) {
-          toast.error('Error fetching data');
-          return;
-        }
-
-        getData = response.data;
-        console.log('Data retrieved:', getData);
-      } catch (error) {
-        console.error(
-          'Error fetching data:',
-          error.response ? error.response.data : error
-        );
-        toast.error(
-          error.response?.data?.reason ||
-            'An error occurred while fetching data'
-        );
-        return;
-      }
+      const getData = response.data;
+      console.log('Data retrieved:', getData);
 
       const { nonce, name, collegeAddress, relayer } = getData;
       const currentNonce = parseInt(nonce, 10);
@@ -66,9 +47,11 @@ const GovForm = ({ onClose, publickey }) => {
       const domain = {
         name: name,
         version: '1',
-        chainId: 80002,
+        chainId: 1337,
         verifyingContract: collegeAddress,
       };
+
+      console.log('Domain:', domain);
 
       const types = {
         CreateGovernance: [
@@ -89,6 +72,8 @@ const GovForm = ({ onClose, publickey }) => {
         nonces: currentNonce,
         relayer: relayer,
       };
+
+      console.log('Data to be signed:', value);
 
       const email = localStorage.getItem('email');
 
@@ -121,7 +106,7 @@ const GovForm = ({ onClose, publickey }) => {
         nonce: currentNonce,
       });
 
-      const response = await axios.post(
+      response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/createGovernance',
         {
           owner: publickey,
