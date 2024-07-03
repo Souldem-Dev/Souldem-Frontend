@@ -19,6 +19,7 @@ const Page = () => {
       setEmail('');
     }
   };
+  console.log[emails];
 
   const handleRemoveEmail = (emailToRemove) => {
     setEmails(emails.filter((email) => email !== emailToRemove));

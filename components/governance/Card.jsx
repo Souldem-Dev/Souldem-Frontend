@@ -27,7 +27,7 @@ const Card = ({ data, name }) => {
               </div>
             </div>
             {/* <Link href={`/governance/${item.address}`}> */}
-            <Link href="/proposal">
+            <Link href="/university/governance/invite">
               <button className=" absolute top-0 right-2  p-2 mx-auto my-4 text-white bg-blue   rounded-full focus:ring-1">
                 <MoveUpRight className="text-white" />
               </button>
