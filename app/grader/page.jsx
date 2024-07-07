@@ -1,54 +1,25 @@
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
 import dashboard from '@/app/assets/Governance/dashboard.svg';
 import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 import SearchFilter from '@/components/hod/SearchFilter';
-import Card from '@/components/governance/Card';
+import CardUser from '@/components/governance/CardUser';
+import axios from 'axios';
 
-const data = [
-  {
-    id: 1,
-    semester: 'Current Semester',
-    batch: 'CSE batch 2024',
-    students: 3000,
-    graders: 20,
-    others: 10,
-    university: 'Chandigarh University',
-  },
-  {
-    id: 2,
-    semester: 'Current Semester',
-    batch: 'CSE batch 2024',
-    students: 200,
-    graders: 20,
-    others: 10,
-    university: 'Chandigarh University',
-  },
-  {
-    id: 3,
-    semester: 'Current Semester',
-    batch: 'CSE batch 2024',
-    students: 3000,
-    graders: 20,
-    others: 10,
-    university: 'Chandigarh University',
-  },
-  {
-    id: 4,
-    semester: 'Current Semester',
-    batch: 'CSE batch 2024',
-    students: 3000,
-    graders: 20,
-    others: 10,
-    university: 'Chandigarh University',
-  },
-
-  // Add more objects as needed
-];
 
 const page = () => {
+  let [joinedGov,setJoinedGov] = useState([]);
+  useEffect(()=>{
+    axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"become/joinedGov/grader/"+localStorage.getItem('userPublicAddress')).then(res=>{
+      setJoinedGov(res.data)
+    }).catch(err=>{
+      console.log(err)
+    })
+  },[])
+  console.log(joinedGov)
   return (
     <div className=" m-8  w-full mb-40">
       <div className="flex mb-8">
@@ -68,7 +39,7 @@ const page = () => {
 
       {/* card mapping */}
 
-      {/* <Card data={data} /> */}
+    { joinedGov.length  !=0? <CardUser data={joinedGov} url={"http://localhost:3000/grader"}/>:null}
     </div>
   );
 };

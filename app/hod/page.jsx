@@ -1,59 +1,23 @@
-import React from 'react';
+"use client"
+import React, { useState,useEffect } from 'react';
+import axios from 'axios';
 
-import Image from 'next/image';
-import dashboard from '@/app/assets/Governance/dashboard.svg';
-import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 
-import Card from '@/components/governance/Card';
+import CardUser from '@/components/governance/CardUser';
 import { Home } from 'lucide-react';
 import SearchFilter from '@/components/hod/SearchFilter';
 
-const data = [
-  {
-    id: 1,
-    batch: 'CSE batch 2024',
-    address: '0x1a2b3C4D5e6F7G8H9I0JkLmNoPQr',
-    university: 'Chandigarh University',
-  },
-  {
-    id: 2,
-    batch: 'CSE batch 2024',
-    address: '0x2b3cD4E5F6G7H8I9J0K1lMnOpQrS',
-    university: 'Chandigarh University',
-  },
-  {
-    id: 3,
-    batch: 'CSE batch 2024',
-    address: '0x3c4dE5F6G7H8I9J0K1L2mNoPqRsT',
-    university: 'Chandigarh University',
-  },
-  {
-    id: 4,
-    batch: 'CSE batch 2024',
-    address: '0x4d5eF6G7H8I9J0K1L2M3nOpQrStU',
-    university: 'Chandigarh University',
-  },
-  {
-    id: 5,
-    batch: 'CSE batch 2024',
-    address: '0x5e6fG7H8I9J0K1L2M3N4oPqRsTuV',
-    university: 'Chandigarh University',
-  },
-  {
-    id: 6,
-    batch: 'CSE batch 2024',
-    address: '0x6f7gH8I9J0K1L2M3N4O5pQqRsTuV',
-    university: 'Chandigarh University',
-  },
-  {
-    id: 7,
-    batch: 'CSE batch 2024',
-    address: '0x7g8hI9J0K1L2M3N4O5P6qRrStTuV',
-    university: 'Chandigarh University',
-  },
-];
+
 
 const page = () => {
+  let [joinedGov,setJoinedGov] = useState([]);
+  useEffect(()=>{
+    axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"become/joinedGov/hod/"+localStorage.getItem('userPublicAddress')).then(res=>{
+      setJoinedGov(res.data)
+    }).catch(err=>{
+      console.log(err)
+    })
+  },[])
   return (
     <div className=" mx-6 md:mx-12 my-4 w-full	">
       <div className="flex mb-8 items-center">
@@ -68,7 +32,9 @@ const page = () => {
 
       {/* card mapping */}
 
-      <Card data={data} />
+      {/* <Card data={data} /> */}
+      { joinedGov.length  !=0? <CardUser data={joinedGov} url={"http://localhost:3000/hod/invite"}/>:null}
+
     </div>
   );
 };
