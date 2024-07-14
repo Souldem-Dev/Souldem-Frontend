@@ -1,34 +1,82 @@
 'use client';
-
 import React, { useState } from 'react';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
-import { Pencil } from 'lucide-react';
-import { Save } from 'lucide-react';
+import { Trash2, Pencil, Save, CheckCircle, Edit3 } from 'lucide-react';
+import axios from 'axios';
+// import {
+//   enterInternalMarks,
+//   enterExternalMarks,
+//   updateInternalMarks,
+//   updateExternalMarks,
+// } from '@/components/grader/Api';
 
-const ShadUITableComponent = () => {
-  // Initial state with sections, each section has its rows and input fields for marks
+const MarksTable = ({ formData }) => {
   const [sections, setSections] = useState([
     {
       id: 1,
       name: 'Section 1',
-      rows: [{ id: 1, marksObtained: '', totalMarks: '' }],
+      rows: [{ id: 1, marksObtained: '', totalMarks: '', isSubmitted: false }],
     },
   ]);
 
-  const [value, setValue] = useState('');
+  const handleSubmit = async () => {
+    try {
+      const ipfsJson = {
+        governAdd: '0xA7F3762336Ab6929B7C372B6219EFE0444E3001A',
+        nonce: 3,
+        semesterNo: 9,
+        subjectName: formData.subjectName,
+        subjectCode: formData.subjectCode,
+        marks: [
+          {
+            internalMark: 90,
+            eachMarkArrInternal: sections,
+            totalInternalMark: 100,
+          },
+        ],
+        externalMark: 0,
+        eachMarkArrExternal: [],
+        totalExternalMark: 0,
+      };
+      console.log(sections);
+      console.log('IPFS JSON:', ipfsJson);
 
-  // Function to add a new section
+      if (formData.selectedOption === 'internal') {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterInternalMarks`,
+          {
+            ...ipfsJson,
+            internalMark: 90,
+            eachMarkArrInternal: ipfsJson.marks[0].eachMarkArrInternal,
+            totalInternalMark: 90,
+          }
+        );
+        console.log('Internal marks entered');
+      } else if (formData.selectedOption === 'external') {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterExternalMark`,
+          {
+            ...ipfsJson,
+            externalMark: 90,
+            eachMarkArrExternal: ipfsJson.marks[0].eachMarkArrExternal,
+            totalExternalMark: 90,
+          }
+        );
+        console.log('External marks entered');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const addSection = () => {
     const newSectionId = sections.length + 1;
     const newSection = {
@@ -39,7 +87,6 @@ const ShadUITableComponent = () => {
     setSections([...sections, newSection]);
   };
 
-  // Function to add a new row to a specific section
   const addRowToSection = (sectionId) => {
     const updatedSections = sections.map((section) => {
       if (section.id === sectionId) {
@@ -55,7 +102,6 @@ const ShadUITableComponent = () => {
     setSections(updatedSections);
   };
 
-  // Function to handle input change in a specific section and row
   const handleInputChange = (sectionId, rowId, field, value) => {
     const updatedSections = sections.map((section) => {
       if (section.id === sectionId) {
@@ -66,24 +112,6 @@ const ShadUITableComponent = () => {
       }
       return section;
     });
-    setSections(updatedSections);
-  };
-
-  const deleteRow = (sectionId, rowId) => {
-    const updatedSections = sections.map((section) => {
-      if (section.id === sectionId) {
-        const updatedRows = section.rows.filter((row) => row.id !== rowId);
-        return { ...section, rows: updatedRows };
-      }
-      return section;
-    });
-    setSections(updatedSections);
-  };
-
-  const deleteSection = (sectionId) => {
-    const updatedSections = sections.filter(
-      (section) => section.id !== sectionId
-    );
     setSections(updatedSections);
   };
 
@@ -111,19 +139,19 @@ const ShadUITableComponent = () => {
   };
 
   return (
-    <div>
-      <div className="flex  justify-between items-center m-4">
-        <h1 className="text-2xl font-bold">Marks Table</h1>
-        <Button onClick={addSection} className="bg-green-500 text-white mb-4">
-          Add Section
-        </Button>
-      </div>
+    <main className="flex">
+      <div>
+        <div className="flex justify-between items-center m-4">
+          <h1 className="text-2xl font-bold">Marks Table</h1>
+          <Button onClick={addSection} className="bg-green-500 text-white mb-4">
+            Add Section
+          </Button>
+        </div>
 
-      {sections.map((section) => (
-        <div key={section.id} className="mb-8">
-          <div className="flex  justify-between items-center m-4">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center">
+        {sections.map((section) => (
+          <div key={section.id} className="mb-8">
+            <div className="flex justify-between items-center m-4">
+              <div className="flex items-center">
                 {section.isEditing ? (
                   <input
                     type="text"
@@ -132,7 +160,7 @@ const ShadUITableComponent = () => {
                       handleSectionNameChange(section.id, e.target.value)
                     }
                     onKeyUp={(e) => handleSectionNameKeyPress(e, section.id)}
-                    className="text-2xl font-bold mb-2 w-full  border border-gray-300 rounded"
+                    className="text-2xl font-bold mb-2 w-full border border-gray-300 rounded"
                     autoFocus
                   />
                 ) : (
@@ -140,87 +168,80 @@ const ShadUITableComponent = () => {
                 )}
                 <button
                   onClick={() => toggleEditSectionName(section.id)}
-                  className="ml-1 bg-blue text-white  rounded p-2"
+                  className="ml-1 bg-blue text-white rounded p-2"
                 >
                   {section.isEditing ? <Save /> : <Pencil />}
                 </button>
               </div>
               <Button
-                onClick={() => deleteSection(section.id)}
-                className="bg-red-500 text-white ml-1 p-2 "
+                onClick={() => addRowToSection(section.id)}
+                className="bg-blue text-white"
               >
-                <Trash2 />
+                Add Row
               </Button>
             </div>
-            <Button
-              onClick={() => addRowToSection(section.id)}
-              className="bg-blue text-white"
-            >
-              Add Row
-            </Button>
-          </div>
-          <Table>
-            <TableHeader className="border-gray border bg-gray">
-              <TableRow>
-                <TableHead className="font-bold">ID</TableHead>
-                <TableHead className="font-bold">Marks Obtained</TableHead>
-                <TableHead className="font-bold">Total Marks</TableHead>
-                <TableHead className="font-bold"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="bg-white">
-              {section.rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>
-                    <input
-                      type="text"
-                      value={row.marksObtained}
-                      onChange={(e) =>
-                        handleInputChange(
-                          section.id,
-                          row.id,
-                          'marksObtained',
-                          e.target.value
-                        )
-                      }
-                      placeholder="Marks Obtained"
-                      className="bg-gray h-8 px-4"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <input
-                      type="text"
-                      value={row.totalMarks}
-                      onChange={(e) =>
-                        handleInputChange(
-                          section.id,
-                          row.id,
-                          'totalMarks',
-                          e.target.value
-                        )
-                      }
-                      placeholder="Total Marks"
-                      className="bg-gray h-8 px-4"
-                    />
-                  </TableCell>
-                  <TableCell className="flex items-center">
-                    <Button className="bg-blue text-white h-8">Submit</Button>
-                    <Button
-                      onClick={() => deleteRow(section.id, row.id)}
-                      className="bg-red-500 text-white h-8"
-                    >
-                      <Trash2 />
-                    </Button>
-                  </TableCell>
+            <Table>
+              <TableHeader className="border-gray-300 border bg-gray-200">
+                <TableRow>
+                  <TableHead className="font-bold">ID</TableHead>
+                  <TableHead className="font-bold">Marks Obtained</TableHead>
+                  <TableHead className="font-bold">Total Marks</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody className="bg-white">
+                {section.rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>
+                      <input
+                        type="text"
+                        value={row.marksObtained}
+                        onChange={(e) =>
+                          handleInputChange(
+                            section.id,
+                            row.id,
+                            'marksObtained',
+                            e.target.value
+                          )
+                        }
+                        placeholder="Marks Obtained"
+                        className="bg-gray h-8 px-4 w-full border border-gray-300 rounded"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <input
+                        type="text"
+                        value={row.totalMarks}
+                        onChange={(e) =>
+                          handleInputChange(
+                            section.id,
+                            row.id,
+                            'totalMarks',
+                            e.target.value
+                          )
+                        }
+                        placeholder="Total Marks"
+                        className="bg-gray h-8 px-4 w-full border border-gray-300 rounded"
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ))}
+
+        <div>
+          <Button
+            onClick={handleSubmit}
+            className="bg-green-500 text-white mb-4"
+          >
+            Submit Marks
+          </Button>
         </div>
-      ))}
-    </div>
+      </div>
+    </main>
   );
 };
 
-export default ShadUITableComponent;
+export default MarksTable;

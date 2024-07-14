@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
@@ -9,17 +9,23 @@ import SearchFilter from '@/components/hod/SearchFilter';
 import CardUser from '@/components/governance/CardUser';
 import axios from 'axios';
 
-
 const page = () => {
-  let [joinedGov,setJoinedGov] = useState([]);
-  useEffect(()=>{
-    axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"become/joinedGov/grader/"+localStorage.getItem('userPublicAddress')).then(res=>{
-      setJoinedGov(res.data)
-    }).catch(err=>{
-      console.log(err)
-    })
-  },[])
-  console.log(joinedGov)
+  let [joinedGov, setJoinedGov] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          'become/joinedGov/grader/' +
+          localStorage.getItem('userPublicAddress')
+      )
+      .then((res) => {
+        setJoinedGov(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  console.log(joinedGov);
   return (
     <div className=" m-8  w-full mb-40">
       <div className="flex mb-8">
@@ -27,7 +33,6 @@ const page = () => {
 
         <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
       </div>
-
       {/* <div className="bg-[#FF9D9D] p-2 px-4 rounded-xl w-fit">
       <p className="text-red-600">
         &#9888; Add Nominee account integration to Souldem for enhanced user
@@ -39,7 +44,9 @@ const page = () => {
 
       {/* card mapping */}
 
-    { joinedGov.length  !=0? <CardUser data={joinedGov} url={"http://localhost:3000/grader"}/>:null}
+      {joinedGov.length != 0 ? (
+        <CardUser data={joinedGov} url={'http://localhost:3000/grader'} />
+      ) : null}
     </div>
   );
 };

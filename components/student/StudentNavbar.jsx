@@ -25,7 +25,7 @@ import { ethers } from 'ethers';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const Navbar = () => {
+const StudentNavbar = () => {
   return (
     <main className="flex justify-between  items-center w-full   drop-shadow-md h-20 bg-white px-8">
       <Link href="/governance">
@@ -53,13 +53,7 @@ const Navbar = () => {
                     <Home className="hover:text-white" />
                     <span>Governance</span>
                   </Link>
-                  <Link
-                    href="/"
-                    className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                  >
-                    <HandCoins className="hover:text-white" />
-                    <span>Buy tokens</span>
-                  </Link>
+
                   <Link
                     href="/university/certificates"
                     className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
@@ -67,20 +61,8 @@ const Navbar = () => {
                     <Award className="hover:text-white" />
                     <span>Certificates</span>
                   </Link>
-                  <Link
-                    href="/university/marksDatabase"
-                    className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                  >
-                    <Folder className="hover:text-white" />
-                    <span>Marks database</span>
-                  </Link>
                 </ul>
               </div>
-            </div>
-            <div>
-              <Button className="bg-black text-white ">
-                <Wallet /> Connect Wallet
-              </Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -89,4 +71,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default StudentNavbar;

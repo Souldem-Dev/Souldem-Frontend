@@ -4,7 +4,6 @@ import Searchbox from '@/components/grader/Searchbox';
 import StudentInfo from '@/components/grader/StudentInfo';
 import SubjectInput from '@/components/grader/SubjectInput';
 import MarksTable from '@/components/grader/MarksTable';
-import ShadUITableComponent from '@/components/grader/MarksTable';
 
 const page = () => {
   return (
@@ -17,12 +16,8 @@ const page = () => {
 
       {/* Add the search and filter dropdown here */}
       <Searchbox />
-      <div className="flex">
-        <StudentInfo />
-        <SubjectInput />
-      </div>
 
-      <ShadUITableComponent />
+      <SubjectInput />
     </div>
   );
 };
