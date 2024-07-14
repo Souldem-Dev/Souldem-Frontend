@@ -37,6 +37,7 @@ const dummyCertificates = [
   {
     id: 1,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
     degree: 'Degree Certificate',
     number: '123456789',
     university: 'Souldem University',
@@ -45,6 +46,8 @@ const dummyCertificates = [
   {
     id: 2,
     logo: '/app/assets/logo.svg',
+    tag: 'Marksheet',
+
     degree: 'Degree Certificate',
     number: '234567890',
     university: 'University of Code',
@@ -53,37 +56,42 @@ const dummyCertificates = [
   {
     id: 3,
     logo: '/app/assets/logo.svg',
+    tag: 'Marksheet',
+
     degree: 'Degree Certificate',
     number: '345678901',
     university: 'Tech Institute',
     specialization: 'Computer Scientist',
   },
-  // {
-  //   id: 4,
-  //   logo: '/app/assets/logo.svg',
-  //   degree: 'Degree Certificate',
-  //   number: '345678901',
-  //   university: 'Tech Institute',
-  //   specialization: 'Computer Scientist',
-  // },
+  {
+    id: 4,
+    logo: '/app/assets/logo.svg',
+    degree: 'Degree Certificate',
+    tag: 'Marksheet',
+    number: '345678901',
+    university: 'Tech Institute',
+    specialization: 'Computer Scientist',
+  },
 ];
 const page = () => {
   return (
     <div className=" m-8  w-full	">
-      <div className="flex mb-8">
+      <div className="flex ">
         <Image src={dashboard} alt="dashbopard" />
 
         <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
       </div>
-
+      /{' '}
+      <div className="bg-[#FF9D9D] p-2 px-4 mb-4 rounded-xl w-fit rounded-2xl">
+        <p className="text-red-600">
+          &#9888; Add Nominee account integration to Souldem for enhanced user
+          management and security.<span className="text-blue">Add Now</span>
+        </p>
+      </div>
       {/* Add the search and filter dropdown here */}
       <div className="flex flex-col">
         <div className="flex justify-between mr-20">
           <h1 className="font-light text-blue  text-xl">Issued Certificates</h1>
-
-          <Link href="student/certificates">
-            <p className='className="font-light text-blue  '>View All</p>
-          </Link>
         </div>
 
         <CertificateCard certificates={dummyCertificates} />

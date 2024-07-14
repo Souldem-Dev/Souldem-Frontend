@@ -65,10 +65,6 @@ const page = () => {
     </div> */}
       {/* Add the search and filter dropdown here */}
       <SearchFilter />
-
-      {/* card mapping */}
-
-      {/* <Card data={data} /> */}
     </div>
   );
 };

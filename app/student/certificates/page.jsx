@@ -8,6 +8,8 @@ const data = [
   {
     id: 1,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '123456789',
     university: 'Souldem University',
@@ -16,6 +18,8 @@ const data = [
   {
     id: 2,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '234567890',
     university: 'University of Code',
@@ -24,6 +28,8 @@ const data = [
   {
     id: 3,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '345678901',
     university: 'Tech Institute',
@@ -32,6 +38,8 @@ const data = [
   {
     id: 20,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '234567890',
     university: 'University of Code',
@@ -40,6 +48,8 @@ const data = [
   {
     id: 9,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '345678901',
     university: 'Tech Institute',
@@ -48,6 +58,8 @@ const data = [
   {
     id: 6,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '234567890',
     university: 'University of Code',
@@ -56,6 +68,8 @@ const data = [
   {
     id: 99,
     logo: '/app/assets/logo.svg',
+    tag: 'Degree',
+
     degree: 'Degree Certificate',
     number: '345678901',
     university: 'Tech Institute',

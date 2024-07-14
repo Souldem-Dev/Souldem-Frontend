@@ -33,6 +33,13 @@ module.exports = {
         gray: '#F2F2F3',
         para: '#415058',
         cyan: '#00AEE6',
+        blueLight: '#64A2EC',
+        purpleLight: '#A98CE3',
+        tealLight: '#8CE3CE',
+        purpleDark: '#A98CE3',
+      },
+      backdropBlur: {
+        xs: '2px',
       },
     },
   },
