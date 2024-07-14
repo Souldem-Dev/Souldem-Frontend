@@ -7,56 +7,54 @@ import CoinDesign from '@/app/assets/CoinDesign.svg';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [universityName, setUniversityName] = useState('');
 
-  const handleCreateAccount = async () => {
-    const domain = {
-      name: 'BASE_FACTORY',
-      version: '1',
-      chainId: 1337,
-      verifyingContract: '0x5E31d529989791722443Bc8F7C83ded491f15198',
-    };
-
-    const types = {
-      Create: [
-        { name: 'wallet', type: 'address' },
-        { name: 'universityName', type: 'string' },
-      ],
-    };
-
+  const handleLogin = async () => {
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL +
-          'register/createUniversityAccount',
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'login/loginUser',
         {
           email,
           password,
-          universityName,
-          domain,
-          types,
         }
       );
-      console.log(response);
 
-      if (response.status !== 200) {
-        toast.error('Error creating account');
-        router.push('/university/login');
-        return;
+      if (response.status === 200) {
+        // Assuming the backend sends the public address, email, and JWT token in the response
+        const { publickey, token } = response.data;
+
+        // Save the public address, email, and JWT token to local storage
+        localStorage.setItem('userPublicAddress', publickey);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userJwt', token);
+
+        console.log(publickey, email, token);
+        toast.success('Login successful');
+
+        router.push('/student'); // Adjust this route as needed
       }
-
-      toast.success('Account successfully created');
-      setTimeout(() => {
-        router.push('/university/login');
-      }, 3000);
     } catch (error) {
-      toast.error('An error occurred. Please try again.');
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          toast.error(data || 'Invalid email or password');
+        } else if (status === 500) {
+          toast.error(
+            'An internal server error occurred. Please try again later.'
+          );
+        } else {
+          toast.error('An error occurred. Please try again.');
+        }
+      } else {
+        toast.error('An error occurred. Please check your network connection.');
+      }
     }
   };
 
@@ -73,29 +71,19 @@ const Page = () => {
         </div>
         <div className="lg:w-5/12 md:w-6/12 h-screen bg-white flex flex-col items-center justify-center lg:px-32 px-20 gap-y-2">
           <div>
-            <h3 className="text-3xl font-bold">Create a college in</h3>
-            <h1 className="text-blue text-4xl font-extrabold">Souldem</h1>
+            <h3 className="text-3xl font-bold">
+              Login to{' '}
+              <span className="text-blue text-3xl font-extrabold">Souldem</span>
+            </h3>
             <p className="text-para">
-              Have your college on Souldem network for easier management of
-              examinations
+            Have your Educational assets seamless with souldem
             </p>
-          </div>
-
-          <div className="w-full flex flex-col gap-y-1">
-            <label>University Name</label>
-            <Input
-              type="text"
-              placeholder="Name of the University"
-              className="text-dark bg-gray"
-              value={universityName}
-              onChange={(e) => setUniversityName(e.target.value)}
-            />
           </div>
 
           <div className="w-full flex flex-col gap-y-1">
             <label>Email</label>
             <Input
-              type="email"
+              type="text"
               placeholder="email"
               className="text-dark bg-gray"
               value={email}
@@ -113,21 +101,17 @@ const Page = () => {
             />
           </div>
 
-          <p className="text-para text-xs">
-            By creating an account, I agree to Souldem's Terms of Service and
-            Privacy Policy.
-          </p>
           <Button
             className="bg-blue text-white p-2 px-4 rounded-l w-full"
-            onClick={handleCreateAccount}
+            onClick={handleLogin}
           >
-            Create College
+            Login
           </Button>
 
           <p>
-            Already have an account?{' '}
-            <Link href="/university/login" className="text-blue">
-              Login
+            Don't have an account?{' '}
+            <Link href="/university/signup" className="text-blue">
+              Signup
             </Link>
           </p>
         </div>
