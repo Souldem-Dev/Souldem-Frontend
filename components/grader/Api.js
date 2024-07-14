@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/'; // Replace with your actual backend URL
+const BASE_URL = 'http://localhost:8000/';
 
 export const enterInternalMarks = async (data) => {
   try {
@@ -9,7 +9,6 @@ export const enterInternalMarks = async (data) => {
       data
     );
     return response.data;
-    console.log(response.data);
   } catch (error) {
     throw error.response ? error.response.data : error.message;
   }

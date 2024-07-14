@@ -15,7 +15,6 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from '@/components/ui/pagination';
-import { set } from 'date-fns';
 
 const Page = ({ onClose }) => {
   // Add onClose as a prop
