@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { CircleX } from 'lucide-react';
 
-const GovForm = ({ onClose }) => {
+const GovForm = ({ onClose, publickey }) => {
   const [formData, setFormData] = useState({
     governanceName: '',
     batch: '',
@@ -24,24 +24,34 @@ const GovForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const publicAddress = await signer.getAddress();
+      const publickey = localStorage.getItem('publicAddress');
+      console.log(publickey);
 
-      const { data: getData } = await axios.get(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/getData/' + publicAddress
+      // Fetching data
+      let response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publickey}`
       );
+
+      if (response.status !== 200) {
+        toast.error('Error fetching data');
+        return;
+      }
+
+      const getData = response.data;
+      console.log('Data retrieved:', getData);
+
       const { nonce, name, collegeAddress, relayer } = getData;
       const currentNonce = parseInt(nonce, 10);
 
       const domain = {
         name: name,
         version: '1',
-        chainId: 80002,
+        chainId: 1337,
         verifyingContract: collegeAddress,
       };
+
+      console.log('Domain:', domain);
 
       const types = {
         CreateGovernance: [
@@ -55,7 +65,7 @@ const GovForm = ({ onClose }) => {
       };
 
       const value = {
-        wallet: signer.address,
+        wallet: publickey,
         governanceName: formData.governanceName,
         totalEndExamination: formData.semester,
         batch: formData.batch,
@@ -63,12 +73,32 @@ const GovForm = ({ onClose }) => {
         relayer: relayer,
       };
 
-      const signature = await signer.signTypedData(domain, types, value);
+      console.log('Data to be signed:', value);
+
+      const email = localStorage.getItem('email');
+
+      const signResponse = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'signature/signWithUniv',
+        {
+          email,
+          domain,
+          types,
+          value,
+        }
+      );
+      console.log(signResponse);
+
+      if (signResponse.status !== 200) {
+        toast.error('Error signing data');
+        return;
+      }
+
+      const signature = signResponse.data.signature;
       console.log(signature);
 
       // Log the data to be sent to the backend
       console.log({
-        owner: signer.address,
+        owner: publickey,
         signature,
         governanceName: formData.governanceName,
         batch: formData.batch,
@@ -76,10 +106,10 @@ const GovForm = ({ onClose }) => {
         nonce: currentNonce,
       });
 
-      const response = await axios.post(
+      response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'factory/createGovernance',
         {
-          owner: signer.address,
+          owner: publickey,
           signature,
           governanceName: formData.governanceName,
           batch: formData.batch,
@@ -91,6 +121,7 @@ const GovForm = ({ onClose }) => {
       console.log(response.data);
       if (response.data._type === 'TransactionResponse') {
         toast.success('Governance Created!');
+        onClose();
       }
     } catch (error) {
       console.error('Error creating governance:', error);
@@ -101,7 +132,7 @@ const GovForm = ({ onClose }) => {
   return (
     <main>
       <form
-        className="flex absolute z-10 flex-col gap-y-4 w-4/6 sm:w-5/6 md:w-2/6 m-auto h-full sm:h-2/4 p-8 bg-white  drop-shadow-xl text-L_black rounded-2xl  inset-0  backdrop-blur-xl  "
+        className="flex flex-col gap-y-4 w-5/6 md:w-2/6  mt-40 m-auto  h-max 	 p-6  bg-white  backdrop-blur-xl  z-50 drop-shadow-xl text-L_black rounded-2xl fixed inset-0"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center my-4">
@@ -156,7 +187,8 @@ const GovForm = ({ onClose }) => {
         </div>
         <button
           type="submit"
-          className="btn bg-gradient-to-r from-blue to-D_blue focus:outline-none focus:ring  w-28 text-white  py-2 px-4  mr-6  rounded-xl"
+          className="bg-blue  hover:bg-blue hover:text-white hover:cursor-pointer focus:outline-none focus:ring  w-28 text-white  py-2 px-4  mr-6  rounded-xl"
+          onSubmit={onClose}
         >
           Submit
         </button>

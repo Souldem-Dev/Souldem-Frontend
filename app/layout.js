@@ -1,4 +1,3 @@
-
 import { PT_Sans } from 'next/font/google';
 import './globals.css';
 

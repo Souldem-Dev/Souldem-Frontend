@@ -46,7 +46,7 @@ const GovSidebar = () => {
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Folder className="hover:text-white" />
-                  <span>Marks database</span>
+                  <span>AcadHub</span>
                 </Link>
               </ul>
             </div>

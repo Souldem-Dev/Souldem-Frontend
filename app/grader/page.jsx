@@ -68,7 +68,7 @@ const page = () => {
 
       {/* card mapping */}
 
-      <Card data={data} />
+      {/* <Card data={data} /> */}
     </div>
   );
 };
