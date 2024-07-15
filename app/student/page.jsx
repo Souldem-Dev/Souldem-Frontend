@@ -100,7 +100,7 @@ const page = () => {
       <div className="flex flex-col">
         <h1 className="font-light text-blue  text-xl">Dashboard</h1>
 
-        <Card data={data} />
+        {/* <Card data={data} /> */}
       </div>
     </div>
   );
