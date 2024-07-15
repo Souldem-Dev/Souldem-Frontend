@@ -1,11 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 
-import PropForm from './PropForm';
-import ProposalCard from './ProposalCard';
-import ProposalFilter from './ProposalFilter';
 import Invite from './Invite';
-import Settings from '@/components/proposal/Settings';
+import Approval from './Approval';
 
 const proposalList = [
   {
@@ -75,13 +72,13 @@ const FunctionCard = () => {
           </button>
           <button
             className={`px-4 py-2 ${
-              activeSection === 'Settings'
+              activeSection === 'Approval'
                 ? 'bg-blue text-white'
                 : 'bg-gray-200'
             } rounded-l`}
-            onClick={() => setActiveSection('Settings')}
+            onClick={() => setActiveSection('Approval')}
           >
-            Settings
+            Approval
           </button>
         </div>
       </div>
@@ -92,9 +89,9 @@ const FunctionCard = () => {
         </div>
       )}
 
-      {activeSection === 'Settings' && (
+      {activeSection === 'Approval' && (
         <div className="p-2">
-          <Settings />
+          <Approval />
         </div>
       )}
     </div>

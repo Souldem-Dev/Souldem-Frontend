@@ -139,7 +139,7 @@ const MarksTable = ({ formData }) => {
   };
 
   return (
-    <main className="flex">
+    <main className="">
       <div>
         <div className="flex justify-between items-center m-4">
           <h1 className="text-2xl font-bold">Marks Table</h1>

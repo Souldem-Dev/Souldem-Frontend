@@ -6,7 +6,13 @@ import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+<<<<<<< HEAD:app/hod/invite/[govAdd]/[govName]/[cName]/page.js
 import { useParams } from 'next/navigation';
+=======
+import ProposalBanner from '@/components/student/ProposalBanner';
+import FunctionCard from '@/components/proposal/FunctionCard';
+
+>>>>>>> fc629df (&&):app/university/(university)/governance/invite/page.jsx
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
@@ -69,6 +75,7 @@ if(emails.length !=0){
 console.log(role)
   return (
     <div className="m-4 w-11/12 flex flex-col">
+<<<<<<< HEAD:app/hod/invite/[govAdd]/[govName]/[cName]/page.js
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
           <Label htmlFor="role" className=" text-xl">
@@ -102,46 +109,11 @@ console.log(role)
             </div>
           </div>
         </div>
+=======
+      <ProposalBanner />
+>>>>>>> fc629df (&&):app/university/(university)/governance/invite/page.jsx
 
-        <div className="flex md:flex-row flex-col gap-y-4 gap-x-20">
-          <div className="grid w-full gap-1.5">
-            <Label htmlFor="To">To:</Label>
-            <div className="flex flex-col gap-2">
-              <div className="bg-gray h-60 p-2 overflow-y-auto">
-                {emails.map((email, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center bg-white p-2 mb-1 rounded-xl"
-                  >
-                    <span>{email}</span>
-                    <Button
-                      variant="outline"
-                      className="hover:bg-red-500 border-none text-red-500 hover:text-white"
-                      onClick={() => handleRemoveEmail(email)}
-                    >
-                      <X />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-x-2">
-          <Button
-            className="bg-blue text-white w-24"
-            onClick={handleSendInvite}
-          >
-            Invite
-          </Button>
-          <Button
-            variant="outline"
-            className="hover:bg-blue w-24 border-blue border"
-          >
-            Import CSV
-          </Button>
-        </div>
-      </div>
+      <FunctionCard />
     </div>
   );
 };

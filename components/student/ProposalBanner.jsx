@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 const ProposalBanner = () => {
   return (
-    <div className="relative   h-screen  mx-8">
+    <div className="relative  h-48 ">
       <div className="absolute inset-0 bg-banner-img opacity-90 rounded-2xl"></div>
 
       <div className="flex flex-col  p-8 px-4 gap-y-6 relative    ">
@@ -22,7 +22,7 @@ const ProposalBanner = () => {
             anticipated to complete their studies by 2026.
           </p>
         </div>
-        <div className=" flex border-t justify-between border-black">
+        {/* <div className=" flex border-t justify-between border-black">
           <div className="flex justify-around gap-x-6">
             <div>
               <h5 className="font-bold text-white">Members</h5>
@@ -47,7 +47,7 @@ const ProposalBanner = () => {
             <p className="text-white text-lg">Proposal Accepted</p>
             <Checkbox className="text-white" />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
