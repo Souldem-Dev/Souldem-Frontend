@@ -34,6 +34,7 @@ const Page = () => {
   };
 
   const handleExternalToggle = async () => {
+    console.log("clicked")
     setExternalToggle(!externalToggle);
     try {
       const response = await axios.post(
@@ -70,7 +71,7 @@ const Page = () => {
           <Switch
             id="internal-marks-toggle"
             className="bg-gray"
-            checked={internalToggle}
+            //checked={internalToggle}
             onChange={handleInternalToggle}
           />
         </div>

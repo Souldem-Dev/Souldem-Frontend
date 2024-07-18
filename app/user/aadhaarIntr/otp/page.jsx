@@ -31,23 +31,27 @@ const Page = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}aadhar/verifyOTP`,
+    let aadhaar_number = localStorage.getItem('aadhaar_num')
+      let userEmail = localStorage.getItem('userEmail')
+
+       axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}aadhaar/verifyOTP`,
         {
           otp: otp,
           reference_id: referenceId,
+          userEmail,
+          aadhaar_number
         }
-      );
+      ).then(res=>{
+        console.log(res)
+        toast.success('OTP verified successfully!');
+        router.push('/student');
 
-      toast.success('OTP verified successfully!');
+      }).catch(err=>{
+        toast.error('failed to verify')
+        console.log(err)
+      })
 
-      router.push('/student');
-      // Perform any additional actions after successful verification
-    } catch (error) {
-      toast.error('Failed to verify OTP');
-      console.error(error);
-    }
   };
 
   return (

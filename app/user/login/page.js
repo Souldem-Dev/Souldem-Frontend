@@ -110,7 +110,7 @@ const Page = () => {
 
           <p>
             Don't have an account?{' '}
-            <Link href="/university/signup" className="text-blue">
+            <Link href="/user/signup" className="text-blue">
               Signup
             </Link>
           </p>

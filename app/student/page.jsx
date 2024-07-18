@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import Image from 'next/image';
 import dashboard from '@/app/assets/Governance/dashboard.svg';
@@ -5,6 +6,7 @@ import dashboard from '@/app/assets/Governance/dashboard.svg';
 import Card from '@/components/governance/Card';
 import CertificateCard from '@/components/student/CertificateCard';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const data = [
   {
@@ -74,6 +76,7 @@ const dummyCertificates = [
   },
 ];
 const page = () => {
+  let router = useRouter()
   return (
     <div className=" m-8  w-full	">
       <div className="flex ">
@@ -81,11 +84,10 @@ const page = () => {
 
         <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
       </div>
-      /{' '}
+      {' '}
       <div className="bg-[#FF9D9D] p-2 px-4 mb-4 rounded-xl w-fit rounded-2xl">
         <p className="text-red-600">
-          &#9888; Add Nominee account integration to Souldem for enhanced user
-          management and security.<span className="text-blue">Add Now</span>
+          &#9888; Connect your Souldem account with aadhaar card for efficient use(manaditory)<span className="text-blue" onClick={()=>{router.push("/user/aadhaarIntr")}}> Add Now</span>
         </p>
       </div>
       {/* Add the search and filter dropdown here */}

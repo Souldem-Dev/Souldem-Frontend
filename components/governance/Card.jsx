@@ -13,7 +13,7 @@ const Card = ({ data, name }) => {
           <div className=" p-6  flex flex-col justify-between gap-y-4">
             <div>
               <div>
-                {/* <h2 className="text-2xl font-thin ">{item.args[3]}</h2> */}
+                <h2 className="text-2xl font-thin ">{item.args[3]}</h2>
                 <p> by {name}</p>
               </div>
             </div>
@@ -21,9 +21,9 @@ const Card = ({ data, name }) => {
             <div>
               <div className="flex flex-col text-right">
                 <p> Governannce address</p>
-                {/* <h2 className="text-2xl text-blue font-thin truncate ">
+                <h2 className="text-2xl text-blue font-thin truncate ">
                   {item.args[1]}
-                </h2> */}
+                </h2>
               </div>
             </div>
             {/* <Link href={`/governance/${item.address}`}> */}
