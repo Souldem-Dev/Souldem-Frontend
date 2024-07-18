@@ -1,5 +1,5 @@
-"use client"
-import React, { useState,useEffect } from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 
@@ -8,19 +8,24 @@ import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 import SearchFilter from '@/components/hod/SearchFilter';
 import CardUser from '@/components/governance/CardUser';
 
-
-
 const page = () => {
-  let [joinedGov,setJoinedGov] = useState([]);
-  useEffect(()=>{
-    axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"become/joinedGov/mentor/"+localStorage.getItem('userPublicAddress')).then(res=>{
-      setJoinedGov(res.data)
-    }).catch(err=>{
-      console.log(err)
-    })
-  },[])
+  let [joinedGov, setJoinedGov] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          'become/joinedGov/mentor/' +
+          localStorage.getItem('userPublicAddress')
+      )
+      .then((res) => {
+        setJoinedGov(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  console.log(joinedGov)
+  console.log(joinedGov);
   return (
     <div className=" m-8  w-full mb-40">
       <div className="flex mb-8">
@@ -39,8 +44,21 @@ const page = () => {
       <SearchFilter />
 
       {/* card mapping */}
-      { joinedGov.length  !=0? <CardUser data={joinedGov} url={"http://localhost:3000/mentor/invite"}/>:null}
-
+      {joinedGov.length != 0 ? (
+        <CardUser
+          data={joinedGov}
+          url={'http://localhost:3000/mentor/invite'}
+        />
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          <Image
+            src={EmptyGov}
+            alt="No Governance Joined"
+            className="h-64 w-64"
+          />
+          <p className="text-center text-gray-500 mt-4">No Governance Joined</p>
+        </div>
+      )}
     </div>
   );
 };
