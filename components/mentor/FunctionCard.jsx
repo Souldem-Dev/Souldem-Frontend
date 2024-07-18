@@ -85,7 +85,7 @@ const FunctionCard = () => {
 
       {activeSection === 'Invite' && (
         <div className="p-2">
-          <Invite />
+          <inviteMentor />
         </div>
       )}
 

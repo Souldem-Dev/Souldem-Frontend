@@ -7,12 +7,19 @@ import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
   const [id, setId] = useState('');
   const [role, setRole] = useState('grader');
-const params = useParams()
+  const params = useParams();
+
+  const [activeButton, setActiveButton] = useState('');
+
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
       setEmails([...emails, email]);
@@ -31,43 +38,63 @@ const params = useParams()
   };
 
   const handleSendInvite = async () => {
-if(emails.length !=0){
-  try {
-    const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
-      {
-        role: role,
-        universityName: params.cName,
-        GovName: params.govName,
-        universityMail:localStorage.getItem('email'),
-        toEmails: emails,
-        uniqueId:10,
-        domain:{
-          name: params.govName,
-          version: '1',
-          chainId:1337,
-          verifyingContract: params.govAdd
-      }
-      }
-    );
+    if (emails.length != 0) {
+      try {
+        const response = await axios.post(
+          process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
+          {
+            role: role,
+            universityName: params.cName,
+            GovName: params.govName,
+            universityMail: localStorage.getItem('email'),
+            toEmails: emails,
+            uniqueId: 10,
+            domain: {
+              name: params.govName,
+              version: '1',
+              chainId: 1337,
+              verifyingContract: params.govAdd,
+            },
+          }
+        );
 
-    console.log(response);
+        console.log(response);
 
-    if (response.status === 200) {
-      toast.success('Invitations sent successfully');
+        if (response.status === 200) {
+          toast.success('Invitations sent successfully');
+        } else {
+          toast.error('Failed to send invitations');
+        }
+      } catch (error) {
+        toast.error('An error occurred while sending invitations');
+      }
     } else {
-      toast.error('Failed to send invitations');
+      alert('enter email');
     }
-  } catch (error) {
-    toast.error('An error occurred while sending invitations');
-  }
-}else{
-  alert("enter email")
-}
   };
-console.log(role)
+  console.log(role);
+
   return (
     <div className="m-4 w-11/12 flex flex-col">
+      <div className="flex gap-x-4 items-center mx-auto">
+        <Link
+          href={`/university/governance/invite/${params.govAdd}/${params.govName}/${params.cName}`}
+        >
+          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
+            governance
+          </button>
+        </Link>
+
+        <Link
+          href={`/university/governance/marksEntryToggle/${params.govAdd}/${params.govName}/${params.cName}`}
+
+          // href={'/university/governance/marksEntryToggle'}
+        >
+          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
+            toggle
+          </button>
+        </Link>
+      </div>
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
           <Label htmlFor="role" className=" text-xl">

@@ -7,12 +7,13 @@ import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
+
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
   const [id, setId] = useState('');
   const [role, setRole] = useState('student');
-const params = useParams()
+  const params = useParams();
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
       setEmails([...emails, email]);
@@ -31,41 +32,41 @@ const params = useParams()
   };
 
   const handleSendInvite = async () => {
-if(emails.length !=0){
-  try {
-    const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/user',
-      {
-        role: role,
-        universityName: params.cName,
-        GovName: params.govName,
-        userMail:localStorage.getItem('userEmail'),
-        toEmails: emails,
-        uniqueId:10,
-        domain:{
-          name: params.govName,
-          version: '1',
-          chainId:1337,
-          verifyingContract: params.govAdd
-      }
-      }
-    );
+    if (emails.length != 0) {
+      try {
+        const response = await axios.post(
+          process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/user',
+          {
+            role: role,
+            universityName: params.cName,
+            GovName: params.govName,
+            userMail: localStorage.getItem('userEmail'),
+            toEmails: emails,
+            uniqueId: 10,
+            domain: {
+              name: params.govName,
+              version: '1',
+              chainId: 1337,
+              verifyingContract: params.govAdd,
+            },
+          }
+        );
 
-    console.log(response);
+        console.log(response);
 
-    if (response.status === 200) {
-      toast.success('Invitations sent successfully');
+        if (response.status === 200) {
+          toast.success('Invitations sent successfully');
+        } else {
+          toast.error('Failed to send invitations');
+        }
+      } catch (error) {
+        toast.error('An error occurred while sending invitations');
+      }
     } else {
-      toast.error('Failed to send invitations');
+      alert('enter email');
     }
-  } catch (error) {
-    toast.error('An error occurred while sending invitations');
-  }
-}else{
-  alert("enter email")
-}
   };
-console.log(role)
+  console.log(role);
   return (
     <div className="m-4 w-11/12 flex flex-col">
       <div className="mt-4 flex flex-col justify-between gap-y-2">

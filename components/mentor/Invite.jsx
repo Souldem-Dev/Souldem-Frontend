@@ -71,8 +71,7 @@ const Invite = () => {
             onChange={(e) => setRole(e.target.value)}
             className="bg-blue text-white w-24 p-2 border rounded-md"
           >
-            <option value="mentor">Mentor</option>
-            <option value="hod">HOD</option>
+            <option value="mentor">student</option>
           </select>
         </div>
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
