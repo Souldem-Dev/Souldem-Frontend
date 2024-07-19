@@ -7,6 +7,7 @@ import dashboard from '@/app/assets/Governance/dashboard.svg';
 import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
 import SearchFilter from '@/components/hod/SearchFilter';
 import CardUser from '@/components/governance/CardUser';
+import Invite from '@/components/mentor/Invite';
 
 const page = () => {
   let [joinedGov, setJoinedGov] = useState([]);
@@ -56,6 +57,7 @@ const page = () => {
             alt="No Governance Joined"
             className="h-64 w-64"
           />
+
           <p className="text-center text-gray-500 mt-4">No Governance Joined</p>
         </div>
       )}

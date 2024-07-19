@@ -6,30 +6,32 @@ import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import ProposalBanner from '@/components/student/ProposalBanner';
-import FunctionCard from '@/components/proposal/FunctionCard';
+import { useParams } from 'next/navigation';
 
 const Invite = () => {
   const [email, setEmail] = useState('');
-  const [emails, setEmails] = useState([]);
-  const [id, setId] = useState('');
+  const [regNo, setRegNo] = useState('');
+  const [invites, setInvites] = useState([]);
   const [role, setRole] = useState('mentor');
+  const params = useParams();
 
-  const handleAddEmail = () => {
-    if (email && !emails.includes(email)) {
-      setEmails([...emails, email]);
+  const handleAddInvite = () => {
+    if (email && regNo && !invites.some((invite) => invite.email === email)) {
+      setInvites([...invites, { email, regNo }]);
       setEmail('');
+      setRegNo('');
     }
   };
-  console.log[emails];
 
-  const handleRemoveEmail = (emailToRemove) => {
-    setEmails(emails.filter((email) => email !== emailToRemove));
+  console.log(invites);
+
+  const handleRemoveInvite = (emailToRemove) => {
+    setInvites(invites.filter((invite) => invite.email !== emailToRemove));
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      handleAddEmail();
+      handleAddInvite();
     }
   };
 
@@ -40,9 +42,9 @@ const Invite = () => {
         {
           url: 'https://souldem.com/invite',
           role: role,
-          universityName: 'Your University Name',
-          GovName: 'Governance Name',
-          toEmails: emails,
+          universityName: params.cName,
+          GovName: params.govName,
+          toEmails: invites.map((invite) => invite.email),
         }
       );
 
@@ -87,11 +89,26 @@ const Invite = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
-              <Button onClick={handleAddEmail} className="bg-blue text-white">
-                Add
-              </Button>
             </div>
           </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="regNo">Reg.No</Label>
+            <div className="flex gap-x-2">
+              <Input
+                type="text"
+                id="RegNo"
+                placeholder="Enter Reg.no and press Enter"
+                className="bg-gray w-full"
+                value={regNo}
+                onChange={(e) => setRegNo(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+            </div>
+          </div>
+
+          <Button onClick={handleAddInvite} className="bg-blue text-white">
+            Add
+          </Button>
         </div>
 
         <div className="flex md:flex-row flex-col gap-y-4 gap-x-20">
@@ -99,16 +116,18 @@ const Invite = () => {
             <Label htmlFor="To">To:</Label>
             <div className="flex flex-col gap-2">
               <div className="bg-gray h-60 p-2 overflow-y-auto">
-                {emails.map((email, index) => (
+                {invites.map((invite, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center bg-white p-2 mb-1 rounded-xl"
                   >
-                    <span>{email}</span>
+                    <span>
+                      {invite.email} - {invite.regNo}
+                    </span>
                     <Button
                       variant="outline"
                       className="hover:bg-red-500 border-none text-red-500 hover:text-white"
-                      onClick={() => handleRemoveEmail(email)}
+                      onClick={() => handleRemoveInvite(invite.email)}
                     >
                       <X />
                     </Button>
