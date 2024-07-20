@@ -9,65 +9,58 @@ import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-const Page = () => {
+const Invite = () => {
   const [email, setEmail] = useState('');
-  const [emails, setEmails] = useState([]);
-  const [id, setId] = useState('');
-  const [role, setRole] = useState('student');
+  const [regNo, setRegNo] = useState('');
+  const [invites, setInvites] = useState([]);
+  const [role, setRole] = useState('mentor');
   const params = useParams();
-  const handleAddEmail = () => {
-    if (email && !emails.includes(email)) {
-      setEmails([...emails, email]);
+
+  const handleAddInvite = () => {
+    if (email && regNo && !invites.some((invite) => invite.email === email)) {
+      setInvites([...invites, { email, regNo }]);
       setEmail('');
+      setRegNo('');
     }
   };
 
-  const handleRemoveEmail = (emailToRemove) => {
-    setEmails(emails.filter((email) => email !== emailToRemove));
+  console.log(invites);
+
+  const handleRemoveInvite = (emailToRemove) => {
+    setInvites(invites.filter((invite) => invite.email !== emailToRemove));
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      handleAddEmail();
+      handleAddInvite();
     }
   };
 
   const handleSendInvite = async () => {
-    if (emails.length != 0) {
-      try {
-        const response = await axios.post(
-          process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/user',
-          {
-            role: role,
-            universityName: params.cName,
-            GovName: params.govName,
-            userMail: localStorage.getItem('userEmail'),
-            toEmails: emails,
-            uniqueId: 10,
-            domain: {
-              name: params.govName,
-              version: '1',
-              chainId: 1337,
-              verifyingContract: params.govAdd,
-            },
-          }
-        );
-
-        console.log(response);
-
-        if (response.status === 200) {
-          toast.success('Invitations sent successfully');
-        } else {
-          toast.error('Failed to send invitations');
+    try {
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
+        {
+          url: 'https://souldem.com/invite',
+          role: role,
+          universityName: params.cName,
+          GovName: params.govName,
+          toEmails: invites.map((invite) => invite.email),
         }
-      } catch (error) {
-        toast.error('An error occurred while sending invitations');
+      );
+
+      console.log(response);
+
+      if (response.status === 200) {
+        toast.success('Invitations sent successfully');
+      } else {
+        toast.error('Failed to send invitations');
       }
-    } else {
-      alert('enter email');
+    } catch (error) {
+      toast.error('An error occurred while sending invitations');
     }
   };
-  console.log(role);
+
   return (
     <div className="m-4 w-11/12 flex flex-col">
          <div className="flex gap-x-4 items-center mx-auto">
@@ -102,7 +95,7 @@ const Page = () => {
             onChange={(e) => setRole(e.target.value)}
             className="bg-blue text-white w-24 p-2 border rounded-md"
           >
-            <option value="student">Student</option>
+            <option value="mentor">student</option>
           </select>
         </div>
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
@@ -118,11 +111,26 @@ const Page = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
-              <Button onClick={handleAddEmail} className="bg-blue text-white">
-                Add
-              </Button>
             </div>
           </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="regNo">Reg.No</Label>
+            <div className="flex gap-x-2">
+              <Input
+                type="text"
+                id="RegNo"
+                placeholder="Enter Reg.no and press Enter"
+                className="bg-gray w-full"
+                value={regNo}
+                onChange={(e) => setRegNo(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+            </div>
+          </div>
+
+          <Button onClick={handleAddInvite} className="bg-blue text-white">
+            Add
+          </Button>
         </div>
 
         <div className="flex md:flex-row flex-col gap-y-4 gap-x-20">
@@ -130,16 +138,18 @@ const Page = () => {
             <Label htmlFor="To">To:</Label>
             <div className="flex flex-col gap-2">
               <div className="bg-gray h-60 p-2 overflow-y-auto">
-                {emails.map((email, index) => (
+                {invites.map((invite, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center bg-white p-2 mb-1 rounded-xl"
                   >
-                    <span>{email}</span>
+                    <span>
+                      {invite.email} - {invite.regNo}
+                    </span>
                     <Button
                       variant="outline"
                       className="hover:bg-red-500 border-none text-red-500 hover:text-white"
-                      onClick={() => handleRemoveEmail(email)}
+                      onClick={() => handleRemoveInvite(invite.email)}
                     >
                       <X />
                     </Button>
@@ -168,4 +178,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Invite;
