@@ -4,8 +4,14 @@ import Searchbox from '@/components/grader/Searchbox';
 import StudentInfo from '@/components/grader/StudentInfo';
 import SubjectInput from '@/components/grader/SubjectInput';
 import MarksTable from '@/components/grader/MarksTable';
+import { useParams } from 'next/navigation';
 
 const page = () => {
+  const params = useParams();
+
+  const govAdd = params.govAdd;
+
+  console.log(govAdd);
   return (
     <div className=" m-8  w-full mb-40">
       <div className="flex items-center gap-2 mb-8">
@@ -17,7 +23,7 @@ const page = () => {
       {/* Add the search and filter dropdown here */}
       <Searchbox />
 
-      <SubjectInput />
+      <SubjectInput govAdd={govAdd} />
     </div>
   );
 };

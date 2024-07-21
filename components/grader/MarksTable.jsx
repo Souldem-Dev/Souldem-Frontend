@@ -30,9 +30,9 @@ const MarksTable = ({ formData }) => {
   const handleSubmit = async () => {
     try {
       const ipfsJson = {
-        governAdd: '0xA7F3762336Ab6929B7C372B6219EFE0444E3001A',
-        nonce: 3,
-        semesterNo: 9,
+        governAdd: formData.governAdd,
+        nonce: formData.nonce,
+        semesterNo: formData.semNo,
         subjectName: formData.subjectName,
         subjectCode: formData.subjectCode,
         marks: [

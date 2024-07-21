@@ -76,7 +76,7 @@ const Page = () => {
               <span className="text-blue text-3xl font-extrabold">Souldem</span>
             </h3>
             <p className="text-para">
-            Have your Educational assets seamless with souldem
+              Have your Educational assets seamless with souldem
             </p>
           </div>
 
