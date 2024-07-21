@@ -76,7 +76,7 @@ const Page = () => {
               <span className="text-blue text-3xl font-extrabold">Souldem</span>
             </h3>
             <p className="text-para">
-            Have your Educational assets seamless with souldem
+              Have your Educational assets seamless with souldem
             </p>
           </div>
 
@@ -110,7 +110,7 @@ const Page = () => {
 
           <p>
             Don't have an account?{' '}
-            <Link href="/university/signup" className="text-blue">
+            <Link href="/user/signup" className="text-blue">
               Signup
             </Link>
           </p>

@@ -5,57 +5,26 @@ import 'react-toastify/dist/ReactToastify.css';
 import MarksTable from './MarksTable';
 import StudentInfo from './StudentInfo';
 
-const SubjectInput = () => {
+const SubjectInput = ({ govAdd }) => {
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectName, setSubjectName] = useState('');
   const [selectedOption, setSelectedOption] = useState('internal');
   const [formData, setFormData] = useState(null);
+  const [semNo, setSemNo] = useState('');
+  const [nonce, setNonce] = useState('');
 
   const handleOptionChange = async (event) => {
     const selected = event.target.value;
     setSelectedOption(selected);
-
-    // try {
-    //   if (selected === 'internal') {
-    //     const response = await axios.post(
-    //       process.env.NEXT_PUBLIC_BACKEND_URL + 'marksheets/allowInternalMarks',
-    //       {
-    //         governAdd: '0xbD5ED0d45129dD88D87CfB9228905252fB83b1a6',
-    //         semNo: 9,
-    //         internal: true,
-    //         external: false,
-    //       }
-    //     );
-    //     if (response.status === 200) {
-    //       toast.success('Internal Marks Allowed');
-    //     }
-    //     console.log(response.data);
-    //   } else if (selected === 'external') {
-    //     const response = await axios.post(
-    //       process.env.NEXT_PUBLIC_BACKEND_URL + 'marksheets/allowExternalMarks',
-    //       {
-    //         governAdd: '0xbD5ED0d45129dD88D87CfB9228905252fB83b1a6',
-    //         semNo: 9,
-    //         internal: false,
-    //         external: true,
-    //       }
-    //     );
-    //     if (response.status === 200) {
-    //       console.log('Success');
-    //       toast.success('External Marks Allowed');
-    //     }
-    //     console.log(response.data);
-    //   }
-    // } catch (error) {
-    //   console.error('Error:', error);
-    //   toast.error('An error occurred. Please try again.');
-    // }
   };
 
   const handleSubmit = () => {
     const response = {
       subjectCode: subjectCode,
       subjectName: subjectName,
+      semNo: semNo,
+      nonce: nonce,
+      govAdd: govAdd,
       selectedOption: selectedOption,
     };
     console.log(response);
@@ -66,9 +35,7 @@ const SubjectInput = () => {
     <main>
       <div className="flex flex-col">
         <div className="flex flex-col md:flex-row">
-          <div>
-            <StudentInfo />
-          </div>
+          <div></div>
           <div>
             <div className=" md:p-4 flex flex-col m-2 md:m-12 gap-y-4">
               <div className="flex items-center justify-content">
@@ -92,6 +59,29 @@ const SubjectInput = () => {
                   placeholder="Enter Subject Name"
                   value={subjectName}
                   onChange={(e) => setSubjectName(e.target.value)}
+                  className="text-para border-0 focus:ring-0 focus:outline-none bg-gray rounded-xl px-2 h-12 w-full"
+                />
+              </div>
+
+              <div className="flex items-center justify-content">
+                <label className="text-para font-bold w-1/3">
+                  Semester Number
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Semester Number"
+                  value={semNo}
+                  onChange={(e) => setSemNo(e.target.value)}
+                  className="w-full h-12 text-para border-0 focus:ring-0 focus:outline-none bg-gray rounded-xl px-2"
+                />
+              </div>
+              <div className="flex items-center justify-content">
+                <label className="text-para font-bold w-1/3">Nonce</label>
+                <input
+                  type="text"
+                  placeholder="Enter Nonce"
+                  value={nonce}
+                  onChange={(e) => setNonce(e.target.value)}
                   className="text-para border-0 focus:ring-0 focus:outline-none bg-gray rounded-xl px-2 h-12 w-full"
                 />
               </div>

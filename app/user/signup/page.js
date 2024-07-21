@@ -17,11 +17,9 @@ const Page = () => {
   const [userName, setUserName] = useState('');
 
   const handleCreateAccount = async () => {
-
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL +
-          'register/createUser',
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'register/createUser',
         {
           email,
           password,
