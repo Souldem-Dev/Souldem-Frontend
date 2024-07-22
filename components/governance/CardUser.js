@@ -28,7 +28,7 @@ const Card = (props) => {
               </div>
             </div>
             {/* <Link href={`/governance/${item.address}`}> */}
-            <Link href={props.url+"/"+item.governAdd+"/"+item.gName+"/"+item.cName}>
+            <Link href={props.url+"/"+item.governAdd}>
               <button className=" absolute top-0 right-2  p-2 mx-auto my-4 text-white bg-blue   rounded-full focus:ring-1">
                 <MoveUpRight className="text-white" />
               </button>

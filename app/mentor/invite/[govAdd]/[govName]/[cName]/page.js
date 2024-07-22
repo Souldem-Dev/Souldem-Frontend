@@ -39,13 +39,19 @@ const Invite = () => {
   const handleSendInvite = async () => {
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/student',
         {
           url: 'https://souldem.com/invite',
           role: role,
           universityName: params.cName,
           GovName: params.govName,
-          toEmails: invites.map((invite) => invite.email),
+          toEmails: invites,
+          domain:{
+            name: params.govName,
+            version: '1',
+            chainId: 1337,
+            verifyingContract: params.govAdd,
+          },
         }
       );
 
@@ -58,8 +64,7 @@ const Invite = () => {
       }
     } catch (error) {
       toast.error('An error occurred while sending invitations');
-    }
-  };
+    }  };
 
   return (
     <div className="m-4 w-11/12 flex flex-col">

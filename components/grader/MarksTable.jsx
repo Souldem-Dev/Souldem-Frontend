@@ -29,10 +29,11 @@ const MarksTable = ({ formData }) => {
 
   const handleSubmit = async () => {
     try {
+      console.log(formData.governAdd)
       const ipfsJson = {
-        governAdd: formData.governAdd,
-        nonce: formData.nonce,
-        semesterNo: formData.semNo,
+        governAdd: formData.govAdd,
+        nonce: parseInt(formData.nonce),
+        semesterNo: parseInt(formData.semNo),
         subjectName: formData.subjectName,
         subjectCode: formData.subjectCode,
         marks: [
@@ -45,6 +46,7 @@ const MarksTable = ({ formData }) => {
         externalMark: 0,
         eachMarkArrExternal: [],
         totalExternalMark: 0,
+        graderAdd: localStorage.getItem('userPublicAddress')
       };
       console.log(sections);
       console.log('IPFS JSON:', ipfsJson);

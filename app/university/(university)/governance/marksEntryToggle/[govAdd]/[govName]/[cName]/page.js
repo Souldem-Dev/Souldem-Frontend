@@ -19,7 +19,7 @@ const Page = () => {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'marksheets/allowInternalMarks',
         {
-          governAdd: '0xbD5ED0d45129dD88D87CfB9228905252fB83b1a6',
+          governAdd: params.govAdd,
           semNo: 9,
           internal: !internalToggle,
           external: false,

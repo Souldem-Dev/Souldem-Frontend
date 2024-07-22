@@ -11,7 +11,7 @@ const SubjectInput = ({ govAdd }) => {
   const [selectedOption, setSelectedOption] = useState('internal');
   const [formData, setFormData] = useState(null);
   const [semNo, setSemNo] = useState('');
-  const [nonce, setNonce] = useState('');
+  const [nonce, setNonce] = useState(0);
 
   const handleOptionChange = async (event) => {
     const selected = event.target.value;
@@ -34,7 +34,7 @@ const SubjectInput = ({ govAdd }) => {
   return (
     <main>
       <div className="flex flex-col">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row justify-center">
           <div></div>
           <div>
             <div className=" md:p-4 flex flex-col m-2 md:m-12 gap-y-4">
@@ -78,7 +78,7 @@ const SubjectInput = ({ govAdd }) => {
               <div className="flex items-center justify-content">
                 <label className="text-para font-bold w-1/3">Nonce</label>
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter Nonce"
                   value={nonce}
                   onChange={(e) => setNonce(e.target.value)}
