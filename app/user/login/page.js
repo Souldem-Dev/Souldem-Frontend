@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const Page = () => {
   const router = useRouter();
@@ -36,6 +37,8 @@ const Page = () => {
         localStorage.setItem('userJwt', token);
 
         console.log(publickey, email, token);
+
+        Cookies.set('userJwt', token, { expires: 1 });
         toast.success('Login successful');
 
         router.push('/student'); // Adjust this route as needed

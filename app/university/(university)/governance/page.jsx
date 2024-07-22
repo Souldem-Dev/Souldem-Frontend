@@ -25,11 +25,9 @@ const Page = ({ onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [governancePerPage] = useState(8);
 
-  const publickey = localStorage.getItem('publicAddress');
-  console.log(publickey);
-
   const fetchData = async () => {
     try {
+      const publickey = localStorage.getItem('publicAddress');
       const { data: getData } = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${publickey}`
       );

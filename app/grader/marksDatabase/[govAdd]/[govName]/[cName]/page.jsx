@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React from 'react';
 import { Folder } from 'lucide-react';
 import Searchbox from '@/components/grader/Searchbox';

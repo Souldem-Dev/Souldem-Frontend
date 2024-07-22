@@ -9,40 +9,51 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Trash2, Pencil, Save, CheckCircle, Edit3 } from 'lucide-react';
+import { Pencil, Save } from 'lucide-react';
 import axios from 'axios';
-// import {
-//   enterInternalMarks,
-//   enterExternalMarks,
-//   updateInternalMarks,
-//   updateExternalMarks,
-// } from '@/components/grader/Api';
 
 const MarksTable = ({ formData }) => {
   const [sections, setSections] = useState([
     {
-      id: 1,
       name: 'Section 1',
-      rows: [{ id: 1, marksObtained: '', totalMarks: '', isSubmitted: false }],
+      rows: [{ marksObtained: '', totalMarks: '' }],
     },
   ]);
 
   const handleSubmit = async () => {
     try {
-      console.log(formData.governAdd)
+      const totalMark = sections.reduce((acc, section) => {
+        return (
+          acc +
+          section.rows.reduce(
+            (rowAcc, row) => rowAcc + Number(row.totalMarks || 0),
+            0
+          )
+        );
+      }, 0);
+
+      const marksObtained = sections.reduce((acc, section) => {
+        return (
+          acc +
+          section.rows.reduce(
+            (rowAcc, row) => rowAcc + Number(row.marksObtained || 0),
+            0
+          )
+        );
+      }, 0);
+
       const ipfsJson = {
         governAdd: formData.govAdd,
-        nonce: parseInt(formData.nonce),
-        semesterNo: parseInt(formData.semNo),
+        nonce: formData.nonce,
+        semesterNo: formData.semNo,
+        graderAdd: localStorage.getItem('userPublicAddress'),
         subjectName: formData.subjectName,
         subjectCode: formData.subjectCode,
-        marks: [
-          {
-            internalMark: 90,
-            eachMarkArrInternal: sections,
-            totalInternalMark: 100,
-          },
-        ],
+
+        internalMark: marksObtained,
+        eachMarkArrInternal: sections,
+        totalInternalMark: totalMark,
+
         externalMark: 0,
         eachMarkArrExternal: [],
         totalExternalMark: 0,
@@ -54,11 +65,9 @@ const MarksTable = ({ formData }) => {
       if (formData.selectedOption === 'internal') {
         await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterInternalMarks`,
+
           {
             ...ipfsJson,
-            internalMark: 90,
-            eachMarkArrInternal: ipfsJson.marks[0].eachMarkArrInternal,
-            totalInternalMark: 90,
           }
         );
         console.log('Internal marks entered');
@@ -67,9 +76,10 @@ const MarksTable = ({ formData }) => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterExternalMark`,
           {
             ...ipfsJson,
-            externalMark: 90,
-            eachMarkArrExternal: ipfsJson.marks[0].eachMarkArrExternal,
-            totalExternalMark: 90,
+
+            externalMark: marksObtained,
+            totalExternalMark: totalMark,
+            eachMarkArrExternal: sections,
           }
         );
         console.log('External marks entered');
@@ -79,21 +89,72 @@ const MarksTable = ({ formData }) => {
     }
   };
 
+  const handleUpdate = async (updateType) => {
+    try {
+      const totalMarkUpdated = sections.reduce((acc, section) => {
+        return (
+          acc +
+          section.rows.reduce(
+            (rowAcc, row) => rowAcc + Number(row.totalMarks || 0),
+            0
+          )
+        );
+      }, 0);
+
+      const marksObtainedUpdated = sections.reduce((acc, section) => {
+        return (
+          acc +
+          section.rows.reduce(
+            (rowAcc, row) => rowAcc + Number(row.marksObtained || 0),
+            0
+          )
+        );
+      }, 0);
+
+      const url =
+        updateType === 'internal'
+          ? `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateInternal`
+          : `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateExternalMark`;
+
+      const data =
+        updateType === 'internal'
+          ? {
+              governAdd: formData.govAdd,
+              nonce: formData.nonce,
+              subjectCode: formData.subjectCode,
+              newInternalMark: marksObtainedUpdated,
+
+              newEachMarkArrInternal: sections,
+              semesterNo: formData.semNo,
+            }
+          : {
+              governAdd: formData.govAdd,
+              nonce: formData.nonce,
+              subjectCode: formData.subjectCode,
+              newExternalMark: marksObtainedUpdated,
+              newEachMarkArrExternal: sections,
+              semesterNo: formData.semNo,
+            };
+
+      await axios.patch(url, data);
+      console.log(data);
+      console.log(`${updateType} marks updated`);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   const addSection = () => {
-    const newSectionId = sections.length + 1;
     const newSection = {
-      id: newSectionId,
-      name: `Section ${newSectionId}`,
-      rows: [{ id: 1, marksObtained: '', totalMarks: '' }],
+      name: `Section ${sections.length + 1}`,
+      rows: [{ marksObtained: '', totalMarks: '' }],
     };
     setSections([...sections, newSection]);
   };
 
-  const addRowToSection = (sectionId) => {
+  const addRowToSection = (sectionName) => {
     const updatedSections = sections.map((section) => {
-      if (section.id === sectionId) {
+      if (section.name === sectionName) {
         const newRow = {
-          id: section.rows.length + 1,
           marksObtained: '',
           totalMarks: '',
         };
@@ -104,11 +165,11 @@ const MarksTable = ({ formData }) => {
     setSections(updatedSections);
   };
 
-  const handleInputChange = (sectionId, rowId, field, value) => {
+  const handleInputChange = (sectionName, rowIndex, field, value) => {
     const updatedSections = sections.map((section) => {
-      if (section.id === sectionId) {
-        const updatedRows = section.rows.map((row) =>
-          row.id === rowId ? { ...row, [field]: value } : row
+      if (section.name === sectionName) {
+        const updatedRows = section.rows.map((row, index) =>
+          index === rowIndex ? { ...row, [field]: value } : row
         );
         return { ...section, rows: updatedRows };
       }
@@ -117,31 +178,31 @@ const MarksTable = ({ formData }) => {
     setSections(updatedSections);
   };
 
-  const handleSectionNameChange = (sectionId, newName) => {
+  const handleSectionNameChange = (sectionName, newName) => {
     const updatedSections = sections.map((section) =>
-      section.id === sectionId ? { ...section, name: newName } : section
+      section.name === sectionName ? { ...section, name: newName } : section
     );
     setSections(updatedSections);
   };
 
-  const toggleEditSectionName = (sectionId) => {
+  const toggleEditSectionName = (sectionName) => {
     const updatedSections = sections.map((section) =>
-      section.id === sectionId
+      section.name === sectionName
         ? { ...section, isEditing: !section.isEditing }
         : section
     );
     setSections(updatedSections);
   };
 
-  const handleSectionNameKeyPress = (e, sectionId) => {
+  const handleSectionNameKeyPress = (e, sectionName) => {
     if (e.key === 'Enter') {
-      handleSectionNameChange(sectionId, e.target.value);
-      toggleEditSectionName(sectionId);
+      handleSectionNameChange(sectionName, e.target.value);
+      toggleEditSectionName(sectionName);
     }
   };
 
   return (
-    <main className="">
+    <main className="flex">
       <div>
         <div className="flex justify-between items-center m-4">
           <h1 className="text-2xl font-bold">Marks Table</h1>
@@ -150,8 +211,8 @@ const MarksTable = ({ formData }) => {
           </Button>
         </div>
 
-        {sections.map((section) => (
-          <div key={section.id} className="mb-8">
+        {sections.map((section, sectionIndex) => (
+          <div key={sectionIndex} className="mb-8">
             <div className="flex justify-between items-center m-4">
               <div className="flex items-center">
                 {section.isEditing ? (
@@ -159,9 +220,9 @@ const MarksTable = ({ formData }) => {
                     type="text"
                     defaultValue={section.name}
                     onBlur={(e) =>
-                      handleSectionNameChange(section.id, e.target.value)
+                      handleSectionNameChange(section.name, e.target.value)
                     }
-                    onKeyUp={(e) => handleSectionNameKeyPress(e, section.id)}
+                    onKeyUp={(e) => handleSectionNameKeyPress(e, section.name)}
                     className="text-2xl font-bold mb-2 w-full border border-gray-300 rounded"
                     autoFocus
                   />
@@ -169,14 +230,14 @@ const MarksTable = ({ formData }) => {
                   <h1 className="text-2xl font-bold">{section.name}</h1>
                 )}
                 <button
-                  onClick={() => toggleEditSectionName(section.id)}
+                  onClick={() => toggleEditSectionName(section.name)}
                   className="ml-1 bg-blue text-white rounded p-2"
                 >
                   {section.isEditing ? <Save /> : <Pencil />}
                 </button>
               </div>
               <Button
-                onClick={() => addRowToSection(section.id)}
+                onClick={() => addRowToSection(section.name)}
                 className="bg-blue text-white"
               >
                 Add Row
@@ -191,17 +252,17 @@ const MarksTable = ({ formData }) => {
                 </TableRow>
               </TableHeader>
               <TableBody className="bg-white">
-                {section.rows.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.id}</TableCell>
+                {section.rows.map((row, rowIndex) => (
+                  <TableRow key={rowIndex}>
+                    <TableCell>{rowIndex + 1}</TableCell>
                     <TableCell>
                       <input
                         type="text"
                         value={row.marksObtained}
                         onChange={(e) =>
                           handleInputChange(
-                            section.id,
-                            row.id,
+                            section.name,
+                            rowIndex,
                             'marksObtained',
                             e.target.value
                           )
@@ -216,8 +277,8 @@ const MarksTable = ({ formData }) => {
                         value={row.totalMarks}
                         onChange={(e) =>
                           handleInputChange(
-                            section.id,
-                            row.id,
+                            section.name,
+                            rowIndex,
                             'totalMarks',
                             e.target.value
                           )
@@ -239,6 +300,9 @@ const MarksTable = ({ formData }) => {
             className="bg-green-500 text-white mb-4"
           >
             Submit Marks
+          </Button>
+          <Button onClick={handleUpdate} className="bg-blue text-white mb-4">
+            Update
           </Button>
         </div>
       </div>

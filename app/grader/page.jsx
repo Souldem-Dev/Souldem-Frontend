@@ -46,7 +46,10 @@ const page = () => {
       {/* card mapping */}
 
       {joinedGov.length != 0 ? (
-        <CardUser data={joinedGov} url={'http://localhost:3000/grader/marksDatabase'} />
+        <CardUser
+          data={joinedGov}
+          url={'http://localhost:3000/grader/marksDatabase'}
+        />
       ) : (
         <div className="flex flex-col items-center justify-center">
           <Image

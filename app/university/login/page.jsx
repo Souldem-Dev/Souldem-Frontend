@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const Page = () => {
   const router = useRouter();
@@ -27,19 +28,17 @@ const Page = () => {
       );
 
       if (response.status === 200) {
-        // Assuming the backend sends the public address, email, and JWT token in the response
         const { publickey, token, id } = response.data;
-
-        // Save the public address, email, and JWT token to local storage
         localStorage.setItem('publicAddress', publickey);
         localStorage.setItem('email', email);
         localStorage.setItem('jwt', token);
         localStorage.setItem('userId', id);
+        Cookies.set('jwt', token, { expires: 1 });
 
-        console.log(publickey, email, token);
         toast.success('Login successful');
 
-        // Call the protected route
+        console.log(token);
+
         try {
           const protectedResponse = await axios.post(
             process.env.NEXT_PUBLIC_BACKEND_URL + 'login/universityEnv',
@@ -54,7 +53,6 @@ const Page = () => {
           if (protectedResponse.status === 200) {
             const { id, email, publicAdd } = protectedResponse.data;
             console.log(id, email, publicAdd);
-            // Handle the response as needed, e.g., update state or local storage
           }
         } catch (protectedError) {
           if (protectedError.response) {

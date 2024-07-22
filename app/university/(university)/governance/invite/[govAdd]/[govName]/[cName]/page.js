@@ -48,7 +48,6 @@ const Page = () => {
             GovName: params.govName,
             universityMail: localStorage.getItem('email'),
             toEmails: emails,
-            uniqueId: 10,
             domain: {
               name: params.govName,
               version: '1',
