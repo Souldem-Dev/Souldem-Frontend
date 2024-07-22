@@ -21,9 +21,9 @@ const Card = ({ data, name }) => {
             <div>
               <div className="flex flex-col text-right">
                 <p> Governannce address</p>
-                {/* <h2 className="text-2xl text-blue font-thin truncate ">
+                <h2 className="text-2xl text-blue font-thin truncate ">
                   {item.args[1]}
-                </h2> */}
+                </h2>
               </div>
             </div>
             {/* <Link href={`/governance/${item.address}`}> */}

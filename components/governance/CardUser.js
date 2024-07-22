@@ -3,7 +3,7 @@ import { MoveUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 const Card = (props) => {
-    console.log("from prop",props.data)
+  console.log('from prop', props.data);
   return (
     <main className="  grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 w-full  gap-y-8  gap-x-4  ">
       {props.data.map((item, index) => (
@@ -28,7 +28,17 @@ const Card = (props) => {
               </div>
             </div>
             {/* <Link href={`/governance/${item.address}`}> */}
-            <Link href={props.url+"/"+item.governAdd+"/"+item.gName+"/"+item.cName}>
+            <Link
+              href={
+                props.url +
+                '/' +
+                item.governAdd +
+                '/' +
+                item.gName +
+                '/' +
+                item.cName
+              }
+            >
               <button className=" absolute top-0 right-2  p-2 mx-auto my-4 text-white bg-blue   rounded-full focus:ring-1">
                 <MoveUpRight className="text-white" />
               </button>

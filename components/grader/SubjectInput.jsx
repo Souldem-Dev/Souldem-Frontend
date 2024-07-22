@@ -18,16 +18,26 @@ const SubjectInput = ({ govAdd }) => {
     setSelectedOption(selected);
   };
 
+  console.log(govAdd);
   const handleSubmit = () => {
+    const semNoInt = parseInt(semNo);
+    const nonceInt = parseInt(nonce);
+
+    if (isNaN(semNoInt) || isNaN(nonceInt)) {
+      toast.error('Semester Number and Nonce must be integers');
+      return;
+    }
+
     const response = {
       subjectCode: subjectCode,
       subjectName: subjectName,
-      semNo: semNo,
-      nonce: nonce,
+      semNo: semNoInt,
+      nonce: nonceInt,
       govAdd: govAdd,
       selectedOption: selectedOption,
     };
     console.log(response);
+    console.log('address', govAdd);
     setFormData(response);
   };
 

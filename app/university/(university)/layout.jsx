@@ -6,6 +6,7 @@ export default function Layout({ children }) {
   return (
     <main>
       <Navbar />
+
       <div className="flex  bg-[#FAFAFD]">
         <GovSidebar />
 
