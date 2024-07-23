@@ -49,14 +49,6 @@ const MarksTable = ({ formData }) => {
         graderAdd: localStorage.getItem('userPublicAddress'),
         subjectName: formData.subjectName,
         subjectCode: formData.subjectCode,
-
-        internalMark: marksObtained,
-        eachMarkArrInternal: sections,
-        totalInternalMark: totalMark,
-
-        externalMark: 0,
-        eachMarkArrExternal: [],
-        totalExternalMark: 0,
       };
       console.log(sections);
       console.log('IPFS JSON:', ipfsJson);
@@ -67,6 +59,9 @@ const MarksTable = ({ formData }) => {
 
           {
             ...ipfsJson,
+            internalMark: marksObtained,
+            eachMarkArrInternal: sections,
+            totalInternalMark: totalMark,
           }
         );
         console.log('Internal marks entered');
@@ -75,7 +70,6 @@ const MarksTable = ({ formData }) => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterExternalMark`,
           {
             ...ipfsJson,
-
             externalMark: marksObtained,
             totalExternalMark: totalMark,
             eachMarkArrExternal: sections,
@@ -88,7 +82,7 @@ const MarksTable = ({ formData }) => {
     }
   };
 
-  const handleUpdate = async (updateType) => {
+  const handleUpdate = async () => {
     try {
       const totalMarkUpdated = sections.reduce((acc, section) => {
         return (
@@ -110,30 +104,30 @@ const MarksTable = ({ formData }) => {
         );
       }, 0);
 
+      const updateType = formData.selectedOption;
+
+      console.log('update type:', updateType);
       const url =
         updateType === 'internal'
           ? `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateInternal`
           : `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateExternalMark`;
 
-      const data =
-        updateType === 'internal'
-          ? {
-              governAdd: formData.govAdd,
-              nonce: formData.nonce,
-              subjectCode: formData.subjectCode,
-              newInternalMark: marksObtainedUpdated,
+      const data = {
+        governAdd: formData.govAdd,
+        nonce: formData.nonce,
+        subjectCode: formData.subjectCode,
+        semesterNo: formData.semNo,
+      };
 
-              newEachMarkArrInternal: sections,
-              semesterNo: formData.semNo,
-            }
-          : {
-              governAdd: formData.govAdd,
-              nonce: formData.nonce,
-              subjectCode: formData.subjectCode,
-              newExternalMark: marksObtainedUpdated,
-              newEachMarkArrExternal: sections,
-              semesterNo: formData.semNo,
-            };
+      if (updateType === 'internal') {
+        data.newInternalMark = marksObtainedUpdated;
+        data.newEachMarkArrInternal = sections;
+        data.newTotalInternalMark = totalMarkUpdated;
+      } else {
+        data.newExternalMark = marksObtainedUpdated;
+        data.newEachMarkArrExternal = sections;
+        data.newTotalExternalMark = totalMarkUpdated;
+      }
 
       await axios.patch(url, data);
       console.log(data);
@@ -142,6 +136,7 @@ const MarksTable = ({ formData }) => {
       console.error('Error:', error);
     }
   };
+
   const addSection = () => {
     const newSection = {
       name: `Section ${sections.length + 1}`,
