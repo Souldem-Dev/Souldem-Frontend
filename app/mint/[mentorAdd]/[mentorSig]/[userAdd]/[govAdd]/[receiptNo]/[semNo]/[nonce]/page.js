@@ -10,9 +10,17 @@ function Page(){
     useEffect(()=>{
         let govAdd = params.govAdd
         let semNo = params.semNo
-        axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+`marksheets/getResult/${govAdd}/3/${semNo}`).then(res=>{
-        console.log(res.data)
-        setDt(res.data)
+        let nonce = params.nonce
+        console.log(params)
+        axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+`marksheets/getResult/${govAdd}/${nonce}/${semNo}`).then(res=>{
+        console.log(res.data.ipfsCid)
+        axios.post(process.env.NEXT_PUBLIC_BACKEND_URL+"marksheets/mintCert",{governAdd:govAdd,studentAdd:params.userAdd,mentorAdd:params.mentorAdd,currentSem:parseInt(params.semNo),receiptNo:params.receiptNo,mentorSignature:params.mentorSig, _ipfsCID:res.data.ipfsCid,relayerSig:res.data.signature,degreeIpfs:""}).then(resp=>{
+            console.log(resp)
+            setDt(res.data)
+        }).catch(err=>{
+            console.log(err)
+        })
+
         }).catch(err=>{
             console.log(err)
         })
@@ -50,3 +58,4 @@ function Page(){
     )
 }
 export default Page
+

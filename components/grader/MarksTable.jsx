@@ -110,7 +110,7 @@ const MarksTable = ({ formData }) => {
           )
         );
       }, 0);
-
+console.log(updateType)
       const url =
         updateType === 'internal'
           ? `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateInternal`

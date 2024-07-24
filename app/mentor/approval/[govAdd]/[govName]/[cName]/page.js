@@ -26,9 +26,11 @@ const Page = () => {
         name: params.govName,
         version: '1',
         chainId: 1337,
-        verifyingContract: params.cName
+        verifyingContract: params.govAdd
     }
     let userMail = localStorage.getItem('userEmail')
+    console.log(resp)
+    console.log(domain)
       axios.post(process.env.NEXT_PUBLIC_BACKEND_URL+"mail/sendMail/approve/student",{domain,student:resp,userMail}).then(res=>{
         console.log(res)
         toast.success("mail sent")
@@ -97,7 +99,7 @@ const Page = () => {
           </div>
           <div className="md:w-1/2">
             <input
-              type="text"
+              type="number"
               id="currentSemester"
               name="currentSemester"
               placeholder="Enter current semester of the student"

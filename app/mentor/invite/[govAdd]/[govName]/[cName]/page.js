@@ -13,7 +13,7 @@ const Invite = () => {
   const [email, setEmail] = useState('');
   const [regNo, setRegNo] = useState('');
   const [invites, setInvites] = useState([]);
-  const [role, setRole] = useState('mentor');
+  const [role, setRole] = useState('student');
   const params = useParams();
 
   const handleAddInvite = () => {
@@ -41,7 +41,7 @@ const Invite = () => {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/student',
         {
-          url: 'https://souldem.com/invite',
+          userMail:localStorage.getItem('userEmail'),
           role: role,
           universityName: params.cName,
           GovName: params.govName,
