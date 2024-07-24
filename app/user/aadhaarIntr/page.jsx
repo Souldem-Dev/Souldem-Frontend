@@ -24,44 +24,32 @@ const Page = () => {
 
   const handleGenerateOtp = async () => {
     // Validate Aadhaar number
-    try {
+    
       aadhaarSchema.parse(aadhaarNo);
       setError('');
 
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'aadhar/sendOTP',
+      axios.post(
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'aadhaar/sendOTP',
         {
-          aadharNo: aadhaarNo,
+          aadhaarNo: aadhaarNo,
         }
-      );
-      // Access reference_id from response.data.data
-      if (
-        response.data &&
-        response.data.data &&
-        response.data.data.reference_id
-      ) {
-        const referenceId = response.data.data.reference_id;
+      ).then(res=>{
+        const referenceId = res.data.data.reference_id;
+        console.log("your reference id: ",referenceId)
         toast.success('OTP sent successfully!');
 
         // Save reference_id in local storage
         localStorage.setItem('reference_id', referenceId);
+        localStorage.setItem('aadhaar_num',aadhaarNo)
 
         // Redirect to OTP verification page
-        router.push('user/aadhaarIntr/otp');
-      } else {
-        toast.error('Invalid response from server');
-        console.error('Invalid response:', response);
-      }
-    } catch (validationError) {
-      if (validationError instanceof z.ZodError) {
-        setError(validationError.errors[0].message);
-        toast.error(validationError.errors[0].message);
-      } else {
-        toast.error('Failed to send OTP');
-        console.error(validationError);
-      }
-    }
-  };
+        router.push('/user/aadhaarIntr/otp');
+      }).catch(err=>{
+        console.log(err)
+        toast.error("failed to send otp!")
+      })
+  }
+  
 
   return (
     <div>

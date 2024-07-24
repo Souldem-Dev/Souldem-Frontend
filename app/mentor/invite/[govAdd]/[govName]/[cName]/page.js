@@ -7,12 +7,13 @@ import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 const Invite = () => {
   const [email, setEmail] = useState('');
   const [regNo, setRegNo] = useState('');
   const [invites, setInvites] = useState([]);
-  const [role, setRole] = useState('mentor');
+  const [role, setRole] = useState('student');
   const params = useParams();
 
   const handleAddInvite = () => {
@@ -38,13 +39,19 @@ const Invite = () => {
   const handleSendInvite = async () => {
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/student',
         {
-          url: 'https://souldem.com/invite',
+          userMail:localStorage.getItem('userEmail'),
           role: role,
           universityName: params.cName,
           GovName: params.govName,
-          toEmails: invites.map((invite) => invite.email),
+          toEmails: invites,
+          domain:{
+            name: params.govName,
+            version: '1',
+            chainId: 1337,
+            verifyingContract: params.govAdd,
+          },
         }
       );
 
@@ -57,11 +64,31 @@ const Invite = () => {
       }
     } catch (error) {
       toast.error('An error occurred while sending invitations');
-    }
-  };
+    }  };
 
   return (
     <div className="m-4 w-11/12 flex flex-col">
+         <div className="flex gap-x-4 items-center mx-auto">
+        <Link
+          href={`/mentor//invite/${params.govAdd}/${params.govName}/${params.cName}`}
+        >
+          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
+            {' '}
+            invite
+          </button>
+        </Link>
+
+        <Link
+          href={`/mentor/approval/${params.govAdd}/${params.govName}/${params.cName}`}
+
+          // href={'/university/governance/marksEntryToggle'}
+        >
+          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
+            {' '}
+            approval
+          </button>
+        </Link>
+      </div>
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
           <Label htmlFor="role" className=" text-xl">

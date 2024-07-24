@@ -13,7 +13,7 @@ const Card = ({ data, name }) => {
           <div className=" p-6  flex flex-col justify-between gap-y-4">
             <div>
               <div>
-                {/* <h2 className="text-2xl font-thin ">{item.args[3]}</h2> */}
+                <h2 className="text-2xl font-thin ">{item.args[3]}</h2>
                 <p> by {name}</p>
               </div>
             </div>

@@ -49,6 +49,15 @@ const MarksTable = ({ formData }) => {
         graderAdd: localStorage.getItem('userPublicAddress'),
         subjectName: formData.subjectName,
         subjectCode: formData.subjectCode,
+
+        internalMark: marksObtained,
+        eachMarkArrInternal: sections,
+        totalInternalMark: totalMark,
+
+        externalMark: 0,
+        eachMarkArrExternal: [],
+        totalExternalMark: 0,
+        graderAdd: localStorage.getItem('userPublicAddress')
       };
       console.log(sections);
       console.log('IPFS JSON:', ipfsJson);
@@ -103,10 +112,7 @@ const MarksTable = ({ formData }) => {
           )
         );
       }, 0);
-
-      const updateType = formData.selectedOption;
-
-      console.log('update type:', updateType);
+console.log(updateType)
       const url =
         updateType === 'internal'
           ? `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateInternal`

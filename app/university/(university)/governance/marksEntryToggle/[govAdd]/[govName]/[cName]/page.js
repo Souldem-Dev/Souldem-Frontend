@@ -37,6 +37,7 @@ const Page = () => {
   };
 
   const handleExternalToggle = async () => {
+    console.log("clicked")
     setExternalToggle(!externalToggle);
     try {
       const response = await axios.post(

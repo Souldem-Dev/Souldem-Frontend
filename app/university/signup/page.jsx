@@ -21,7 +21,7 @@ const Page = () => {
       name: 'BASE_FACTORY',
       version: '1',
       chainId: 1337,
-      verifyingContract: '0x2852ce2be0a1d4ef4f5E062f399b8904E0430c57',
+      verifyingContract: process.env.NEXT_PUBLIC_BASE_FACTORY_ADDRESS,
     };
 
     const types = {
