@@ -85,7 +85,10 @@ const page = () => {
       <div className="bg-[#FF9D9D] p-2 px-4 mb-4 rounded-xl w-fit rounded-2xl">
         <p className="text-red-600">
           &#9888; Add Nominee account integration to Souldem for enhanced user
-          management and security.<span className="text-blue">Add Now</span>
+          management and security.
+          <Link to="/user/aadhaarIntr">
+            <span className="text-blue">Add Now</span>
+          </Link>
         </p>
       </div>
       {/* Add the search and filter dropdown here */}

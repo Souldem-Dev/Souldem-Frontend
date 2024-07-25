@@ -29,7 +29,7 @@ const Page = () => {
       setError('');
 
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'aadhar/sendOTP',
+        process.env.NEXT_PUBLIC_BACKEND_URL + 'aadhaar/sendOTP',
         {
           aadharNo: aadhaarNo,
         }
@@ -52,6 +52,7 @@ const Page = () => {
         toast.error('Invalid response from server');
         console.error('Invalid response:', response);
       }
+      g;
     } catch (validationError) {
       if (validationError instanceof z.ZodError) {
         setError(validationError.errors[0].message);
