@@ -14,11 +14,28 @@ import { useState } from 'react';
 const page = () => {
   let router = useRouter()
   let [gov,setGov]= useState([])
+  let [isConnectAadhaar,setIsConnectAadhaar] = useState(false)
+  let [certs,setCerts] = useState([])
   useEffect(()=>{
     let add = localStorage.getItem('userPublicAddress')
     axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"become/joinedGov/student/"+add).then(res=>{
       setGov(res.data)
       console.log(res.data)
+      let userMail = localStorage.getItem('userEmail');
+      axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"aadhaar/isAadhaarIntegWithSDEM/"+userMail).then(res=>{
+setIsConnectAadhaar(true)
+
+axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"marksheets/getMintedCerts/"+add).then(res=>{
+console.log(res)
+setCerts(res.data)
+}).catch(err=>{
+  console.log(err)
+})
+console.log(res.data)
+      }).catch(err=>{
+setIsConnectAadhaar(false)
+console.log(err)
+      })
     }).catch(err=>{
       console.log(err)
     })
@@ -31,18 +48,18 @@ const page = () => {
         <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
       </div>
       {' '}
-      <div className="bg-[#FF9D9D] p-2 px-4 mb-4 rounded-xl w-fit rounded-2xl">
+     {isConnectAadhaar==true?null: <div className="bg-[#FF9D9D] p-2 px-4 mb-4 rounded-xl w-fit rounded-2xl">
         <p className="text-red-600">
           &#9888; Connect your Souldem account with aadhaar card for efficient use(manaditory)<span className="text-blue" onClick={()=>{router.push("/user/aadhaarIntr")}}> Add Now</span>
         </p>
-      </div>
+      </div>}
       {/* Add the search and filter dropdown here */}
       <div className="flex flex-col">
         <div className="flex justify-between mr-20">
           <h1 className="font-light text-blue  text-xl">Issued Certificates</h1>
         </div>
 
-        {/* <CertificateCard certificates={gov} /> */}
+        <CertificateCard certificates={certs} />
       </div>
       {/* card mapping */}
       <div className="flex flex-col">
