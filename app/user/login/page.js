@@ -34,11 +34,11 @@ const Page = () => {
         // Save the public address, email, and JWT token to local storage
         localStorage.setItem('userPublicAddress', publickey);
         localStorage.setItem('userEmail', email);
-        localStorage.setItem('userJwt', token);
+        localStorage.setItem('jwt', token);
 
         console.log(publickey, email, token);
 
-        Cookies.set('userJwt', token, { expires: 1 });
+        Cookies.set('jwt', token, { expires: 1 });
         toast.success('Login successful');
 
         router.push('/grader'); // Adjust this route as needed

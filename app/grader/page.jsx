@@ -42,9 +42,7 @@ const page = () => {
     </div> */}
       {/* Add the search and filter dropdown here */}
       <SearchFilter />
-
       {/* card mapping */}
-
       {joinedGov.length != 0 ? (
         <CardUser
           data={joinedGov}
@@ -60,6 +58,7 @@ const page = () => {
           <p className="text-center text-gray-500 mt-4">No Governance Joined</p>
         </div>
       )}
+      \
     </div>
   );
 };

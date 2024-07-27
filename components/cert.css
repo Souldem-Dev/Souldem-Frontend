@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 900px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 30px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: 5px solid #8e44ad; /* Theme color border */
+  position: relative;
+  overflow: hidden;
+  background-image: url('https://www.transparenttextures.com/patterns/gplay.png'); /* Flower background pattern */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #8e44ad; /* Theme color border */
+}
+
+.header:after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 5px;
+  background: #8e44ad; /* Theme color */
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.header h2 {
+  margin: 5px 0;
+  font-size: 20px;
+  color: #666;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+table,
+th,
+td {
+  border: 1px solid #8e44ad; /* Theme color border */
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background-color: #8e44ad; /* Theme color */
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #8e44ad; /* Theme color border */
+}
+
+.footer p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.signature {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.signature div {
+  text-align: center;
+  width: 45%;
+}
+
+.signature div p {
+  margin: 5px 0;
+}
+
+.background-design {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: rgba(142, 68, 173, 0.2); /* Theme color */
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.background-design-left {
+  position: absolute;
+  bottom: -50px;
+  left: -50px;
+  width: 200px;
+  height: 200px;
+  background: rgba(142, 68, 173, 0.2); /* Theme color */
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.user-image{
+  width: 120px;
+  height: 120px;
+}
