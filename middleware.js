@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 
 const matchesDynamicRoute = (pathname, route) => {
   const routeParts = route.split('/').filter(Boolean);
@@ -15,21 +14,9 @@ const matchesDynamicRoute = (pathname, route) => {
 };
 
 export function middleware(request) {
-  const jwtToken = request.cookies.get('jwt');
+  const jwt = request.cookies.get('jwt');
+  const role = request.cookies.get('role'); // Assuming the role is stored in a cookie
   const { pathname } = request.nextUrl;
-
-  // Function to get the role from the JWT
-  const getRoleFromJwt = (token) => {
-    if (!token) return null;
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use your JWT secret
-      return decoded.role; // Adjust based on your JWT structure
-    } catch (err) {
-      return null;
-    }
-  };
-
-  const userRole = getRoleFromJwt(jwtToken);
 
   const publicRoutes = [
     '/university/login',
@@ -59,50 +46,72 @@ export function middleware(request) {
     '/hod/invite/[govAdd]/[govName]/[cName]',
   ];
 
+  // Redirect authenticated users trying to access public routes based on their role
   if (publicRoutes.includes(pathname)) {
-    if (userRole) {
-      if (userRole === 'university') {
-        return NextResponse.redirect(
-          new URL('/university/governance', request.url)
-        );
-      } else if (userRole === 'grader') {
-        return NextResponse.redirect(new URL('/grader', request.url));
-      } else if (userRole === 'student') {
-        return NextResponse.redirect(new URL('/student', request.url));
-      } else if (userRole === 'mentor') {
-        return NextResponse.redirect(new URL('/mentor', request.url));
-      } else if (userRole === 'hod') {
-        return NextResponse.redirect(new URL('/hod', request.url));
+    if (jwt) {
+      // Redirect based on user role
+      switch (role) {
+        case 'grader':
+          return NextResponse.redirect(new URL('/grader', request.url));
+        case 'hod':
+          return NextResponse.redirect(new URL('/hod', request.url));
+        case 'student':
+          return NextResponse.redirect(new URL('/student', request.url));
+        case 'mentor':
+          return NextResponse.redirect(new URL('/mentor', request.url));
+        default:
+          return NextResponse.next(); // If role is unknown, allow access
       }
     } else {
-      return NextResponse.next();
+      return NextResponse.next(); // Allow access for public routes if not authenticated
     }
   }
 
+  // Check governance protected routes
   if (
     governanceProtectedRoutes.some((route) =>
       matchesDynamicRoute(pathname, route)
     )
   ) {
-    if (!userRole || userRole !== 'university') {
+    if (!jwt) {
       return NextResponse.redirect(new URL('/university/login', request.url));
     }
     return NextResponse.next();
   }
 
+  // Check user protected routes
   if (
     userProtectedRoutes.some((route) => matchesDynamicRoute(pathname, route))
   ) {
-    if (!userRole) {
-      return NextResponse.redirect(new URL('/user/login', request.url));
+    if (!jwt) {
+      // Redirect to respective paths based on user role
+      switch (role) {
+        case 'grader':
+          return NextResponse.redirect(new URL('/grader', request.url));
+        case 'hod':
+          return NextResponse.redirect(new URL('/hod', request.url));
+        case 'student':
+          return NextResponse.redirect(new URL('/student', request.url));
+        case 'mentor':
+          return NextResponse.redirect(new URL('/mentor', request.url));
+        default:
+          return NextResponse.redirect(new URL('/user/login', request.url)); // Redirect to login for unknown roles
+      }
     }
     return NextResponse.next();
   }
 
-  // If entering any random route, redirect to the error page
+  // If the route is not protected or public, redirect to a 404 page
   return NextResponse.redirect(new URL('/404', request.url));
 }
 
 export const config = {
-  matcher: ['/university/:path*', '/grader/:path*', '/user/:path*'],
+  matcher: [
+    '/university/:path*',
+    '/grader/:path*',
+    '/user/:path*',
+    '/student/:path*',
+    '/hod/:path*',
+    '/mentor/:path*',
+  ],
 };
