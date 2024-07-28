@@ -6,8 +6,10 @@ import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Papa from 'papaparse';
 
 const Invite = () => {
   const [email, setEmail] = useState('');
@@ -24,8 +26,6 @@ const Invite = () => {
     }
   };
 
-  console.log(invites);
-
   const handleRemoveInvite = (emailToRemove) => {
     setInvites(invites.filter((invite) => invite.email !== emailToRemove));
   };
@@ -39,14 +39,14 @@ const Invite = () => {
   const handleSendInvite = async () => {
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/student',
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}mail/sendMail/invite/student`,
         {
-          userMail:localStorage.getItem('userEmail'),
+          userMail: localStorage.getItem('userEmail'),
           role: role,
           universityName: params.cName,
           GovName: params.govName,
           toEmails: invites,
-          domain:{
+          domain: {
             name: params.govName,
             version: '1',
             chainId: 1337,
@@ -55,8 +55,6 @@ const Invite = () => {
         }
       );
 
-      console.log(response);
-
       if (response.status === 200) {
         toast.success('Invitations sent successfully');
       } else {
@@ -64,34 +62,53 @@ const Invite = () => {
       }
     } catch (error) {
       toast.error('An error occurred while sending invitations');
-    }  };
+    }
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const parsedInvites = result.data.map((row) => ({
+            email: row.email,
+            regNo: row.regNo,
+          }));
+          setInvites([...invites, ...parsedInvites]);
+        },
+        error: (error) => {
+          toast.error('An error occurred while parsing the CSV file');
+        },
+      });
+    }
+  };
 
   return (
     <div className="m-4 w-11/12 flex flex-col">
-         <div className="flex gap-x-4 items-center mx-auto">
+      <div className="flex gap-x-4 items-center mx-auto">
         <Link
-          href={`/mentor//invite/${params.govAdd}/${params.govName}/${params.cName}`}
+          href={`/mentor/invite/${params.govAdd}/${params.govName}/${params.cName}`}
         >
           <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
-            {' '}
             invite
           </button>
         </Link>
 
         <Link
           href={`/mentor/approval/${params.govAdd}/${params.govName}/${params.cName}`}
-
-          // href={'/university/governance/marksEntryToggle'}
         >
           <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
-            {' '}
             approval
           </button>
         </Link>
       </div>
+
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
-          <Label htmlFor="role" className=" text-xl">
+          <Label htmlFor="role" className="text-xl">
             Role:{' '}
           </Label>
           <select
@@ -100,9 +117,10 @@ const Invite = () => {
             onChange={(e) => setRole(e.target.value)}
             className="bg-blue text-white w-24 p-2 border rounded-md"
           >
-            <option value="mentor">student</option>
+            <option value="student">student</option>
           </select>
         </div>
+
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="email">Email</Label>
@@ -164,6 +182,7 @@ const Invite = () => {
             </div>
           </div>
         </div>
+
         <div className="flex gap-x-2">
           <Button
             className="bg-blue text-white w-24"
@@ -174,9 +193,17 @@ const Invite = () => {
           <Button
             variant="outline"
             className="hover:bg-blue w-24 border-blue border"
+            onClick={() => document.getElementById('csvInput').click()}
           >
             Import CSV
           </Button>
+          <input
+            type="file"
+            id="csvInput"
+            accept=".csv"
+            style={{ display: 'none' }}
+            onChange={handleFileUpload}
+          />
         </div>
       </div>
     </div>

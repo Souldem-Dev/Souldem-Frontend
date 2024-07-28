@@ -41,7 +41,7 @@ const Page = () => {
         Cookies.set('jwt', token, { expires: 1 });
         toast.success('Login successful');
 
-        router.push('/grader'); // Adjust this route as needed
+        router.push('/student'); // Adjust this route as needed
       }
     } catch (error) {
       if (error.response) {
