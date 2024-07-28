@@ -29,7 +29,7 @@ const Page = () => {
 
       if (response.status === 200) {
         // Assuming the backend sends the public address, email, and JWT token in the response
-        const { publickey, token } = response.data;
+        const { publickey, token, role } = response.data;
 
         // Save the public address, email, and JWT token to local storage
         localStorage.setItem('userPublicAddress', publickey);
@@ -39,6 +39,7 @@ const Page = () => {
         console.log(publickey, email, token);
 
         Cookies.set('jwt', token, { expires: 1 });
+        Cookies.set('role', role, { expires: 1 });
         toast.success('Login successful');
 
         router.push('/student'); // Adjust this route as needed
