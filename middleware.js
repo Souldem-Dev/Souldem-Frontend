@@ -15,7 +15,6 @@ const matchesDynamicRoute = (pathname, route) => {
 
 export function middleware(request) {
   const jwt = request.cookies.get('jwt');
-  const role = request.cookies.get('role'); // Assuming the role is stored in a cookie
   const { pathname } = request.nextUrl;
 
   const publicRoutes = [
@@ -25,7 +24,7 @@ export function middleware(request) {
     '/user/signup',
   ];
 
-  const governanceProtectedRoutes = [
+  const universityProtectedRoutes = [
     '/university/governance',
     '/university/governance/invite/[govAdd]/[govName]/[cName]',
     '/university/governance/marksEntryToggle/[govAdd]/[govName]/[cName]',
@@ -33,85 +32,78 @@ export function middleware(request) {
   ];
 
   const userProtectedRoutes = [
-    '/grader',
-    '/grader/marksDatabase/[govAdd]/[govName]/[cName]',
-    '/student',
-    '/student/certificate',
-    '/student/marksheet/[cid]/[cName]/[gName]',
-    '/mentor',
-    '/mentor/invite/[govAdd]/[govName]/[cName]',
-    '/mentor/approval/[govAdd]/[govName]/[cName]',
-    '/mentor/mint/[mentorAdd]/[govAdd]/[govName]/[cName]',
-    '/hod',
-    '/hod/invite/[govAdd]/[govName]/[cName]',
+    '/user/grader',
+    '/user/grader/marksDatabase/[govAdd]/[govName]/[cName]',
+    '/user/wallet',
+    '/user/wallet/certificate',
+    '/user/wallet/marksheet/[cid]/[cName]/[gName]',
+    '/user/mentor',
+    '/user/mentor/invite/[govAdd]/[govName]/[cName]',
+    '/user/mentor/approval/[govAdd]/[govName]/[cName]',
+    '/user/mentor/mint/[mentorAdd]/[govAdd]/[govName]/[cName]',
+    '/user/hod',
+    '/user/hod/invite/[govAdd]/[govName]/[cName]',
   ];
 
-  // Redirect authenticated users trying to access public routes based on their role
+  // Handle public routes
   if (publicRoutes.includes(pathname)) {
     if (jwt) {
-      // Redirect based on user role
-      switch (role) {
-        case 'grader':
-          return NextResponse.redirect(new URL('/grader', request.url));
-        case 'hod':
-          return NextResponse.redirect(new URL('/hod', request.url));
-        case 'student':
-          return NextResponse.redirect(new URL('/student', request.url));
-        case 'mentor':
-          return NextResponse.redirect(new URL('/mentor', request.url));
-        default:
-          return NextResponse.next(); // If role is unknown, allow access
+      if (pathname.startsWith('/university')) {
+        return NextResponse.redirect(
+          new URL('/university/governance', request.url)
+        );
+      } else if (pathname.startsWith('/user')) {
+        return NextResponse.redirect(new URL('/user/wallet', request.url));
       }
     } else {
-      return NextResponse.next(); // Allow access for public routes if not authenticated
+      return NextResponse.next(); // Allow access to public routes if not logged in
     }
   }
 
-  // Check governance protected routes
+  // Handle protected university routes
   if (
-    governanceProtectedRoutes.some((route) =>
+    universityProtectedRoutes.some((route) =>
       matchesDynamicRoute(pathname, route)
     )
   ) {
     if (!jwt) {
       return NextResponse.redirect(new URL('/university/login', request.url));
     }
-    return NextResponse.next();
+    return NextResponse.next(); // Allow access to protected university routes if logged in
   }
 
-  // Check user protected routes
+  // Handle protected user routes
   if (
     userProtectedRoutes.some((route) => matchesDynamicRoute(pathname, route))
   ) {
     if (!jwt) {
-      // Redirect to respective paths based on user role
-      switch (role) {
-        case 'grader':
-          return NextResponse.redirect(new URL('/grader', request.url));
-        case 'hod':
-          return NextResponse.redirect(new URL('/hod', request.url));
-        case 'student':
-          return NextResponse.redirect(new URL('/student', request.url));
-        case 'mentor':
-          return NextResponse.redirect(new URL('/mentor', request.url));
-        default:
-          return NextResponse.redirect(new URL('/user/login', request.url)); // Redirect to login for unknown roles
-      }
+      return NextResponse.redirect(new URL('/user/login', request.url));
     }
-    return NextResponse.next();
+    return NextResponse.next(); // Allow access to protected user routes if logged in
   }
 
-  // If the route is not protected or public, redirect to a 404 page
-  return NextResponse.redirect(new URL('/404', request.url));
+  // Handle other university routes
+  if (pathname.startsWith('/university')) {
+    if (jwt) {
+      return NextResponse.redirect(
+        new URL('/university/governance', request.url)
+      );
+    }
+    return NextResponse.next(); // Allow access to other university routes if not logged in
+  }
+
+  // Handle other user routes
+  if (pathname.startsWith('/user')) {
+    if (jwt) {
+      return NextResponse.redirect(new URL('/user/wallet', request.url));
+    }
+    return NextResponse.next(); // Allow access to other user routes if not logged in
+  }
+
+  // Allow access if no conditions are met
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/university/:path*',
-    '/grader/:path*',
-    '/user/:path*',
-    '/student/:path*',
-    '/hod/:path*',
-    '/mentor/:path*',
-  ],
+  matcher: ['/university/:path*', '/user/:path*'],
 };
