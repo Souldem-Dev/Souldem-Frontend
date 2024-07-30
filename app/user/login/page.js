@@ -16,11 +16,13 @@ const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'login/loginUser',
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}login/loginUser`,
         {
           email,
           password,
@@ -28,20 +30,16 @@ const Page = () => {
       );
 
       if (response.status === 200) {
-        // Assuming the backend sends the public address, email, and JWT token in the response
         const { publickey, token } = response.data;
 
-        // Save the public address, email, and JWT token to local storage
         localStorage.setItem('userPublicAddress', publickey);
         localStorage.setItem('userEmail', email);
         localStorage.setItem('jwt', token);
 
-        console.log(publickey, email, token);
-
         Cookies.set('jwt', token, { expires: 1 });
-        toast.success('Login successful');
 
-        router.push('/grader'); // Adjust this route as needed
+        router.push('/user/wallet');
+        toast.success('Login successful');
       }
     } catch (error) {
       if (error.response) {
@@ -58,6 +56,8 @@ const Page = () => {
       } else {
         toast.error('An error occurred. Please check your network connection.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,8 +107,9 @@ const Page = () => {
           <Button
             className="bg-blue text-white p-2 px-4 rounded-l w-full"
             onClick={handleLogin}
+            disabled={loading}
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </Button>
 
           <p>

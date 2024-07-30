@@ -30,11 +30,11 @@ const Page = () => {
     let url;
     if (params.role === 'hod')
       url = process.env.NEXT_PUBLIC_BACKEND_URL + 'become/becomeHod';
-    if (params.role === 'mentor')
+    else if (params.role === 'mentor')
       url = process.env.NEXT_PUBLIC_BACKEND_URL + 'become/becomeMentor';
-    if (params.role === 'student')
+    else if (params.role === 'student')
       url = process.env.NEXT_PUBLIC_BACKEND_URL + 'become/becomeStudent';
-    if (params.role === 'grader')
+    else if (params.role === 'grader')
       url = process.env.NEXT_PUBLIC_BACKEND_URL + 'become/becomeGrader';
 
     axios
@@ -53,7 +53,19 @@ const Page = () => {
       .then((res) => {
         toast.success('Successfully joined governance!');
         console.log(res);
-        router.push('/user/login');
+
+        // Redirect based on role
+        if (params.role === 'hod') {
+          router.push('/hod'); // Replace with your actual path
+        } else if (params.role === 'mentor') {
+          router.push('/mentor'); // Replace with your actual path
+        } else if (params.role === 'student') {
+          router.push('/user/login'); // Replace with your actual path
+        } else if (params.role === 'grader') {
+          router.push('/grader'); // Replace with your actual path
+        } else {
+          router.push('/user/login'); // Default redirect if role is unknown
+        }
       })
       .catch((err) => {
         toast.error('Failed to join governance. Please try again.');

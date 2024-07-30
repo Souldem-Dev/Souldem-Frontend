@@ -28,7 +28,7 @@ const GovSidebar = () => {
                   <span>Governance</span>
                 </Link>
                 <Link
-                  href="/"
+                  href="/pageUnderConstruction"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <HandCoins className="hover:text-white" />
@@ -42,7 +42,7 @@ const GovSidebar = () => {
                   <span>Certificates</span>
                 </Link>
                 <Link
-                  href="/university/marksDatabase"
+                  href="/pageUnderConstruction"
                   className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                 >
                   <Folder className="hover:text-white" />

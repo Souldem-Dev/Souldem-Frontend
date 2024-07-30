@@ -54,7 +54,7 @@ const Navbar = () => {
                     <span>Governance</span>
                   </Link>
                   <Link
-                    href="/"
+                    href="/pageUnderConstruction"
                     className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
                   >
                     <HandCoins className="hover:text-white" />
@@ -67,20 +67,8 @@ const Navbar = () => {
                     <Award className="hover:text-white" />
                     <span>Certificates</span>
                   </Link>
-                  <Link
-                    href="/university/marksDatabase"
-                    className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                  >
-                    <Folder className="hover:text-white" />
-                    <span>Marks database</span>
-                  </Link>
                 </ul>
               </div>
-            </div>
-            <div>
-              <Button className="bg-black text-white ">
-                <Wallet /> Connect Wallet
-              </Button>
             </div>
           </SheetContent>
         </Sheet>

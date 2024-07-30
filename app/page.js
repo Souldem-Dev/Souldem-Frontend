@@ -32,35 +32,26 @@ function Page() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={count.title}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="description">desc</label>
-        <input
-          type="text"
-          id="description"
-          name="description"
-          value={count.description}
-          onChange={handleChange}
-        />
-        <button type="submit" className="btn">
-          submit
-        </button>
-      </form>
-
-      {submit && (
-        <div>
-          <p>{submit.title}</p>
-          <p>{submit.description}</p>
+      {' '}
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray text-para">
+        <h1 className="text-5xl font-bold mb-4 text-blue">
+          Welcome to Souldem
+        </h1>
+        <p className="text-xl mb-8 text-para">
+          We are working hard to bring you something amazing! Stay tuned.
+        </p>
+        <div className="flex space-x-4 text-6xl">
+          <span role="img" aria-label="construction" className="text-cyan">
+            🚧
+          </span>
+          <span role="img" aria-label="tools" className="text-blueLight">
+            🔧
+          </span>
+          <span role="img" aria-label="hammer" className="text-purpleLight">
+            🔨
+          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 }
