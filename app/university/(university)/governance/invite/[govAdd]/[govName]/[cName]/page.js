@@ -8,17 +8,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Papa from 'papaparse';
 
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
-  const [id, setId] = useState('');
   const [role, setRole] = useState('grader');
   const params = useParams();
-
-  const [activeButton, setActiveButton] = useState('');
 
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
@@ -38,10 +34,10 @@ const Page = () => {
   };
 
   const handleSendInvite = async () => {
-    if (emails.length != 0) {
+    if (emails.length !== 0) {
       try {
         const response = await axios.post(
-          process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite',
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}mail/sendMail/invite`,
           {
             role: role,
             universityName: params.cName,
@@ -57,8 +53,6 @@ const Page = () => {
           }
         );
 
-        console.log(response);
-
         if (response.status === 200) {
           toast.success('Invitations sent successfully');
         } else {
@@ -68,10 +62,29 @@ const Page = () => {
         toast.error('An error occurred while sending invitations');
       }
     } else {
-      alert('enter email');
+      alert('Please enter email(s)');
     }
   };
-  console.log(role);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const parsedEmails = result.data
+            .map((row) => row.email)
+            .filter(Boolean);
+          setEmails((prevEmails) => [...prevEmails, ...parsedEmails]);
+        },
+        error: (error) => {
+          toast.error('An error occurred while parsing the CSV file');
+        },
+      });
+    }
+  };
 
   return (
     <div className="m-4 w-11/12 flex flex-col">
@@ -83,11 +96,8 @@ const Page = () => {
             governance
           </button>
         </Link>
-
         <Link
           href={`/university/governance/marksEntryToggle/${params.govAdd}/${params.govName}/${params.cName}`}
-
-          // href={'/university/governance/marksEntryToggle'}
         >
           <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
             toggle
@@ -96,8 +106,8 @@ const Page = () => {
       </div>
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
-          <Label htmlFor="role" className=" text-xl">
-            Role:{' '}
+          <Label htmlFor="role" className="text-xl">
+            Role:
           </Label>
           <select
             id="role"
@@ -128,7 +138,6 @@ const Page = () => {
             </div>
           </div>
         </div>
-
         <div className="flex md:flex-row flex-col gap-y-4 gap-x-20">
           <div className="grid w-full gap-1.5">
             <Label htmlFor="To">To:</Label>
@@ -163,9 +172,17 @@ const Page = () => {
           <Button
             variant="outline"
             className="hover:bg-blue w-24 border-blue border"
+            onClick={() => document.getElementById('csvInput').click()}
           >
             Import CSV
           </Button>
+          <input
+            type="file"
+            id="csvInput"
+            accept=".csv"
+            style={{ display: 'none' }}
+            onChange={handleFileUpload}
+          />
         </div>
       </div>
     </div>

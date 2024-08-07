@@ -6,13 +6,16 @@ import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
+import Papa from 'papaparse';
+
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
-  const [id, setId] = useState('');
   const [role, setRole] = useState('mentor');
-const params = useParams()
+  const params = useParams();
+
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
       setEmails([...emails, email]);
@@ -31,46 +34,64 @@ const params = useParams()
   };
 
   const handleSendInvite = async () => {
-if(emails.length !=0){
-  try {
-    const response = await axios.post(
-      process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/user',
-      {
-        role: role,
-        universityName: params.cName,
-        GovName: params.govName,
-        userMail:localStorage.getItem('userEmail'),
-        toEmails: emails,
-        uniqueId:10,
-        domain:{
-          name: params.govName,
-          version: '1',
-          chainId:1337,
-          verifyingContract: params.govAdd
-      }
-      }
-    );
+    if (emails.length !== 0) {
+      try {
+        const response = await axios.post(
+          process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/invite/user',
+          {
+            role: role,
+            universityName: params.cName,
+            GovName: params.govName,
+            userMail: localStorage.getItem('userEmail'),
+            toEmails: emails,
+            uniqueId: 10,
+            domain: {
+              name: params.govName,
+              version: '1',
+              chainId: 1337,
+              verifyingContract: params.govAdd,
+            },
+          }
+        );
 
-    console.log(response);
+        console.log(response);
 
-    if (response.status === 200) {
-      toast.success('Invitations sent successfully');
+        if (response.status === 200) {
+          toast.success('Invitations sent successfully');
+        } else {
+          toast.error('Failed to send invitations');
+        }
+      } catch (error) {
+        toast.error('An error occurred while sending invitations');
+      }
     } else {
-      toast.error('Failed to send invitations');
+      alert('Enter email');
     }
-  } catch (error) {
-    toast.error('An error occurred while sending invitations');
-  }
-}else{
-  alert("enter email")
-}
   };
-console.log(role)
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const parsedEmails = result.data.map((row) => row.email);
+          setEmails([...emails, ...parsedEmails]);
+        },
+        error: (error) => {
+          toast.error('An error occurred while parsing the CSV file');
+        },
+      });
+    }
+  };
+
   return (
     <div className="m-4 w-11/12 flex flex-col">
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
-          <Label htmlFor="role" className=" text-xl">
+          <Label htmlFor="role" className="text-xl">
             Role:{' '}
           </Label>
           <select
@@ -82,6 +103,7 @@ console.log(role)
             <option value="mentor">Mentor</option>
           </select>
         </div>
+
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="email">Email</Label>
@@ -126,6 +148,7 @@ console.log(role)
             </div>
           </div>
         </div>
+
         <div className="flex gap-x-2">
           <Button
             className="bg-blue text-white w-24"
@@ -136,9 +159,17 @@ console.log(role)
           <Button
             variant="outline"
             className="hover:bg-blue w-24 border-blue border"
+            onClick={() => document.getElementById('csvInput').click()}
           >
             Import CSV
           </Button>
+          <input
+            type="file"
+            id="csvInput"
+            accept=".csv"
+            style={{ display: 'none' }}
+            onChange={handleFileUpload}
+          />
         </div>
       </div>
     </div>

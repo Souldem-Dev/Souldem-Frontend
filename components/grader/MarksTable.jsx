@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save } from 'lucide-react';
+import { Pencil, Save, Trash2 } from 'lucide-react';
 import axios from 'axios';
 
 const MarksTable = ({ formData }) => {
@@ -57,7 +57,7 @@ const MarksTable = ({ formData }) => {
         externalMark: 0,
         eachMarkArrExternal: [],
         totalExternalMark: 0,
-        graderAdd: localStorage.getItem('userPublicAddress')
+        graderAdd: localStorage.getItem('userPublicAddress'),
       };
       console.log(sections);
       console.log('IPFS JSON:', ipfsJson);
@@ -112,7 +112,7 @@ const MarksTable = ({ formData }) => {
           )
         );
       }, 0);
-console.log(updateType)
+
       const url =
         updateType === 'internal'
           ? `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/updateInternal`
@@ -201,8 +201,28 @@ console.log(updateType)
     }
   };
 
+  const deleteSection = (sectionName) => {
+    const updatedSections = sections.filter(
+      (section) => section.name !== sectionName
+    );
+    setSections(updatedSections);
+  };
+
+  const deleteRow = (sectionName, rowIndex) => {
+    const updatedSections = sections.map((section) => {
+      if (section.name === sectionName) {
+        const updatedRows = section.rows.filter(
+          (_, index) => index !== rowIndex
+        );
+        return { ...section, rows: updatedRows };
+      }
+      return section;
+    });
+    setSections(updatedSections);
+  };
+
   return (
-    <main className="flex">
+    <main className="">
       <div>
         <div className="flex justify-between items-center m-4">
           <h1 className="text-2xl font-bold">Marks Table</h1>
@@ -236,12 +256,20 @@ console.log(updateType)
                   {section.isEditing ? <Save /> : <Pencil />}
                 </button>
               </div>
-              <Button
-                onClick={() => addRowToSection(section.name)}
-                className="bg-blue text-white"
-              >
-                Add Row
-              </Button>
+              <div className="flex">
+                <Button
+                  onClick={() => addRowToSection(section.name)}
+                  className="bg-blue text-white"
+                >
+                  Add Row
+                </Button>
+                <Button
+                  onClick={() => deleteSection(section.name)}
+                  className="bg-red-500 text-white ml-2"
+                >
+                  <Trash2 />
+                </Button>
+              </div>
             </div>
             <Table>
               <TableHeader className="border-gray-300 border bg-gray-200">
@@ -249,6 +277,7 @@ console.log(updateType)
                   <TableHead className="font-bold">ID</TableHead>
                   <TableHead className="font-bold">Marks Obtained</TableHead>
                   <TableHead className="font-bold">Total Marks</TableHead>
+                  <TableHead className="font-bold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="bg-white">
@@ -286,6 +315,14 @@ console.log(updateType)
                         placeholder="Total Marks"
                         className="bg-gray h-8 px-4 w-full border border-gray-300 rounded"
                       />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => deleteRow(section.name, rowIndex)}
+                        className="bg-red-500 text-white"
+                      >
+                        <Trash2 />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

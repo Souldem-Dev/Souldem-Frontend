@@ -40,7 +40,10 @@ const page = () => {
 
       {/* <Card data={data} /> */}
       {joinedGov.length != 0 ? (
-        <CardUser data={joinedGov} url={'http://localhost:3000/hod/invite'} />
+        <CardUser
+          data={joinedGov}
+          url={'http://localhost:3000/user/hod/invite'}
+        />
       ) : (
         <div className="flex flex-col items-center justify-center">
           <Image

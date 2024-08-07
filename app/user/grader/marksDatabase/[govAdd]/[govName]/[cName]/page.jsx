@@ -25,6 +25,7 @@ const page = () => {
       <Searchbox />
 
       <SubjectInput govAdd={govAdd} />
+      
     </div>
   );
 };

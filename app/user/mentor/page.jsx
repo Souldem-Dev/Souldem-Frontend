@@ -48,7 +48,7 @@ const page = () => {
       {joinedGov.length != 0 ? (
         <CardUser
           data={joinedGov}
-          url={'http://localhost:3000/mentor/invite'}
+          url={'http://localhost:3000/user/mentor/invite'}
         />
       ) : (
         <div className="flex flex-col items-center justify-center">

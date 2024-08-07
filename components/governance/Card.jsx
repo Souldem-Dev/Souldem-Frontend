@@ -29,7 +29,12 @@ const Card = ({ data, name }) => {
             {/* <Link href={`/governance/${item.address}`}> */}
             <Link
               href={
-                '/marksheet' + item.args[1] + '/' + item.args[3] + '/' + name
+                '/university/governance/invite/' +
+                item.args[1] +
+                '/' +
+                item.args[3] +
+                '/' +
+                name
               }
             >
               <button className=" absolute top-0 right-2  p-2 mx-auto my-4 text-white bg-blue   rounded-full focus:ring-1">
