@@ -5,34 +5,42 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './cert.css';
 import axios from 'axios';
+import Image from 'next/image';
 
-const Cert = ({ governAdd, nonce, marks,userMail,cName,gName }) => {
+const Cert = ({ governAdd, nonce, marks, userMail, cName, gName }) => {
   const componentRef = useRef();
-let [userData,setData] = useState()
-let [collegeName,setCName] = useState("")
+  const [userData, setData] = useState(null);
+  const [collegeName, setCName] = useState('');
+  const [imageSrc, setImageSrc] = useState(null); // State to hold the image source
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  const [imageSrc, setImageSrc] = useState(null);
-
-
   useEffect(() => {
+    const fetchUserDetail = async () => {
+      try {
+        // Fetch user details
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}aadhaar/detail/${userMail}`
+        );
+        console.log(res.data);
+        setData(res.data);
 
+        // Fetch the image separately
+        const imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}aadhaar/image/${userMail}`;
+        setImageSrc(imageUrl); // Set the image source
 
-    const fetchUserDetail = async()=>{
-      axios.get(process.env.NEXT_PUBLIC_BACKEND_URL+"aadhaar/detail/"+userMail).then(res=>{
-        console.log(res.data)
-        setData(res.data)
-        let result = cName.replace("%20%20"," ").replace("%20"," ")
-        setCName(result)
-      }).catch(err=>{
-        console.log(err)
-      })
-    }
-    fetchUserDetail()
-  }, []);
+        // Format the college name
+        let result = cName.replace('%20%20', ' ').replace('%20', ' ');
+        setCName(result);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUserDetail();
+  }, [userMail, cName]);
 
   const handleDownloadPdf = async () => {
     const input = componentRef.current;
@@ -57,19 +65,40 @@ let [collegeName,setCName] = useState("")
         <div className="justify-start w-1/2">
           <h1>{collegeName}</h1>
           <h2>Marksheet</h2>
-          <p><b>Student Name</b> {userData.name}</p>
-          <p>{userData.care_of}</p>
-          <p><b>Date of Birth</b> {userData.dob}</p>
-          <p><b>Gender</b> {userData.gender}</p>
-          <p><b>Aadhaar Number</b> {userData.aadhaar_number}</p>
+          {/* Display user details once available */}
+          {userData && (
+            <>
+              <p>
+                <b>Student Name:</b> {userData.name}
+              </p>
+              <p>{userData.care_of}</p>
+              <p>
+                <b>Date of Birth:</b> {userData.dob}
+              </p>
+              <p>
+                <b>Gender:</b> {userData.gender}
+              </p>
+              <p>
+                <b>Aadhaar Number:</b> {userData.aadhaar_number}
+              </p>
+            </>
+          )}
           <p>{governAdd}</p>
         </div>
 
         <div className="w-1/2 justify-end flex">
-<div className='justify-end mt-6 ml-2'>
-<img src={process.env.NEXT_PUBLIC_BACKEND_URL+"aadhaar/image/"+localStorage.getItem('userEmail')} alt="User" className="user-image" />
-
-</div>
+          <div className="justify-end mt-6 ml-2">
+            {/* Display the image once it is fetched */}
+            {imageSrc && (
+              <Image
+                src={imageSrc}
+                alt="User"
+                className="user-image"
+                width={100}
+                height={100}
+              />
+            )}
+          </div>
         </div>
       </div>
       <table>
@@ -79,7 +108,6 @@ let [collegeName,setCName] = useState("")
             <th>Internal Marks</th>
             <th>External Marks</th>
             <th>Total Marks</th>
-
             <th>Grade</th>
           </tr>
         </thead>
@@ -93,7 +121,6 @@ let [collegeName,setCName] = useState("")
               <td>{subject.internalMark}</td>
               <td>{subject.externalMark}</td>
               <td>{totalMarks(subject.internalMark, subject.externalMark)}</td>
-
               <td>
                 {calculateGrade(
                   totalMarks(subject.internalMark, subject.externalMark)

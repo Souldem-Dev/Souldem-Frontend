@@ -7,12 +7,12 @@ import CoinDesign from '@/app/assets/CoinDesign.svg';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 
-const Page = () => {
+const ResetPassword = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const { id, type } = useParams();
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,8 +20,8 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'resetPassword',
-        { email, newPassword }
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}login/resetPassword`,
+        { id, type, newPassword }
       );
 
       if (response.status === 200) {
@@ -52,20 +52,9 @@ const Page = () => {
         </div>
         <div className="lg:w-5/12 md:w-6/12 h-screen bg-white flex flex-col items-center justify-center lg:px-32 px-20 gap-y-2">
           <div>
-            <h3 className="text-3xl font-bold">Reset Your Password</h3>
+            <h3 className="text-3xl font-bold">Set New Password</h3>
             <h1 className="text-blue text-4xl font-extrabold">Souldem</h1>
             <p className="text-para">Enter your new password below</p>
-          </div>
-
-          <div className="w-full flex flex-col gap-y-1">
-            <label>Email</label>
-            <Input
-              type="email"
-              placeholder="Your email"
-              className="text-dark bg-gray"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
           </div>
 
           <div className="w-full flex flex-col gap-y-1">
@@ -100,4 +89,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ResetPassword;

@@ -37,7 +37,7 @@ const Page = () => {
   };
 
   const handleExternalToggle = async () => {
-    console.log("clicked")
+    console.log('clicked');
     setExternalToggle(!externalToggle);
     try {
       const response = await axios.post(
@@ -67,7 +67,7 @@ const Page = () => {
         >
           <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
             {' '}
-            governance
+            Invite
           </button>
         </Link>
 

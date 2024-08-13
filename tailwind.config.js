@@ -1,5 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  images: {
+    domains: ['localhost', 'your-production-domain.com'],
+  },
+
   content: [
     './pages/**/*.{js,jsx}',
     './components/**/*.{js,jsx}',

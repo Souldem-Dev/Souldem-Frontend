@@ -2,7 +2,8 @@ import React from 'react';
 import { MoveUpRight } from 'lucide-react';
 import Link from 'next/link';
 
-const Card = ({ data, name }) => {
+const 
+Card = ({ data, name }) => {
   return (
     <main className="  grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 w-full  gap-y-8  gap-x-4  ">
       {data.map((item, index) => (

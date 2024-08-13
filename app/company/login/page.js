@@ -7,33 +7,55 @@ import CoinDesign from '@/app/assets/CoinDesign.svg';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'resetPassword',
-        { email, newPassword }
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}login/Company`,
+        {
+          email,
+          password,
+        }
       );
 
       if (response.status === 200) {
-        toast.success('Password reset successfully');
-        setTimeout(() => {
-          router.push('/user/login');
-        }, 3000);
-      } else {
-        toast.error('Failed to reset password');
+        const { publickey, token } = response.data;
+
+        localStorage.setItem('userPublicAddress', publickey);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('jwt', token);
+
+        Cookies.set('jwt', token, { expires: 1 });
+
+        router.push('/user/wallet');
+        toast.success('Login successful');
       }
     } catch (error) {
-      toast.error('An error occurred. Please try again.');
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          toast.error(data || 'Invalid email or password');
+        } else if (status === 500) {
+          toast.error(
+            'An internal server error occurred. Please try again later.'
+          );
+        } else {
+          toast.error('An error occurred. Please try again.');
+        }
+      } else {
+        toast.error('An error occurred. Please check your network connection.');
+      }
     } finally {
       setLoading(false);
     }
@@ -52,45 +74,48 @@ const Page = () => {
         </div>
         <div className="lg:w-5/12 md:w-6/12 h-screen bg-white flex flex-col items-center justify-center lg:px-32 px-20 gap-y-2">
           <div>
-            <h3 className="text-3xl font-bold">Reset Your Password</h3>
-            <h1 className="text-blue text-4xl font-extrabold">Souldem</h1>
-            <p className="text-para">Enter your new password below</p>
+            <h3 className="text-3xl font-bold">
+              Login to{' '}
+              <span className="text-blue text-3xl font-extrabold">Souldem</span>
+            </h3>
+            <p className="text-para">
+              Have your Educational assets seamless with souldem
+            </p>
           </div>
 
           <div className="w-full flex flex-col gap-y-1">
             <label>Email</label>
             <Input
-              type="email"
-              placeholder="Your email"
+              type="text"
+              placeholder="email"
               className="text-dark bg-gray"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-
           <div className="w-full flex flex-col gap-y-1">
-            <label>New Password</label>
+            <label>Password</label>
             <Input
               type="password"
-              placeholder="New password"
+              placeholder="password"
               className="text-dark bg-gray"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
           <Button
             className="bg-blue text-white p-2 px-4 rounded-l w-full"
-            onClick={handleResetPassword}
+            onClick={handleLogin}
             disabled={loading}
           >
-            Reset Password
+            {loading ? 'Logging in...' : 'Login'}
           </Button>
 
           <p>
-            Remembered your password?{' '}
-            <Link href="/user/login" className="text-blue">
-              Login
+            Don't have an account?{' '}
+            <Link href="/user/signup" className="text-blue">
+              Signup
             </Link>
           </p>
         </div>

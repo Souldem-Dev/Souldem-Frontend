@@ -87,26 +87,26 @@ const Invite = () => {
   };
 
   return (
-    <div className="m-4 w-11/12 flex flex-col">
+    <div className="m-4 md:mx-auto w-11/12 flex flex-col">
       <div className="flex gap-x-4 items-center mx-auto">
         <Link
-          href={`/mentor/invite/${params.govAdd}/${params.govName}/${params.cName}`}
+          href={`/user/mentor/invite/${params.govAdd}/${params.govName}/${params.cName}`}
         >
-          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
+          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-2 hover:border-blue">
             invite
           </button>
         </Link>
 
         <Link
-          href={`/mentor/approval/${params.govAdd}/${params.govName}/${params.cName}`}
+          href={`/user/mentor/approval/${params.govAdd}/${params.govName}/${params.cName}`}
         >
-          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
+          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-blue hover:border-2">
             approval
           </button>
         </Link>
       </div>
 
-      <div className="mt-4 flex flex-col justify-between gap-y-2">
+      <div className="mt-4 flex bg-white drop-shadow-md p-12 rounded-2xl flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
           <Label htmlFor="role" className="text-xl">
             Role:{' '}
@@ -121,7 +121,7 @@ const Invite = () => {
           </select>
         </div>
 
-        <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
+        <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between  items-center gap-x-2">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="email">Email</Label>
             <div className="flex gap-x-2">
@@ -151,7 +151,10 @@ const Invite = () => {
             </div>
           </div>
 
-          <Button onClick={handleAddInvite} className="bg-blue text-white">
+          <Button
+            onClick={handleAddInvite}
+            className="bg-blue text-white w-60 h-12"
+          >
             Add
           </Button>
         </div>

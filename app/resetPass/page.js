@@ -13,24 +13,26 @@ import { toast, ToastContainer } from 'react-toastify';
 const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [type, setType] = useState(''); // 'user', 'university', or 'company'
   const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = async () => {
+  const handleRequestReset = async () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_BACKEND_URL + 'resetPassword',
-        { email, newPassword }
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}login/resetPasswordOtpAuth`,
+        { email, type, resetLink: 'http://localhost:3000/reset-password/' } // Update with your actual reset link
       );
 
+      console.log(response);
+
       if (response.status === 200) {
-        toast.success('Password reset successfully');
+        toast.success('Reset link sent successfully');
         setTimeout(() => {
-          router.push('/user/login');
+          router.push('/reset-password');
         }, 3000);
       } else {
-        toast.error('Failed to reset password');
+        toast.error('Failed to send reset link');
       }
     } catch (error) {
       toast.error('An error occurred. Please try again.');
@@ -52,9 +54,11 @@ const Page = () => {
         </div>
         <div className="lg:w-5/12 md:w-6/12 h-screen bg-white flex flex-col items-center justify-center lg:px-32 px-20 gap-y-2">
           <div>
-            <h3 className="text-3xl font-bold">Reset Your Password</h3>
+            <h3 className="text-3xl font-bold">Reset Password Request</h3>
             <h1 className="text-blue text-4xl font-extrabold">Souldem</h1>
-            <p className="text-para">Enter your new password below</p>
+            <p className="text-para">
+              Enter your email to request a reset link
+            </p>
           </div>
 
           <div className="w-full flex flex-col gap-y-1">
@@ -69,22 +73,24 @@ const Page = () => {
           </div>
 
           <div className="w-full flex flex-col gap-y-1">
-            <label>New Password</label>
-            <Input
-              type="password"
-              placeholder="New password"
-              className="text-dark bg-gray"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+            <label>Account Type</label>
+            <select
+              className="border rounded w-full py-2 px-3"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option value="user">User</option>
+              <option value="university">University</option>
+              <option value="company">Company</option>
+            </select>
           </div>
 
           <Button
             className="bg-blue text-white p-2 px-4 rounded-l w-full"
-            onClick={handleResetPassword}
+            onClick={handleRequestReset}
             disabled={loading}
           >
-            Reset Password
+            Send Reset Link
           </Button>
 
           <p>

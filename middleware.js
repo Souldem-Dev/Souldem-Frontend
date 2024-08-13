@@ -29,6 +29,7 @@ export function middleware(request) {
     '/university/governance/invite/[govAdd]/[govName]/[cName]',
     '/university/governance/marksEntryToggle/[govAdd]/[govName]/[cName]',
     '/university/certificates',
+    '/university/certificates/certificateCreate',
   ];
 
   const userProtectedRoutes = [
@@ -40,9 +41,10 @@ export function middleware(request) {
     '/user/mentor',
     '/user/mentor/invite/[govAdd]/[govName]/[cName]',
     '/user/mentor/approval/[govAdd]/[govName]/[cName]',
-    '/user/mentor/mint/[mentorAdd]/[govAdd]/[govName]/[cName]',
+    '/user/mentor/mint/[mentorAdd]/[mentorSig]/[userAdd]/[govAdd]/[receiptNo]/[semNo]/[nonce]',
     '/user/hod',
     '/user/hod/invite/[govAdd]/[govName]/[cName]',
+    '/user/aadhaarIntr',
   ];
 
   // Handle public routes

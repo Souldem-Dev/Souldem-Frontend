@@ -93,7 +93,7 @@ const Page = () => {
           href={`/university/governance/invite/${params.govAdd}/${params.govName}/${params.cName}`}
         >
           <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
-            governance
+            Invite
           </button>
         </Link>
         <Link
