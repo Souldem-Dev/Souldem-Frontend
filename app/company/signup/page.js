@@ -152,7 +152,7 @@ const Page = () => {
 
           <p>
             Already have an account?{' '}
-            <Link href="/user/login" className="text-blue">
+            <Link href="/company/login" className="text-blue">
               Login
             </Link>
           </p>

@@ -75,7 +75,7 @@ const Page = () => {
           <div className="w-full flex flex-col gap-y-1">
             <label>Account Type</label>
             <select
-              className="border rounded w-full py-2 px-3"
+              className="border bg-gray rounded w-full py-2 px-3"
               value={type}
               onChange={(e) => setType(e.target.value)}
             >
@@ -92,13 +92,6 @@ const Page = () => {
           >
             Send Reset Link
           </Button>
-
-          <p>
-            Remembered your password?{' '}
-            <Link href="/user/login" className="text-blue">
-              Login
-            </Link>
-          </p>
         </div>
       </main>
       <ToastContainer />

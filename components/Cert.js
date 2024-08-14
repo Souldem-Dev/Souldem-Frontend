@@ -58,7 +58,7 @@ const Cert = ({ governAdd, nonce, marks, userMail, cName, gName }) => {
   const calculateGrade = (totalMarks) => (totalMarks >= 90 ? 'A' : 'B');
 
   return (
-    <div className="container" ref={componentRef}>
+    <div className="a4-container" ref={componentRef}>
       <div className="background-design"></div>
       <div className="background-design-left"></div>
       <div className="header flex ">

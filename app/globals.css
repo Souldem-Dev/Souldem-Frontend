@@ -56,3 +56,22 @@
   }
   color: #415058;
 } */
+
+.a4-container {
+  width: 794px; /* A4 width */
+  height: 1123px; /* A4 height */
+  margin: 0 auto; /* Centering the container */
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow for print-like appearance */
+  background-color: white; /* Ensure the background is white */
+}
+
+@media print {
+  .a4-container {
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+}

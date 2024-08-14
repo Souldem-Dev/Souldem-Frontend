@@ -14,7 +14,7 @@ body {
   padding: 30px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  border: 5px solid #8e44ad; /* Theme color border */
+  /* Theme color border */
   position: relative;
   overflow: hidden;
   background-image: url('https://www.transparenttextures.com/patterns/gplay.png'); /* Flower background pattern */
@@ -126,7 +126,26 @@ tr:nth-child(even) {
   z-index: -1;
 }
 
-.user-image{
+.user-image {
   width: 120px;
   height: 120px;
+}
+
+.a4-container {
+  width: 794px; /* A4 width */
+  height: 1123px; /* A4 height */
+  margin: 0 auto; /* Centering the container */
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow for print-like appearance */
+  border: 5px solid #8e44ad; /* Ensure the background is white */
+}
+
+@media print {
+  .a4-container {
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
 }

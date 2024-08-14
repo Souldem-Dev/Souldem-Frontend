@@ -140,12 +140,16 @@ const Page = () => {
             Login
           </Button>
 
-          <p>
-            Don't have an account?{' '}
-            <Link href="/university/signup" className="text-blue">
-              Signup
-            </Link>
-          </p>
+          <Link href="/resetPass" className="text-blue">
+            Forgetten Password?
+          </Link>
+
+          <Link
+            href="/university/signup"
+            className="bg-white text-center text-sm text-blue border-blue border-2 p-2 px-4 rounded-l w-full"
+          >
+            Register
+          </Link>
         </div>
       </main>
       <ToastContainer />
