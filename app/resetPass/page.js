@@ -9,12 +9,15 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [type, setType] = useState(''); // 'user', 'university', or 'company'
+  const [type, setType] = useState('user'); // 'user', 'university', or 'company'
   const [loading, setLoading] = useState(false);
+
+  console.log(type);
 
   const handleRequestReset = async () => {
     setLoading(true);
@@ -28,9 +31,7 @@ const Page = () => {
 
       if (response.status === 200) {
         toast.success('Reset link sent successfully');
-        setTimeout(() => {
-          router.push('/reset-password');
-        }, 3000);
+        setTimeout(() => {}, 3000);
       } else {
         toast.error('Failed to send reset link');
       }
