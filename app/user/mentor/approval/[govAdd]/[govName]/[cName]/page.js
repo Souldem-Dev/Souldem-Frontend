@@ -41,7 +41,7 @@ const Page = () => {
       axios
         .post(
           process.env.NEXT_PUBLIC_BACKEND_URL + 'mail/sendMail/approve/student',
-          { domain, student: resp, userMail }
+          { domain, student: {...resp,governAdd:params.govAdd}, userMail }
         )
         .then((res) => {
           console.log(res);
