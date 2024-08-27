@@ -1,6 +1,10 @@
 'use client';
+import Footer from '@/components/LandingPage/Footer';
+import Faq from '@/components/LandingPage/Home/Faq';
 import Features from '@/components/LandingPage/Home/Features';
 import HeroPage from '@/components/LandingPage/Home/HeroPage';
+import Newsletter from '@/components/LandingPage/Home/Newsletter';
+import Navbar from '@/components/LandingPage/Navbar';
 import React, { useState, useEffect } from 'react';
 
 function Page() {
@@ -34,7 +38,11 @@ function Page() {
 
   return (
     <div>
+      <Navbar />
       <HeroPage /> <Features />
+      <Newsletter />
+      <Faq />
+      <Footer />
     </div>
   );
 }
