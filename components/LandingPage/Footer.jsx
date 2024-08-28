@@ -51,7 +51,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="flex justify-around h-8 items-center bg-blue">
+      <div className="flex justify-around h-8  md:h-16 items-center bg-blue">
         <p className="text-white text-sm">
           Any Inquiry feel free to Contact - souldem@org{' '}
         </p>

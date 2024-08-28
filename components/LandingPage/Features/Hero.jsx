@@ -3,11 +3,18 @@ import Image from 'next/image';
 import hero from '@/app/assets/LandingPage/Features/hero.svg';
 import { CirclePlay } from 'lucide-react';
 import heroMobile from '@/app/assets/LandingPage/features/HeroMobile.svg';
+import Aero from '@/app/assets/LandingPage/Aero.svg';
 
 const Hero = () => {
   return (
     <div className="flex h-full items-center bg-[#4F5DE4] md:bg-inherit relative">
       <div className="md:w-7/12  lg:p-20  md:p-8 mt-8 mx-auto px-4 ">
+        <Image
+          src={Aero}
+          alt="Aero"
+          className="w-96 h-full  absolute top-1/2 inset-0 "
+        />
+
         <h5 className="text-2xl hidden md:flex text-blue font-medium">
           For Universities
         </h5>

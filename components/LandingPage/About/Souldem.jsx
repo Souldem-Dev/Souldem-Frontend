@@ -2,10 +2,17 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import React from 'react';
 import Souldem from '@/app/assets/LandingPage/Features/Demo.svg';
+import Aero from '@/app/assets/LandingPage/Aero.svg';
+import Bstar from '@/app/assets/LandingPage/Bstar.svg';
 
 const Souldem = () => {
   return (
-    <div className="my-8 flex flex-col items-center">
+    <div className="my-8 flex flex-col items-center relative">
+      <Image
+        src={Aero}
+        alt="Aero"
+        className="w-60 h-full  absolute bottom-64 "
+      />
       <h3 className="text-center font-semibold text-black text-3xl md:text-4xl">
         What is
         <span className="text-blue">Souldem </span>

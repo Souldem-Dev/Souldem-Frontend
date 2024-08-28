@@ -4,12 +4,24 @@ import Abdul from '@/app/assets/LandingPage/aboutUs/Abdul.svg';
 import Jay from '@/app/assets/LandingPage/aboutUs/Jay.svg';
 import logoIcon from '@/app/assets/logoIconBlue.svg';
 import { Linkedin, X } from 'lucide-react';
+import Aero from '@/app/assets/LandingPage/Aero.svg';
+import Bstar from '@/app/assets/LandingPage/Bstar.svg';
 
 import ITNT from '@/app/assets/LandingPage/aboutUs/ITNT.svg';
 
 const Founders = () => {
   return (
-    <div>
+    <div className="relative">
+      <Image
+        src={Bstar}
+        alt="Aero"
+        className="w-12 md:flex hidden h-full   absolute  end-12 "
+      />
+      <Image
+        src={Bstar}
+        alt="Aero"
+        className="w-12 md:flex hidden h-full   absolute top-64 start-12 "
+      />
       <h1 className="text-center text-4xl font-semibold text-blue my-8">
         Founders
       </h1>
