@@ -16,7 +16,9 @@ const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [universityName, setUniversityName] = useState('');
+
+  const [userName, setuserName] = useState('');
+
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,9 @@ const Page = () => {
     try {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'register/createAccountAuth',
-        { email, type: 'university' }
+
+        { email, type: 'user' }
+
       );
       if (response.status === 200) {
         toast.success('OTP sent successfully');
@@ -46,7 +50,9 @@ const Page = () => {
     try {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'register/createUser',
-        { email, password, universityName, otp }
+
+        { email, password, userName, otp }
+
       );
       if (response.status === 200) {
         toast.success('Account successfully created');
@@ -57,9 +63,9 @@ const Page = () => {
         toast.error(response.data.resp || 'Error creating account');
       }
     } catch (error) {
+      console.log(error)
+      setLoading(false)
       toast.error('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -76,11 +82,13 @@ const Page = () => {
         </div>
         <div className="lg:w-5/12 md:w-6/12 h-screen bg-white flex flex-col items-center justify-center lg:px-32 px-20 gap-y-2">
           <div>
-            <h3 className="text-3xl font-bold">Create a college in</h3>
+
+
+            <h3 className="text-3xl font-bold">Create an account in</h3>
             <h1 className="text-blue text-4xl font-extrabold">Souldem</h1>
             <p className="text-para">
-              Have your college on the Souldem network for easier management of
-              examinations
+             Mint and Manage your all academics in souldem
+
             </p>
           </div>
 
@@ -90,8 +98,10 @@ const Page = () => {
               type="text"
               placeholder="Your Good Name"
               className="text-dark bg-gray"
-              value={universityName}
-              onChange={(e) => setUniversityName(e.target.value)}
+
+              value={userName}
+              onChange={(e) => setuserName(e.target.value)}
+
               disabled={isOtpSent}
             />
           </div>
@@ -208,7 +218,9 @@ const Page = () => {
 
           <p>
             Already have an account?{' '}
-            <Link href="/university/login" className="text-blue">
+
+            <Link href="/user/login" className="text-blue">
+
               Login
             </Link>
           </p>
