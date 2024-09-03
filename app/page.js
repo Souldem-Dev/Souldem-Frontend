@@ -1,4 +1,11 @@
 'use client';
+import Footer from '@/components/LandingPage/Footer';
+import Faq from '@/components/LandingPage/Home/Faq';
+import Features from '@/components/LandingPage/Home/Features';
+import HeroPage from '@/components/LandingPage/Home/HeroPage';
+import Newsletter from '@/components/LandingPage/Home/Newsletter';
+import Carousel from '@/components/LandingPage/Home/Usecases';
+import Navbar from '@/components/LandingPage/Navbar';
 import React, { useState, useEffect } from 'react';
 
 function Page() {
@@ -32,26 +39,12 @@ function Page() {
 
   return (
     <div>
-      {' '}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray text-para">
-        <h1 className="text-5xl font-bold mb-4 text-blue">
-          Welcome to Souldem
-        </h1>
-        <p className="text-xl mb-8 text-para">
-          We are working hard to bring you something amazing! Stay tuned.
-        </p>
-        <div className="flex space-x-4 text-6xl">
-          <span role="img" aria-label="construction" className="text-cyan">
-            🚧
-          </span>
-          <span role="img" aria-label="tools" className="text-blueLight">
-            🔧
-          </span>
-          <span role="img" aria-label="hammer" className="text-purpleLight">
-            🔨
-          </span>
-        </div>
-      </div>
+      <Navbar />
+      <HeroPage /> <Features />
+      <Carousel />
+      <Newsletter />
+      <Faq />
+      <Footer />
     </div>
   );
 }
