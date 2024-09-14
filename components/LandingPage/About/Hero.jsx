@@ -22,9 +22,9 @@ const Hero = () => {
 
       <div className="md:w-7/12  lg:p-20  md:p-8 mt-8 mx-auto px-4 ">
         <h5 className="text-2xl hidden md:flex text-blue font-medium">
-          For Universities
+          About Us
         </h5>
-        <h1 className=" text-4xl text-center md:text-left text-white md:text-black font-semibold">
+        <h1 className=" text-5xl text-center md:text-left text-white md:text-black font-semibold">
           Souldem Instant blockchain verification of credentials.
         </h1>
         <p className="my-2 text-center md:text-left text-white md:text-para">

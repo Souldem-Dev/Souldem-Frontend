@@ -10,6 +10,7 @@ const Newsletter = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        height: '30vh',
       }}
       className="md:min-h-[60vh] min-h-[20vh]"
     >

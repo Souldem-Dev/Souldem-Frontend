@@ -18,7 +18,7 @@ const Hero = () => {
         <h5 className="text-2xl hidden md:flex text-blue font-medium">
           For Universities
         </h5>
-        <h1 className=" text-4xl text-center md:text-left text-white md:text-black font-semibold">
+        <h1 className=" text-5xl text-center md:text-left text-white md:text-black font-semibold">
           Souldem is a protocol designed to automate university processes
         </h1>
         <p className="my-2 text-center md:text-left text-white md:text-para">

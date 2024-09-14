@@ -15,7 +15,7 @@ const Faq = () => {
         backgroundImage: `url(${FaqImg.src})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: 'auto',
+        height: '30vh',
 
         display: 'flex',
       }}
@@ -35,12 +35,16 @@ const Faq = () => {
           InsurMagix experience.
         </p>
 
-        <Accordion type="single" collapsible className="w-full my-8">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full my-8 flex flex-col gap-y-4 "
+        >
           <AccordionItem value="item-1   ">
-            <AccordionTrigger className="text-black border-2 px-4 rounded-xl w-3/4  border-blue py-6">
+            <AccordionTrigger className="text-black border-2 px-4 rounded-xl w-3/4  border-blue py-6 ">
               Is it accessible? hello
             </AccordionTrigger>
-            <AccordionContent className="text-black p-4">
+            <AccordionContent className="text-black p-4 ">
               Yes. It adheres to the WAI-ARIA design pattern.
             </AccordionContent>
           </AccordionItem>
@@ -49,7 +53,7 @@ const Faq = () => {
             <AccordionTrigger className="text-black border-2 px-4 rounded-xl border-blue py-6">
               Is it styled?
             </AccordionTrigger>
-            <AccordionContent className="text-black p-4">
+            <AccordionContent className="text-black p-4 ">
               Yes. It comes with default styles that match the other
               components&apos; aesthetic.
             </AccordionContent>

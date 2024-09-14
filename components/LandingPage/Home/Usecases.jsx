@@ -27,7 +27,7 @@ const Carousel = () => {
         Benefits <span className="text-blue">Souldem</span> Provides To
         Universities
       </h3>
-      <div className="sm:hidden">
+      <div className="md:hidden">
         <Slider {...carouselSettings}>
           <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl">
             <Image src={case1} alt="Feature1" className="w-11/12 rounded-lg" />
@@ -116,7 +116,7 @@ const Carousel = () => {
         </Slider>
       </div>
 
-      <div className="hidden sm:grid grid-cols-1 mx-2 md:mx-16 my-8 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="hidden md:grid grid-cols-1 mx-2 md:mx-16 my-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
           <Image src={case1} alt="Feature1" className="w-11/12 rounded-lg" />
           <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">

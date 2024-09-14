@@ -23,7 +23,7 @@ const Founders = () => {
         className="w-12 md:flex hidden h-full   absolute top-64 start-12 "
       />
       <h1 className="text-center text-4xl font-semibold text-blue my-8">
-        Founders
+        Souldem <span className="text-black">Founders</span>
       </h1>
       <div className="flex justify-around items-center">
         <div className=" flex flex-col items-center gap-y-2">
@@ -31,7 +31,7 @@ const Founders = () => {
           <h3 className="text-2xl font-semibold text-black">Abdul Haq M</h3>
           <p className="font-medium"> Founder </p>
           <div className="flex gap-2">
-            <Linkedin className="bg-blue  text-white rounded-l " />
+            <Linkedin className="bg-blue  text-white rounded-l p-1" />
             <X className="bg-black text-white rounded-2xl" />
           </div>
         </div>
@@ -41,13 +41,13 @@ const Founders = () => {
           <h3 className="text-2xl font-semibold text-black">Jayanth Koppala</h3>
           <p className="font-medium"> Co-Founder </p>
           <div className="flex gap-2">
-            <Linkedin className="bg-blue  text-white rounded-l " />
+            <Linkedin className="bg-blue  p-1 text-white rounded-l " />
             <X className="bg-black text-white rounded-2xl" />
           </div>
         </div>
       </div>
 
-      <p className="text-center text-lg my-4  text-black w-3/4 mx-auto">
+      <p className="text-center text-lg my-4  text-black w-5/6 mx-auto">
         Lorem ipsum dolor sit amet consectetur. Est in enim metus pretium sit
         enim volutpat pellentesque. Eu sit justo urna blandit urna dui.
         Pellentesque nunc sit enim elit scelerisque. Risus purus elementum vel
@@ -65,12 +65,12 @@ const Founders = () => {
       </p>
 
       <div className=" w-11/12  mx-auto my-8">
-        <h3 className="text-center font-semibold text-black text-3xl md:text-4xl">
+        <h3 className="text-center font-semibold text-black text-3xl md:text-4xl mb-8">
           Backed by top firm
         </h3>
 
         <Image src={ITNT} alt="ITNT" className="w-11/12 h-full mx-auto my-8" />
-        <p className="text-center   text-lg my-4  text-black w-3/4 mx-auto">
+        <p className="text-center   text-lg my-4  text-black w-5/6 mx-auto">
           Lorem ipsum dolor sit amet consectetur. Est in enim metus pretium sit
           enim volutpat pellentesque. Eu sit justo urna blandit urna dui.
           Pellentesque nunc sit enim elit scelerisque. Risus purus elementum vel
@@ -85,7 +85,7 @@ const Founders = () => {
         <h3 className="text-center font-semibold text-black text-3xl md:text-4xl">
           Mission and Vision of Souldem
         </h3>
-        <p className="text-center my-4  text-black w-3/4 mx-auto  text-lg">
+        <p className="text-center my-4  text-black w-5/6 mx-auto  text-lg">
           Lorem ipsum dolor sit amet consectetur. Est in enim metus pretium sit
           enim volutpat pellentesque. Eu sit justo urna blandit urna dui.
           Pellentesque nunc sit enim elit scelerisque. Risus purus elementum vel
