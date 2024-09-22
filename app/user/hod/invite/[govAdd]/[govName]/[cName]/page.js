@@ -3,19 +3,36 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { X } from 'lucide-react';
+import { X, Menu } from 'lucide-react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Papa from 'papaparse';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import { saveAs } from 'file-saver';
+
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
   const [role, setRole] = useState('mentor');
+  const [loading, setLoading] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const params = useParams();
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
       setEmails([...emails, email]);
@@ -34,6 +51,7 @@ const Page = () => {
   };
 
   const handleSendInvite = async () => {
+    setLoading(true);
     if (emails.length !== 0) {
       try {
         const response = await axios.post(
@@ -54,15 +72,19 @@ const Page = () => {
           }
         );
 
-        console.log(response);
+        let receivedMail = response.data.map((val) => val.accepted[0]);
+        let totalMail = emails;
 
         if (response.status === 200) {
           toast.success('Invitations sent successfully');
+          generateCsv(totalMail, receivedMail);
         } else {
           toast.error('Failed to send invitations');
         }
       } catch (error) {
         toast.error('An error occurred while sending invitations');
+      } finally {
+        setLoading(false);
       }
     } else {
       alert('Enter email');
@@ -87,21 +109,49 @@ const Page = () => {
     }
   };
 
+  const generateCsv = (totalMail, receivedMail) => {
+    const csvData = totalMail.map((email) => {
+      return {
+        email: email,
+        status: receivedMail.includes(email) ? 'Sent' : 'Not Sent',
+      };
+    });
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'email_status.csv');
+  };
+
   return (
-    <div className="m-4 w-11/12 flex flex-col px-20">
+    <div className="m-4 w-11/12 flex flex-col md:px-20">
       <div className="mt-4 flex flex-col justify-between gap-y-2">
-        <div className="flex w-full max-w-sm items-center gap-3">
-          <Label htmlFor="role" className="text-xl">
-            Role:{' '}
-          </Label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="bg-blue text-white w-24 p-2 border rounded-md"
-          >
-            <option value="mentor">Mentor</option>
-          </select>
+        <div className="flex w-full  items-center gap-3 justify-between">
+          <div>
+            <Label htmlFor="role" className="text-xl">
+              Role:{' '}
+            </Label>
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="bg-blue text-white w-24 p-2 border rounded-md"
+            >
+              <option value="mentor">Mentor</option>
+            </select>
+          </div>
+
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <Menu />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem className="hover:bg-white text-black">
+                  Excel Download
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
@@ -153,8 +203,9 @@ const Page = () => {
           <Button
             className="bg-blue text-white w-24"
             onClick={handleSendInvite}
+            disabled={loading}
           >
-            Invite
+            {loading ? 'Inviting...' : 'Invite'}
           </Button>
           <Button
             variant="outline"

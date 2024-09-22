@@ -8,6 +8,7 @@ import Aero from '@/app/assets/LandingPage/Aero.svg';
 import Bstar from '@/app/assets/LandingPage/Bstar.svg';
 
 import ITNT from '@/app/assets/LandingPage/aboutUs/ITNT.svg';
+import Contact from '@/app/assets/LandingPage/aboutUs/Contact.svg';
 
 const Founders = () => {
   return (
@@ -95,13 +96,14 @@ const Founders = () => {
           Risus purus element
         </p>
       </div>
-
-      <div className="border-blue border-2 h-32 my-8 bg-[#F3F6FF] px-4 rounded-xl w-5/6 md:w-3/6 mx-auto flex items-center justify-between">
-        <Image src={logoIcon} alt="logo" className=" mx-auto my-8" />
-        <h3 className=" text-xl md:text-3xl text-black font-semibold">
+      <div className="flex flex-col items-center justify-center">
+        <h3 className=" text-3xl md:text-4xl text-black font-semibold text-center">
           For More Support
         </h3>
-        <button className="bg-blue text-white rounded-xl p-2 px-4 w-40  mx-auto my-8">
+
+        <Image src={Contact} alt="logo" className="" />
+
+        <button className="border-2 border-blue bg-blue text-white rounded-xl p-2 w-60 my-4">
           Contact Us
         </button>
       </div>

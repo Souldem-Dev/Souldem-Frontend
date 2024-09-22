@@ -12,15 +12,14 @@ const Souldem = () => {
         <span className="text-blue"> Souldem </span>
       </h3>
       <p className="text-center text-black mx-2 text-lg md:w-2/3">
-        Allow us to introduce ourselves! Hear from our CEO, Abdul Haq M, about
-        who we are, how we started, and where we're headed.
+        Allow us to introduce ourselves! Hear from our CEO,{' '}
+        <span className="font-bold">Abdul Haq M</span>, about who we are, how we
+        started, and where we're headed.
         <span className="border-b-2 ">
           {' '}
            Learn more about Souldem in our Learn Center
         </span>
       </p>
-
-      <div className="bg-gray w-8/12 h-96 mx-auto my-8"></div>
 
       <Button className="text-white  bg-blue rounded-xl my-2 p-2 w-60 ">
         Follow us on Social Media
