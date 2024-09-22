@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 export default function GovernanceLayout({ children }) {
   return (
     <main className="bg-[#FBFBFD] ">
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="flex">{children}</div>
 
       <Footer />

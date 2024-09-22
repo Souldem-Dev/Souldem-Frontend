@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Papa from 'papaparse';
@@ -185,6 +185,7 @@ const Page = () => {
           />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

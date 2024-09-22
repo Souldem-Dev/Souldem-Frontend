@@ -15,17 +15,15 @@ const page = () => {
   console.log(govAdd);
   return (
     <div className=" m-8  w-full mb-40">
-      <div className="flex items-center gap-2 mb-8">
+      <div className="flex items-center gap-2 ">
         <Folder className="text-blue" />
 
-        <h1 className="font-light text-blue  text-3xl">Marks Database</h1>
+        <h1 className=" text-blue font-bold  text-4xl">Marks Database</h1>
       </div>
 
       {/* Add the search and filter dropdown here */}
-      <Searchbox />
 
       <SubjectInput govAdd={govAdd} />
-      
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Papa from 'papaparse';
@@ -88,7 +88,7 @@ const Page = () => {
   };
 
   return (
-    <div className="m-4 w-11/12 flex flex-col">
+    <div className="m-4 w-11/12 flex flex-col px-20">
       <div className="mt-4 flex flex-col justify-between gap-y-2">
         <div className="flex w-full max-w-sm items-center gap-3">
           <Label htmlFor="role" className="text-xl">
@@ -172,6 +172,7 @@ const Page = () => {
           />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

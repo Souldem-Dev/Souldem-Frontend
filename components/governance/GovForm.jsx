@@ -13,6 +13,7 @@ const GovForm = ({ onClose, publickey }) => {
     batch: '',
     semester: '',
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +25,7 @@ const GovForm = ({ onClose, publickey }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const publickey = localStorage.getItem('publicAddress');
       console.log(publickey);
@@ -126,6 +128,8 @@ const GovForm = ({ onClose, publickey }) => {
     } catch (error) {
       console.error('Error creating governance:', error);
       toast.error(error.response?.data?.reason || 'An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -187,10 +191,11 @@ const GovForm = ({ onClose, publickey }) => {
         </div>
         <button
           type="submit"
-          className="bg-blue  hover:bg-blue hover:text-white hover:cursor-pointer focus:outline-none focus:ring  w-28 text-white  py-2 px-4  mr-6  rounded-xl"
+          className="bg-blue  hover:bg-blue hover:text-white hover:cursor-pointer focus:outline-none focus:ring  w-full text-white  py-2 px-4  mr-6  rounded-xl"
           onSubmit={onClose}
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Creating Governance...' : 'Create Governance'}
         </button>
       </form>
     </main>

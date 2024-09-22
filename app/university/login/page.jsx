@@ -16,8 +16,10 @@ const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'login/loginUniversity',
@@ -86,6 +88,8 @@ const Page = () => {
       } else {
         toast.error('An error occurred. Please check your network connection.');
       }
+    } finally {
+      setLoading(false); // Stop loading after the request finishes
     }
   };
 
@@ -136,8 +140,9 @@ const Page = () => {
           <Button
             className="bg-blue text-white p-2 px-4 rounded-l w-full"
             onClick={handleLogin}
+            disabled={loading}
           >
-            Login
+            {loading ? 'logging in' : 'login'}
           </Button>
 
           <Link href="/resetPass" className="text-blue">

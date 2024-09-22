@@ -37,6 +37,7 @@ export function middleware(request) {
     '/user/grader/marksDatabase/[govAdd]/[govName]/[cName]',
     '/user/wallet',
     '/user/wallet/certificate',
+    '/user/wallet/addSubjects',
     '/user/wallet/marksheet/[cid]/[cName]/[gName]',
     '/user/mentor',
     '/user/mentor/invite/[govAdd]/[govName]/[cName]',

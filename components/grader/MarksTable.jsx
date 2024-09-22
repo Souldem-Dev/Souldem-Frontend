@@ -9,8 +9,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save, Trash2 } from 'lucide-react';
+import { CirclePlus, Pencil, Save, Trash, Trash2 } from 'lucide-react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MarksTable = ({ formData }) => {
   const [sections, setSections] = useState([
@@ -49,23 +51,17 @@ const MarksTable = ({ formData }) => {
         graderAdd: localStorage.getItem('userPublicAddress'),
         subjectName: formData.subjectName,
         subjectCode: formData.subjectCode,
-
         internalMark: marksObtained,
         eachMarkArrInternal: sections,
         totalInternalMark: totalMark,
-
         externalMark: 0,
         eachMarkArrExternal: [],
         totalExternalMark: 0,
-        graderAdd: localStorage.getItem('userPublicAddress'),
       };
-      console.log(sections);
-      console.log('IPFS JSON:', ipfsJson);
 
       if (formData.selectedOption === 'internal') {
         await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterInternalMarks`,
-
           {
             ...ipfsJson,
             internalMark: marksObtained,
@@ -73,7 +69,7 @@ const MarksTable = ({ formData }) => {
             totalInternalMark: totalMark,
           }
         );
-        console.log('Internal marks entered');
+        toast.success('Internal marks submitted successfully!');
       } else if (formData.selectedOption === 'external') {
         await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/enterExternalMark`,
@@ -84,9 +80,10 @@ const MarksTable = ({ formData }) => {
             eachMarkArrExternal: sections,
           }
         );
-        console.log('External marks entered');
+        toast.success('External marks submitted successfully!');
       }
     } catch (error) {
+      toast.error('Failed to submit marks. Please try again.');
       console.error('Error:', error);
     }
   };
@@ -136,9 +133,9 @@ const MarksTable = ({ formData }) => {
       }
 
       await axios.patch(url, data);
-      console.log(data);
-      console.log(`${updateType} marks updated`);
+      toast.success(`${updateType} marks updated successfully!`);
     } catch (error) {
+      toast.error('Failed to update marks. Please try again.');
       console.error('Error:', error);
     }
   };
@@ -225,8 +222,8 @@ const MarksTable = ({ formData }) => {
     <main className="">
       <div>
         <div className="flex justify-between items-center m-4">
-          <h1 className="text-2xl font-bold">Marks Table</h1>
-          <Button onClick={addSection} className="bg-green-500 text-white mb-4">
+          <h1 className="text-3xl font-bold  text-black">Marks Table</h1>
+          <Button onClick={addSection} className="bg-blue text-white mb-4">
             Add Section
           </Button>
         </div>
@@ -247,11 +244,13 @@ const MarksTable = ({ formData }) => {
                     autoFocus
                   />
                 ) : (
-                  <h1 className="text-2xl font-bold">{section.name}</h1>
+                  <h1 className="text-xl text-black font-semibold">
+                    {section.name}
+                  </h1>
                 )}
                 <button
                   onClick={() => toggleEditSectionName(section.name)}
-                  className="ml-1 bg-blue text-white rounded p-2"
+                  className="ml-1 bg-inherit p-2"
                 >
                   {section.isEditing ? <Save /> : <Pencil />}
                 </button>
@@ -259,34 +258,41 @@ const MarksTable = ({ formData }) => {
               <div className="flex">
                 <Button
                   onClick={() => addRowToSection(section.name)}
-                  className="bg-blue text-white"
+                  className="bg-inherit"
                 >
-                  Add Row
+                  <CirclePlus />
                 </Button>
                 <Button
                   onClick={() => deleteSection(section.name)}
-                  className="bg-red-500 text-white ml-2"
+                  className="bg-inherit"
                 >
-                  <Trash2 />
+                  <Trash />
                 </Button>
               </div>
             </div>
-            <Table>
+            <Table className="border-2 border-black">
               <TableHeader className="border-gray-300 border bg-gray-200">
                 <TableRow>
-                  <TableHead className="font-bold">ID</TableHead>
-                  <TableHead className="font-bold">Marks Obtained</TableHead>
-                  <TableHead className="font-bold">Total Marks</TableHead>
-                  <TableHead className="font-bold">Actions</TableHead>
+                  <TableHead className="font-bold text-black">ID</TableHead>
+                  <TableHead className="font-bold  text-black">
+                    Marks Obtained
+                  </TableHead>
+                  <TableHead className="font-bold  text-black">
+                    Total Marks
+                  </TableHead>
+                  <TableHead className="font-bold  text-black">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="bg-white">
                 {section.rows.map((row, rowIndex) => (
                   <TableRow key={rowIndex}>
-                    <TableCell>{rowIndex + 1}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-black">{rowIndex + 1}</TableCell>
+                    <TableCell className="text-black">
                       <input
                         type="text"
+                        required
                         value={row.marksObtained}
                         onChange={(e) =>
                           handleInputChange(
@@ -297,12 +303,13 @@ const MarksTable = ({ formData }) => {
                           )
                         }
                         placeholder="Marks Obtained"
-                        className="bg-gray h-8 px-4 w-full border border-gray-300 rounded"
+                        className="bg-white h-8 px-4 w-full border border-gray-300 rounded"
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-black">
                       <input
                         type="text"
+                        required
                         value={row.totalMarks}
                         onChange={(e) =>
                           handleInputChange(
@@ -313,7 +320,7 @@ const MarksTable = ({ formData }) => {
                           )
                         }
                         placeholder="Total Marks"
-                        className="bg-gray h-8 px-4 w-full border border-gray-300 rounded"
+                        className="bg-white h-8 px-4 w-full border border-gray-300 rounded"
                       />
                     </TableCell>
                     <TableCell>
@@ -331,16 +338,21 @@ const MarksTable = ({ formData }) => {
           </div>
         ))}
 
-        <div>
-          <Button
-            onClick={handleSubmit}
-            className="bg-green-500 text-white mb-4"
-          >
-            Submit Marks
+        <div className="flex justify-between">
+          <Button onClick={handleSubmit} className="bg-red-500 text-white mb-4">
+            Add Arrear Marks
           </Button>
-          <Button onClick={handleUpdate} className="bg-blue text-white mb-4">
-            Update
-          </Button>
+          <div>
+            <Button
+              onClick={handleSubmit}
+              className="bg-green-500 text-white mb-4 mx-2"
+            >
+              Submit Marks
+            </Button>
+            <Button onClick={handleUpdate} className="bg-blue text-white mb-4">
+              Update
+            </Button>
+          </div>
         </div>
       </div>
     </main>
