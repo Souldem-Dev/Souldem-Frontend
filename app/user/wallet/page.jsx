@@ -95,7 +95,10 @@ const page = () => {
       <div className="flex flex-col">
         <h1 className="font-light text-blue  text-xl">Dashboard</h1>
 
-        <CardUser data={gov} />
+        <CardUser
+          data={gov}
+          url={'http://localhost:3000/user/wallet/addSubjects'}
+        />
       </div>
     </div>
   );

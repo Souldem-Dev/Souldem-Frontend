@@ -14,8 +14,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
@@ -33,6 +31,7 @@ const Page = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
       setEmails([...emails, email]);
@@ -81,6 +80,9 @@ const Page = () => {
         } else {
           toast.error('Failed to send invitations');
         }
+
+        // Now let's check who joined
+        checkJoinStatus(totalMail);
       } catch (error) {
         toast.error('An error occurred while sending invitations');
       } finally {
@@ -88,6 +90,26 @@ const Page = () => {
       }
     } else {
       alert('Enter email');
+    }
+  };
+
+  // Function to check join status
+  const checkJoinStatus = async () => {
+    try {
+      const response = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          'become/getAllMemFromGov/mentor/' +
+          params.govAdd
+      );
+
+      const joinStatus = response.data;
+
+      const joinedMails = joinStatus.map((val) => val.email);
+      console.log(joinedMails);
+
+      updateCsvWithJoinStatus(joinedMails);
+    } catch (error) {
+      toast.error('An error occurred while checking join status');
     }
   };
 
@@ -119,7 +141,25 @@ const Page = () => {
 
     const csvString = Papa.unparse(csvData);
     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, 'email_status.csv');
+    saveAs(blob, 'Mentor_email_status.csv');
+  };
+
+  const updateCsvWithJoinStatus = (joinedEmails) => {
+    if (joinedEmails.length === 0) {
+      toast.info('No users have joined yet');
+      return;
+    }
+
+    const csvData = joinedEmails.map((email) => {
+      return {
+        email: email,
+        status: 'Joined',
+      };
+    });
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'Mentor_join_status.csv');
   };
 
   return (
@@ -146,7 +186,10 @@ const Page = () => {
                 <Menu />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem className="hover:bg-white text-black">
+                <DropdownMenuItem
+                  className="hover:bg-white text-black"
+                  onClick={checkJoinStatus}
+                >
                   Excel Download
                 </DropdownMenuItem>
               </DropdownMenuContent>

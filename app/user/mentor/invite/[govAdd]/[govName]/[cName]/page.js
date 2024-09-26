@@ -3,31 +3,40 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Papa from 'papaparse';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import { saveAs } from 'file-saver';
 
 const Invite = () => {
   const [email, setEmail] = useState('');
   const [regNo, setRegNo] = useState('');
-  const [invites, setInvites] = useState([]);
+  const [emails, setEmails] = useState([]);
   const [role, setRole] = useState('student');
+  const [loading, setLoading] = useState(false);
   const params = useParams();
 
   const handleAddInvite = () => {
-    if (email && regNo && !invites.some((invite) => invite.email === email)) {
-      setInvites([...invites, { email, regNo }]);
+    if (email && regNo && !emails.some((invite) => invite.email === email)) {
+      setEmails([...emails, { email, regNo }]);
       setEmail('');
       setRegNo('');
     }
   };
 
   const handleRemoveInvite = (emailToRemove) => {
-    setInvites(invites.filter((invite) => invite.email !== emailToRemove));
+    setInvites(emails.filter((invite) => invite.email !== emailToRemove));
   };
 
   const handleKeyDown = (e) => {
@@ -37,6 +46,7 @@ const Invite = () => {
   };
 
   const handleSendInvite = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}mail/sendMail/invite/student`,
@@ -45,7 +55,7 @@ const Invite = () => {
           role: role,
           universityName: params.cName,
           GovName: params.govName,
-          toEmails: invites,
+          toEmails: emails,
           domain: {
             name: params.govName,
             version: '1',
@@ -55,13 +65,38 @@ const Invite = () => {
         }
       );
 
+      let receivedMail = response.data.map((val) => val.accepted[0]);
+      let totalMail = emails;
+      console.log(receivedMail, totalMail);
       if (response.status === 200) {
         toast.success('Invitations sent successfully');
+        generateCsv(totalMail, receivedMail);
       } else {
         toast.error('Failed to send invitations');
       }
     } catch (error) {
       toast.error('An error occurred while sending invitations');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const checkJoinStatus = async () => {
+    try {
+      const response = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          'become/getAllMemFromGov/stud/' +
+          params.govAdd
+      );
+
+      const joinStatus = response.data;
+
+      const joinedMails = joinStatus.map((val) => val.email);
+      console.log(joinedMails);
+
+      updateCsvWithJoinStatus(joinedMails);
+    } catch (error) {
+      toast.error('An error occurred while checking join status');
     }
   };
 
@@ -86,39 +121,79 @@ const Invite = () => {
     }
   };
 
+  const generateCsv = (totalMail, receivedMail) => {
+    const csvData = totalMail.map((invite) => {
+      return {
+        email: invite.email,
+        status: receivedMail.includes(invite.email) ? 'Sent' : 'Not Sent',
+      };
+    });
+    console.log(csvData);
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'Student_email_status.csv');
+  };
+
+  const updateCsvWithJoinStatus = (joinedEmails) => {
+    if (joinedEmails.length === 0) {
+      toast.info('No users have joined yet');
+      return;
+    }
+
+    const csvData = joinedEmails.map((email) => {
+      return {
+        email: email,
+        status: 'Joined',
+      };
+    });
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'student_join_status.csv');
+  };
+
   return (
     <div className="m-4 md:mx-auto w-11/12 flex flex-col">
-      <div className="flex gap-x-4 items-center mx-auto">
-        <Link
-          href={`/user/mentor/invite/${params.govAdd}/${params.govName}/${params.cName}`}
-        >
-          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-2 hover:border-blue">
-            invite
-          </button>
-        </Link>
+      <div className="mt-4 flex  drop-shadow-md p-12 rounded-2xl flex-col justify-between  gap-y-2">
+        <div className="flex w-full  items-center justify-between gap-3">
+          <div>
+            <Label htmlFor="role" className="text-xl">
+              Role:{' '}
+            </Label>
 
-        <Link
-          href={`/user/mentor/approval/${params.govAdd}/${params.govName}/${params.cName}`}
-        >
-          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-blue hover:border-2">
-            approval
-          </button>
-        </Link>
-      </div>
-
-      <div className="mt-4 flex bg-white drop-shadow-md p-12 rounded-2xl flex-col justify-between gap-y-2">
-        <div className="flex w-full max-w-sm items-center gap-3">
-          <Label htmlFor="role" className="text-xl">
-            Role:{' '}
-          </Label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="bg-blue text-white w-24 p-2 border rounded-md"
-          >
-            <option value="student">student</option>
-          </select>
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="bg-blue text-white w-24 p-2 border rounded-md"
+            >
+              <option value="student">student</option>
+            </select>
+          </div>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <Menu />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white">
+                <DropdownMenuItem
+                  className="hover:bg-white text-black"
+                  onClick={checkJoinStatus}
+                >
+                  Excel Download
+                </DropdownMenuItem>
+                <Link
+                  href={`/user/mentor/approval/${params.govAdd}/${params.govName}/${params.cName}`}
+                >
+                  <DropdownMenuItem className="hover:bg-white text-black">
+                    {' '}
+                    Approval
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between  items-center gap-x-2">
@@ -164,7 +239,7 @@ const Invite = () => {
             <Label htmlFor="To">To:</Label>
             <div className="flex flex-col gap-2">
               <div className="bg-gray h-60 p-2 overflow-y-auto">
-                {invites.map((invite, index) => (
+                {emails.map((invite, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center bg-white p-2 mb-1 rounded-xl"
@@ -190,8 +265,9 @@ const Invite = () => {
           <Button
             className="bg-blue text-white w-24"
             onClick={handleSendInvite}
+            disabled={loading}
           >
-            Invite
+            {loading ? 'Inviting...' : 'Invite'}
           </Button>
           <Button
             variant="outline"

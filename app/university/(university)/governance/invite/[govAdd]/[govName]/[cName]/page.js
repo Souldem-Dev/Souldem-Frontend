@@ -3,17 +3,26 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Papa from 'papaparse';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { saveAs } from 'file-saver';
 
 const Page = () => {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
   const [role, setRole] = useState('grader');
+  const [loading, setLoading] = useState(false);
   const params = useParams();
 
   const handleAddEmail = () => {
@@ -34,6 +43,7 @@ const Page = () => {
   };
 
   const handleSendInvite = async () => {
+    setLoading(true);
     if (emails.length !== 0) {
       try {
         const response = await axios.post(
@@ -53,16 +63,76 @@ const Page = () => {
           }
         );
 
+        let receivedMail = response.data.map((val) => val.accepted[0]);
+        let totalMail = emails;
+
         if (response.status === 200) {
           toast.success('Invitations sent successfully');
+          generateCsv(totalMail, receivedMail);
         } else {
           toast.error('Failed to send invitations');
         }
       } catch (error) {
         toast.error('An error occurred while sending invitations');
+      } finally {
+        setLoading(false);
       }
     } else {
       alert('Please enter email(s)');
+    }
+  };
+
+  const generateCsv = (totalMail, receivedMail) => {
+    const csvData = totalMail.map((email) => {
+      return {
+        email: email,
+        status: receivedMail.includes(email) ? 'Sent' : 'Not Sent',
+      };
+    });
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'Mentor_email_status.csv');
+  };
+
+  const checkHodJoinStatus = async () => {
+    try {
+      const hodResponse = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          'become/getAllMemFromGov/hod/' +
+          params.govAdd
+      );
+
+      console.log(hodResponse);
+
+      const joinStatus = hodResponse.data;
+
+      const joinedMails = joinStatus.map((val) => val.email);
+      console.log(joinedMails);
+
+      updateCsvWithJoinStatus(joinedMails, 'Hod');
+    } catch (error) {
+      toast.error('An error occurred while checking Hod join status');
+    }
+  };
+  const checkGraderJoinStatus = async () => {
+    try {
+      const graderResponse = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          'become/getAllMemFromGov/grader/' +
+          params.govAdd
+      );
+
+      console.log(graderResponse);
+
+      const joinStatus = graderResponse.data;
+
+      const joinedMails = joinStatus.map((val) => val.email);
+      console.log('joined', joinedMails);
+
+      updateCsvWithJoinStatus(joinedMails, 'Grader');
+    } catch (error) {
+      toast.error('An error occurred while checking Hod join status');
     }
   };
 
@@ -86,38 +156,72 @@ const Page = () => {
     }
   };
 
+  const updateCsvWithJoinStatus = (joinedEmails, role) => {
+    if (joinedEmails.length === 0) {
+      toast.info('No users have joined yet');
+      return;
+    }
+
+    const csvData = joinedEmails.map((email) => {
+      return {
+        email: email,
+        status: 'Joined',
+      };
+    });
+
+    const csvString = Papa.unparse(csvData);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `${role}_join_status.csv`);
+  };
+
   return (
-    <div className="m-4 w-11/12 flex flex-col">
-      <div className="flex gap-x-4 items-center mx-auto">
-        <Link
-          href={`/university/governance/invite/${params.govAdd}/${params.govName}/${params.cName}`}
-        >
-          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
-            Invite
-          </button>
-        </Link>
-        <Link
-          href={`/university/governance/marksEntryToggle/${params.govAdd}/${params.govName}/${params.cName}`}
-        >
-          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
-            toggle
-          </button>
-        </Link>
-      </div>
+    <div className="m-4 w-11/12 flex flex-col p-12">
       <div className="mt-4 flex flex-col justify-between gap-y-2">
-        <div className="flex w-full max-w-sm items-center gap-3">
-          <Label htmlFor="role" className="text-xl">
-            Role:
-          </Label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="bg-blue text-white w-24 p-2 border rounded-md"
-          >
-            <option value="grader">Grader</option>
-            <option value="hod">HOD</option>
-          </select>
+        <div className="flex justify-between  items-center gap-3">
+          <div>
+            <Label htmlFor="role" className="text-xl">
+              Role:
+            </Label>
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="bg-blue focus:outline-none  text-white w-24 p-2 border rounded-md"
+            >
+              <option value="grader">Grader</option>
+              <option value="hod">HOD</option>
+            </select>
+          </div>
+
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <Menu />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white">
+                <DropdownMenuItem
+                  className="hover:bg-white text-black"
+                  onClick={checkGraderJoinStatus}
+                >
+                  Grader Excel Download
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="hover:bg-white text-black"
+                  onClick={checkHodJoinStatus}
+                >
+                  Hod Excel Download
+                </DropdownMenuItem>
+                <Link
+                  href={`/university/governance/marksEntryToggle/${params.govAdd}/${params.govName}/${params.cName}`}
+                >
+                  <DropdownMenuItem className="hover:bg-white text-black">
+                    {' '}
+                    Marks Entry Toggle
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         <div className="flex md:flex-row my-4 flex-col gap-y-4 justify-between gap-x-2">
           <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -166,8 +270,9 @@ const Page = () => {
           <Button
             className="bg-blue text-white w-24"
             onClick={handleSendInvite}
+            disabled={loading}
           >
-            Invite
+            {loading ? 'Inviting...' : 'Invite'}
           </Button>
           <Button
             variant="outline"

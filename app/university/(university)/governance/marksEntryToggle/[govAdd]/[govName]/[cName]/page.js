@@ -7,6 +7,13 @@ import { useParams } from 'next/navigation';
 import { Switch } from '@/components/ui/switch';
 import Link from 'next/link';
 import './slider.css';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Menu } from 'lucide-react';
 
 const Page = () => {
   const [internalToggle, setInternalToggle] = useState(false);
@@ -61,26 +68,21 @@ const Page = () => {
 
   return (
     <div className="w-full bg-white drop-shadow-md h-full py-8 px-4 md:p-20 flex flex-col gap-y-8 rounded-xl mx-20  my-20 md:my-auto">
-      <div className="flex gap-x-4 items-center mx-auto">
-        <Link
-          href={`/university/governance/invite/${params.govAdd}/${params.govName}/${params.cName}`}
-        >
-          <button className="px-4 py-2 rounded-md bg-white text-blue hover:border-2 hover:border-blue">
-            {' '}
-            Invite
-          </button>
-        </Link>
-
-        <Link
-          href={`/university/governance/marksEntryToggle/${params.govAdd}/${params.govName}/${params.cName}`}
-
-          // href={'/university/governance/marksEntryToggle'}
-        >
-          <button className="px-4 py-2 rounded-md bg-blue text-white hover:border-blue hover:border-2">
-            {' '}
-            toggle
-          </button>
-        </Link>
+      <div className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="focus:outline-none">
+            <Menu />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-white">
+            <Link
+              href={`/university/governance/invite/${params.govAdd}/${params.govName}/${params.cName}`}
+            >
+              <DropdownMenuItem className="hover:bg-white text-black ">
+                Invite
+              </DropdownMenuItem>
+            </Link>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="flex flex-col md:flex-row w-full gap-y-2">
         <div className="md:w-1/2">
