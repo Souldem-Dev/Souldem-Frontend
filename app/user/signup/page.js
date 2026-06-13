@@ -35,6 +35,10 @@ const Page = () => {
       if (response.status === 200) {
         toast.success('OTP sent successfully');
         setIsOtpSent(true);
+        if (response.data?._devOtp) {
+          setOtp(String(response.data._devOtp));
+          toast.info(`Dev mode: OTP = ${response.data._devOtp}`);
+        }
       } else {
         toast.error('Error sending OTP');
       }

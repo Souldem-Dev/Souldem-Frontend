@@ -1,208 +1,154 @@
+'use client';
 import React from 'react';
-import Slider from 'react-slick';
 import Image from 'next/image';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import case1 from '@/app/assets/LandingPage/Home/usecases/case1.svg';
 import case2 from '@/app/assets/LandingPage/Home/usecases/case2.svg';
 import case3 from '@/app/assets/LandingPage/Home/usecases/case3.svg';
 import case4 from '@/app/assets/LandingPage/Home/usecases/case4.svg';
 import case5 from '@/app/assets/LandingPage/Home/usecases/case5.svg';
 import case6 from '@/app/assets/LandingPage/Home/usecases/case6.svg';
-import { MoveRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
-const carouselSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: false, // Hide navigation arrows
-};
+const benefits = [
+  {
+    img: case1,
+    title: 'Enhanced Security',
+    desc: 'Academic records are stored on immutable blockchains, eliminating the risk of tampering or credential fraud.',
+  },
+  {
+    img: case2,
+    title: 'Streamlined Verification',
+    desc: 'Employers and institutions verify credentials in seconds — no emails, no phone calls, no waiting.',
+  },
+  {
+    img: case3,
+    title: 'Student-Owned Access',
+    desc: 'Students hold their own credentials and can share verified records with anyone, anywhere, at any time.',
+  },
+  {
+    img: case4,
+    title: 'Decentralized Storage',
+    desc: 'Records live on IPFS and public blockchains — no single point of failure, always accessible.',
+  },
+  {
+    img: case5,
+    title: 'Real-Time Updates',
+    desc: 'Academic record changes propagate on-chain instantly, ensuring the most current information at all times.',
+  },
+  {
+    img: case6,
+    title: 'Paperless & Sustainable',
+    desc: 'Replace physical documents with cryptographic proofs — reducing waste and administrative overhead.',
+  },
+];
 
 const Carousel = () => {
   return (
-    <div className="pt-20">
-      <h3 className="text-2xl md:text-4xl text-center font-bold text-black">
-        Benefits <span className="text-blue">Souldem</span> Provides To
-        Universities
-      </h3>
-      <div className="md:hidden">
-        <Slider {...carouselSettings}>
-          <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl">
-            <Image src={case1} alt="Feature1" className="w-11/12 rounded-lg" />
-            <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-              Enhanced Security
-            </h3>
-            <p className="text-base text-black mt-2">
-              Academic records are stored on immutable blockchains, reducing the
-              risk of tampering or fraud.
-            </p>
-            <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-              Find Out More
-              <MoveRight />
-            </button>
-          </div>
-          <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl">
-            <Image src={case2} alt="Feature2" className="w-11/12 rounded-lg" />
-            <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-              Streamlined Verification
-            </h3>
-            <p className="text-base text-black mt-2">
-              Simplifies the process of verifying academic credentials for
-              employers and institutions.
-            </p>
-            <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-              Find Out More
-              <MoveRight />
-            </button>
-          </div>
-          <div className="flex flex-col bg-white drop-shadow-2xl p-4 h-full items-center rounded-3xl">
-            <Image src={case3} alt="Feature3" className="w-11/12 rounded-lg" />
-            <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-              Easy Access
-            </h3>
-            <p className="text-base text-black mt-2">
-              Provides students with easy access to their academic records
-              anytime, anywhere.
-            </p>
-            <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-              Find Out More
-              <MoveRight />
-            </button>
-          </div>
-          <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl">
-            <Image src={case4} alt="Feature4" className="w-11/12 rounded-lg" />
-            <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-              Decentralized Storage
-            </h3>
-            <p className="text-base text-black mt-2">
-              Utilizes decentralized networks to ensure that academic records
-              are always accessible and secure.
-            </p>
-            <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-              Find Out More
-              <MoveRight />
-            </button>
-          </div>
-          <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl">
-            <Image src={case5} alt="Feature5" className="w-11/12 rounded-lg" />
-            <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-              Instant Updates
-            </h3>
-            <p className="text-base text-black mt-2">
-              Updates to academic records are reflected in real-time, ensuring
-              the most current information.
-            </p>
-            <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-              Find Out More
-              <MoveRight />
-            </button>
-          </div>
-          <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl">
-            <Image src={case6} alt="Feature6" className="w-11/12 rounded-lg" />
-            <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-              Eco-Friendly
-            </h3>
-            <p className="text-base text-black mt-2">
-              Reduces the need for paper-based documentation, contributing to a
-              more sustainable environment.
-            </p>
-            <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-              Find Out More
-              <MoveRight />
-            </button>
-          </div>
-        </Slider>
-      </div>
+    <section
+      style={{ background: '#0A0E1A' }}
+      className="py-24 md:py-32"
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <span
+            style={{
+              background: 'rgba(62,104,252,0.12)',
+              border: '1px solid rgba(62,104,252,0.25)',
+              color: '#6B8EFF',
+            }}
+            className="inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6"
+          >
+            Why Souldem
+          </span>
+          <h2
+            style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.03em', color: '#fff' }}
+            className="text-4xl md:text-5xl font-bold"
+          >
+            Benefits that speak
+            <br />
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #3E68FC, #6B8EFF)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              for themselves
+            </span>
+          </h2>
+        </div>
 
-      <div className="hidden md:grid grid-cols-1 mx-2 md:mx-16 my-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
-          <Image src={case1} alt="Feature1" className="w-11/12 rounded-lg" />
-          <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-            Enhanced Security
-          </h3>
-          <p className="text-base text-black mt-2">
-            Academic records are stored on immutable blockchains, reducing the
-            risk of tampering or fraud.
-          </p>
-          <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-            Find Out More
-            <MoveRight />
-          </button>
-        </div>
-        <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
-          <Image src={case2} alt="Feature2" className="w-11/12 rounded-lg" />
-          <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-            Streamlined Verification
-          </h3>
-          <p className="text-base text-black mt-2">
-            Simplifies the process of verifying academic credentials for
-            employers and institutions.
-          </p>
-          <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-            Find Out More
-            <MoveRight />
-          </button>
-        </div>
-        <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
-          <Image src={case3} alt="Feature3" className="w-11/12 rounded-lg" />
-          <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-            Easy Access
-          </h3>
-          <p className="text-base text-black mt-2">
-            Provides students with easy access to their academic records
-            anytime, anywhere.
-          </p>
-          <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-            Find Out More
-            <MoveRight />
-          </button>
-        </div>
-        <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
-          <Image src={case4} alt="Feature4" className="w-11/12 rounded-lg" />
-          <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-            Decentralized Storage
-          </h3>
-          <p className="text-base text-black mt-2">
-            Utilizes decentralized networks to ensure that academic records are
-            always accessible and secure.
-          </p>
-          <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-            Find Out More
-            <MoveRight />
-          </button>
-        </div>
-        <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
-          <Image src={case5} alt="Feature5" className="w-11/12 rounded-lg" />
-          <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-            Instant Updates
-          </h3>
-          <p className="text-base text-black mt-2">
-            Updates to academic records are reflected in real-time, ensuring the
-            most current information.
-          </p>
-          <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-            Find Out More
-            <MoveRight />
-          </button>
-        </div>
-        <div className="flex flex-col bg-white drop-shadow-2xl p-4 items-center rounded-3xl justify-between">
-          <Image src={case6} alt="Feature6" className="w-11/12 rounded-lg" />
-          <h3 className="text-xl md:text-2xl font-semibold text-black mt-4">
-            Eco-Friendly
-          </h3>
-          <p className="text-base text-black mt-2">
-            Reduces the need for paper-based documentation, contributing to a
-            more sustainable environment.
-          </p>
-          <button className="flex items-center gap-x-2 justify-center text-black bg-inherit my-2 border border-blue w-full p-2">
-            Find Out More
-            <MoveRight />
-          </button>
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {benefits.map((b, i) => (
+            <div
+              key={b.title}
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: '16px',
+                padding: '28px',
+                transition: 'border-color 0.2s, background 0.2s',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(62,104,252,0.35)';
+                e.currentTarget.style.background = 'rgba(62,104,252,0.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+                e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+              }}
+            >
+              <div
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '12px',
+                  background: 'rgba(62,104,252,0.12)',
+                  border: '1px solid rgba(62,104,252,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '20px',
+                  overflow: 'hidden',
+                }}
+              >
+                <Image src={b.img} alt={b.title} className="w-7 h-7 object-contain" />
+              </div>
+
+              <h3
+                style={{ color: '#fff', letterSpacing: '-0.01em' }}
+                className="text-lg font-semibold mb-2"
+              >
+                {b.title}
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.45)', lineHeight: '1.65' }} className="text-sm mb-5">
+                {b.desc}
+              </p>
+              <button
+                style={{
+                  color: '#6B8EFF',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                }}
+              >
+                Find out more <ArrowRight size={13} />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

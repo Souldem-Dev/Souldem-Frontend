@@ -1,97 +1,74 @@
 'use client';
-import Image from 'next/image';
-import { useState } from 'react';
 import Link from 'next/link';
-import books from '@/app/assets/sidebar/books.svg';
-import { Home, HandCoins, Award, Folder } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { Home, Award, LogOut, GraduationCap } from 'lucide-react';
+
+const NAV = [
+  { href: '/user/wallet',              icon: Home,  label: 'Home'         },
+  { href: '/user/wallet/certificates', icon: Award, label: 'Certificates' },
+];
+
+function Tooltip({ label, children }) {
+  return (
+    <div className="relative group flex">
+      {children}
+      <span className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-gray-900 text-white text-xs px-2.5 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-50 shadow-lg">
+        {label}
+      </span>
+    </div>
+  );
+}
 
 const StudentSidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const pathname = usePathname();
+  const router   = useRouter();
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  const handleLogout = () => {
+    localStorage.removeItem('userPublicAddress');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('allRoles');
+    Cookies.remove('jwt');
+    Cookies.remove('activeRole');
+    router.push('/user/login');
   };
 
+  const isActive = (href) =>
+    href === '/user/wallet' ? pathname === href : pathname.startsWith(href);
+
   return (
-    <div className="relative max-md:hidden ">
-      {/* Full Side Bar */}
-      {isOpen && (
-        <main className="w-full h-full bg-white drop-shadow-md py-4">
-          <div className="flex justify-center items-center py-16">
-            <div className="flex flex-col gap-y-4 justify-start items-start">
-              <ul className="flex flex-col">
-                <Link
-                  href="/student"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <Home className="hover:text-white" />
-                  <span>Home</span>
-                </Link>
-                <Link
-                  href="/"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <HandCoins className="hover:text-white" />
-                  <span>Buy tokens</span>
-                </Link>
-                <Link
-                  href="/student/certificates"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <Award className="hover:text-white" />
-                  <span>Certificates</span>
-                </Link>
-              </ul>
-            </div>
-          </div>
+    <aside className="hidden md:flex flex-col items-center w-14 shrink-0 bg-blue min-h-[calc(100vh-56px)] py-5 gap-1.5">
+      <div className="mb-4 w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+        <GraduationCap size={20} className="text-white" />
+      </div>
 
-          <div>
-            <Image src={books} alt="books" width={230} height={300} />
-          </div>
-        </main>
-      )}
+      {NAV.map(({ href, icon: Icon, label }) => (
+        <Tooltip key={href} label={label}>
+          <Link
+            href={href}
+            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+              isActive(href)
+                ? 'bg-white/25 text-white'
+                : 'text-white/55 hover:text-white hover:bg-white/15'
+            }`}
+          >
+            <Icon size={19} />
+          </Link>
+        </Tooltip>
+      ))}
 
-      {/* Small Side Bar */}
-      {!isOpen && (
-        <main className=" w-full h-full bg-white drop-shadow-md py-4">
-          <div className="flex justify-center items-center py-16">
-            <div className="flex flex-col gap-y-4 justify-start items-start">
-              <ul className="flex flex-col">
-                <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex ">
-                  <Home className="hover:text-white" />
-                </li>
+      <div className="flex-1" />
 
-                <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex gap-x-2">
-                  <Award className="hover:text-white" />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </main>
-      )}
-
-      <button
-        onClick={toggleSidebar}
-        className={`absolute top-4 z-10 ${
-          isOpen ? 'left-48' : 'left-12'
-        } bg-blue text-white p-1 rounded-full`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-chevron-left"
+      <Tooltip label="Logout">
+        <button
+          onClick={handleLogout}
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-white/45 hover:text-white hover:bg-red-500/25 transition-all"
         >
-          <path d={isOpen ? 'm15 18-6-6 6-6' : 'm9 18 6-6-6-6'} />
-        </svg>
-      </button>
-    </div>
+          <LogOut size={19} />
+        </button>
+      </Tooltip>
+    </aside>
   );
 };
 

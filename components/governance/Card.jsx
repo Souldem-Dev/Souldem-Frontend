@@ -1,50 +1,52 @@
 import React from 'react';
-import { MoveUpRight } from 'lucide-react';
+import { UserPlus, ToggleRight } from 'lucide-react';
 import Link from 'next/link';
 
-const 
-Card = ({ data, name }) => {
+const Card = ({ data, name }) => {
   return (
-    <main className="  grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 w-full  gap-y-8  gap-x-4  ">
-      {data.map((item, index) => (
-        <div
-          key={index}
-          className=" w-auto h-full bg-white  border-0   text-black   relative rounded-3xl "
-        >
-          <div className=" p-6  flex flex-col justify-between gap-y-4">
+    <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-y-8 gap-x-4">
+      {data.map((item, index) => {
+        const govAdd  = item.args[1];
+        const govName = item.args[3];
+        const cName   = name;
+
+        return (
+          <div
+            key={index}
+            className="bg-white rounded-3xl flex flex-col justify-between p-6 gap-y-4"
+          >
+            {/* Header */}
             <div>
-              <div>
-                <h2 className="text-2xl font-thin ">{item.args[3]}</h2>
-                <p> by {name}</p>
-              </div>
+              <h2 className="text-2xl font-thin">{govName}</h2>
+              <p className="text-sm text-para">by {cName}</p>
             </div>
 
-            <div>
-              <div className="flex flex-col text-right">
-                <p> Governannce address</p>
-                <h2 className="text-2xl text-blue font-thin truncate ">
-                  {item.args[1]}
-                </h2>
-              </div>
+            {/* Address */}
+            <div className="text-right">
+              <p className="text-xs text-para">Governance address</p>
+              <p className="text-blue font-mono text-sm truncate">{govAdd}</p>
             </div>
-            {/* <Link href={`/governance/${item.address}`}> */}
-            <Link
-              href={
-                '/university/governance/invite/' +
-                item.args[1] +
-                '/' +
-                item.args[3] +
-                '/' +
-                name
-              }
-            >
-              <button className=" absolute top-0 right-2  p-2 mx-auto my-4 text-white bg-blue   rounded-full focus:ring-1">
-                <MoveUpRight className="text-white" />
-              </button>
-            </Link>
+
+            {/* Actions */}
+            <div className="flex gap-2 pt-1">
+              <Link
+                href={`/university/governance/invite/${govAdd}/${govName}/${cName}`}
+                className="flex-1 flex items-center justify-center gap-1.5 bg-blue text-white text-sm font-medium py-2 rounded-xl hover:bg-blue/90 transition"
+              >
+                <UserPlus size={15} />
+                Invite
+              </Link>
+              <Link
+                href={`/university/governance/marksEntryToggle/${govAdd}/${govName}/${cName}`}
+                className="flex-1 flex items-center justify-center gap-1.5 border border-blue text-blue text-sm font-medium py-2 rounded-xl hover:bg-blue/5 transition"
+              >
+                <ToggleRight size={15} />
+                Marks Toggle
+              </Link>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </main>
   );
 };

@@ -21,7 +21,7 @@ const Page = () => {
   const domain = {
     name: 'BASE_FACTORY',
     version: '1',
-    chainId: 1337,
+    chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '1337'),
     verifyingContract: process.env.NEXT_PUBLIC_BASE_FACTORY_ADDRESS,
   };
 
@@ -41,6 +41,10 @@ const Page = () => {
       if (response.status === 200) {
         toast.success('OTP sent successfully');
         setIsOtpSent(true);
+        if (response.data?._devOtp) {
+          setOtp(String(response.data._devOtp));
+          toast.info(`Dev mode: OTP = ${response.data._devOtp}`);
+        }
       } else {
         toast.error('Error sending OTP');
       }

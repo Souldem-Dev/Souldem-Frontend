@@ -1,109 +1,95 @@
 'use client';
-import Image from 'next/image';
-import { useState } from 'react';
 import Link from 'next/link';
-import books from '@/app/assets/sidebar/books.svg';
-import { Home, HandCoins, Award, Folder } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { Home, CheckSquare, LogOut, GraduationCap } from 'lucide-react';
+
+const ROLE_NAV = {
+  hod: [
+    { href: '/user/hod',  icon: Home, label: 'Home' },
+  ],
+  mentor: [
+    { href: '/user/mentor', icon: Home, label: 'Home' },
+  ],
+  grader: [
+    { href: '/user/grader', icon: Home, label: 'Home' },
+  ],
+  university: [
+    { href: '/university/governance',   icon: Home,        label: 'Governance'   },
+    { href: '/university/certificates', icon: CheckSquare, label: 'Certificates' },
+  ],
+};
+
+function Tooltip({ label, children }) {
+  return (
+    <div className="relative group flex">
+      {children}
+      <span className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-gray-900 text-white text-xs px-2.5 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-50 shadow-lg">
+        {label}
+      </span>
+    </div>
+  );
+}
 
 const GovSidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const pathname = usePathname();
+  const router   = useRouter();
+  const [role, setRole] = useState('');
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  useEffect(() => {
+    setRole(Cookies.get('activeRole') || '');
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userPublicAddress');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('allRoles');
+    Cookies.remove('jwt');
+    Cookies.remove('activeRole');
+    router.push('/user/login');
   };
 
+  const nav = ROLE_NAV[role] || [];
+
+  const isActive = (href) =>
+    href.split('/').length === 3
+      ? pathname === href || pathname.startsWith(href + '/')
+      : pathname.startsWith(href);
+
   return (
-    <div className="relative max-md:hidden ">
-      {/* Full Side Bar */}
-      {isOpen && (
-        <main className="w-full h-full bg-white drop-shadow-md py-4">
-          <div className="flex justify-center items-center py-16">
-            <div className="flex flex-col gap-y-4 justify-start items-start">
-              <ul className="flex flex-col">
-                <Link
-                  href="/university/governance"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <Home className="hover:text-white" />
-                  <span>Governance</span>
-                </Link>
-                <Link
-                  href="/pageUnderConstruction"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <HandCoins className="hover:text-white" />
-                  <span>Buy tokens</span>
-                </Link>
-                <Link
-                  href="/university/certificates"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <Award className="hover:text-white" />
-                  <span>Certificates</span>
-                </Link>
-                <Link
-                  href="/pageUnderConstruction"
-                  className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer w-52 p-4 rounded-r-3xl flex gap-x-2"
-                >
-                  <Folder className="hover:text-white" />
-                  <span>AcadHub</span>
-                </Link>
-              </ul>
-            </div>
-          </div>
+    <aside className="hidden md:flex flex-col items-center w-14 shrink-0 min-h-[calc(100vh-56px)] py-5 gap-1.5" style={{ background: '#3E68FC' }}>
+      <div className="mb-4 w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)' }}>
+        <GraduationCap size={20} className="text-white" />
+      </div>
 
-          <div>
-            <Image src={books} alt="books" width={230} height={300} />
-          </div>
-        </main>
-      )}
+      {nav.map(({ href, icon: Icon, label }) => (
+        <Tooltip key={href} label={label}>
+          <Link
+            href={href}
+            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+              isActive(href)
+                ? 'bg-white/25 text-white'
+                : 'text-white/55 hover:text-white hover:bg-white/15'
+            }`}
+          >
+            <Icon size={19} />
+          </Link>
+        </Tooltip>
+      ))}
 
-      {/* Small Side Bar */}
-      {!isOpen && (
-        <main className=" w-full h-full bg-white drop-shadow-md py-4">
-          <div className="flex justify-center items-center py-16">
-            <div className="flex flex-col gap-y-4 justify-start items-start">
-              <ul className="flex flex-col">
-                <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex ">
-                  <Home className="hover:text-white" />
-                </li>
-                <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex ">
-                  <HandCoins className="hover:text-white" />
-                </li>
-                <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex gap-x-2">
-                  <Award className="hover:text-white" />
-                </li>
-                <li className="hover:bg-blue hover:text-white active:bg-blue cursor-pointer p-4 rounded-r-3xl flex gap-x-2">
-                  <Folder className="hover:text-white" />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </main>
-      )}
+      <div className="flex-1" />
 
-      <button
-        onClick={toggleSidebar}
-        className={`absolute top-4 z-10 ${
-          isOpen ? 'left-48' : 'left-12'
-        } bg-blue text-white p-1 rounded-full`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-chevron-left"
+      <Tooltip label="Logout">
+        <button
+          onClick={handleLogout}
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-white/45 hover:text-white hover:bg-red-500/25 transition-all"
         >
-          <path d={isOpen ? 'm15 18-6-6 6-6' : 'm9 18 6-6-6-6'} />
-        </svg>
-      </button>
-    </div>
+          <LogOut size={19} />
+        </button>
+      </Tooltip>
+    </aside>
   );
 };
 

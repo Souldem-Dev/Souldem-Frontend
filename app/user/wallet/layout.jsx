@@ -1,18 +1,16 @@
-import Footer from '@/components/Footer';
 import StudentSidebar from '@/components/student/StudentSidebar';
 import StudentNavbar from '@/components/student/StudentNavbar';
 
 export default function StudentLayout({ children }) {
   return (
-    <main>
+    <div className="flex flex-col h-screen bg-[#f5f7ff]">
       <StudentNavbar />
-      <div className="flex  bg-[#FAFAFD]">
+      <div className="flex flex-1 overflow-hidden">
         <StudentSidebar />
-
-        {children}
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
       </div>
-
-      <Footer />
-    </main>
+    </div>
   );
 }

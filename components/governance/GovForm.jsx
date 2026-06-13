@@ -49,7 +49,7 @@ const GovForm = ({ onClose, publickey }) => {
       const domain = {
         name: name,
         version: '1',
-        chainId: 1337,
+        chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '1337'),
         verifyingContract: collegeAddress,
       };
 

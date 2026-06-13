@@ -53,6 +53,12 @@ const Page = () => {
 
       // Set OTP request status
       setOtpRequested(true);
+
+      // Dev-mode: auto-fill the dev OTP if backend provided one
+      if (res.data._devOtp) {
+        setOtp(res.data._devOtp);
+        toast.info(`Dev mode: OTP = ${res.data._devOtp}`);
+      }
     } catch (err) {
       console.log(err);
       setError(err.errors ? err.errors[0].message : 'Failed to send OTP!');

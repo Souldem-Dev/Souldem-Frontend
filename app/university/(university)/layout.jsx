@@ -1,19 +1,14 @@
-import Footer from '@/components/Footer';
-import GovSidebar from '@/components/governance/GovSidebar';
 import Navbar from '@/components/Navbar';
+import GovSidebar from '@/components/governance/GovSidebar';
 
-export default function Layout({ children }) {
+export default function UniversityLayout({ children }) {
   return (
-    <main>
+    <div className="flex flex-col h-screen bg-[#f5f7ff]">
       <Navbar />
-
-      <div className="flex  bg-[#FAFAFD]">
+      <div className="flex flex-1 overflow-hidden">
         <GovSidebar />
-
-        {children}
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
-
-      <Footer />
-    </main>
+    </div>
   );
 }

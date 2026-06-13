@@ -14,8 +14,9 @@ function Page() {
     const fetchIPFSData = async (cid) => {
       console.log('run');
       try {
+        const gateway = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
         const response = await fetch(
-          `https://gateway.pinata.cloud/ipfs/${cid}`
+          `https://${gateway}/ipfs/${cid}`
         );
         if (!response.ok) {
           throw new Error('Network response was not ok');

@@ -23,12 +23,16 @@ const Page = () => {
     setLoading(true);
     try {
       // Request to generate and send OTP
-      await axios.post(
+      const otpResp = await axios.post(
         process.env.NEXT_PUBLIC_BACKEND_URL + 'register/createAccountAuth',
         { email, type: 'register' }
       );
       toast.success('OTP sent to your email');
       setIsOtpSent(true); // Update state to show OTP input
+      if (otpResp.data?._devOtp) {
+        setOtp(String(otpResp.data._devOtp));
+        toast.info(`Dev mode: OTP = ${otpResp.data._devOtp}`);
+      }
     } catch (error) {
       toast.error('An error occurred. Please try again.');
     } finally {
@@ -85,7 +89,7 @@ const Page = () => {
           {!isOtpSent ? (
             <>
               <div className="w-full flex flex-col gap-y-1">
-                <label>Comapny Name</label>
+                <label>Company Name</label>
                 <Input
                   type="text"
                   placeholder="Company Name"

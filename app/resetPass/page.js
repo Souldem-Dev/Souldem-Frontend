@@ -24,7 +24,7 @@ const Page = () => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}login/resetPasswordOtpAuth`,
-        { email, type, resetLink: 'http://localhost:3000/reset-password/' } // Update with your actual reset link
+        { email, type, resetLink: `${process.env.NEXT_PUBLIC_FRONTEND_URL || ''}/reset-password/` }
       );
 
       console.log(response);

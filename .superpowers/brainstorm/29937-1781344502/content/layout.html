@@ -1,0 +1,83 @@
+<h2>Overall Layout Structure</h2>
+<p class="subtitle">The current layout has a collapsible left sidebar + top navbar + a large footer. Which direction should we go?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9ff;padding:16px;border-radius:8px;font-family:sans-serif;">
+      <!-- Option A mockup -->
+      <div style="background:#3e68fc;color:white;height:44px;border-radius:6px 6px 0 0;display:flex;align-items:center;padding:0 16px;font-size:13px;font-weight:600;margin-bottom:0;">
+        🎓 Souldem &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="margin-left:auto;background:rgba(255,255,255,0.2);border-radius:20px;padding:3px 12px;font-size:11px;">Student ▾</span>
+      </div>
+      <div style="display:flex;height:220px;">
+        <div style="width:52px;background:#1a1a2e;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:20px;border-radius:0 0 0 6px;">
+          <div style="font-size:18px;opacity:0.9;background:#3e68fc;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;">🏠</div>
+          <div style="font-size:18px;opacity:0.5;">🏅</div>
+          <div style="font-size:18px;opacity:0.5;margin-top:auto;">🚪</div>
+        </div>
+        <div style="flex:1;background:#f5f6ff;padding:16px;border-radius:0 0 6px 0;">
+          <div style="background:white;border-radius:8px;height:40px;margin-bottom:10px;display:flex;align-items:center;padding:0 12px;font-size:12px;color:#3e68fc;border:1px solid #e8ecff;">⚠ Connect Aadhaar to unlock all features</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:white;border-radius:8px;padding:12px;border:1px solid #eee;font-size:11px;"><div style="color:#3e68fc;font-weight:600;margin-bottom:4px;">Certificates</div><div style="color:#999;">0 issued</div></div>
+            <div style="background:white;border-radius:8px;padding:12px;border:1px solid #eee;font-size:11px;"><div style="color:#3e68fc;font-weight:600;margin-bottom:4px;">Governances</div><div style="color:#999;">1 joined</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Icon Sidebar + Top Bar</h3>
+      <p>Slim dark icon sidebar, no labels (hover tooltips), no collapse toggle. Top bar has logo + role switcher only. No footer. Clean and space-efficient.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9ff;padding:16px;border-radius:8px;font-family:sans-serif;">
+      <!-- Option B mockup -->
+      <div style="background:white;border-bottom:1px solid #eee;height:44px;border-radius:6px 6px 0 0;display:flex;align-items:center;padding:0 16px;gap:24px;font-size:12px;">
+        <span style="color:#3e68fc;font-weight:700;">🎓 Souldem</span>
+        <span style="color:#3e68fc;border-bottom:2px solid #3e68fc;padding-bottom:2px;font-weight:600;">Home</span>
+        <span style="color:#888;">Certificates</span>
+        <span style="margin-left:auto;background:#3e68fc;color:white;border-radius:20px;padding:3px 12px;font-size:11px;">Student ▾</span>
+      </div>
+      <div style="background:#f5f6ff;padding:16px;height:220px;border-radius:0 0 6px 6px;">
+        <div style="background:#fff3cd;border-radius:8px;height:36px;margin-bottom:12px;display:flex;align-items:center;padding:0 12px;font-size:11px;color:#856404;border:1px solid #ffe69c;">⚠ Connect Aadhaar — <span style="color:#3e68fc;margin-left:4px;">Add Now →</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div style="background:white;border-radius:8px;padding:12px;border:1px solid #eee;font-size:11px;"><div style="color:#3e68fc;font-weight:600;margin-bottom:4px;">📜 Certs</div><div style="color:#999;">0 issued</div></div>
+          <div style="background:white;border-radius:8px;padding:12px;border:1px solid #eee;font-size:11px;"><div style="color:#3e68fc;font-weight:600;margin-bottom:4px;">🏛 Govs</div><div style="color:#999;">1 joined</div></div>
+          <div style="background:white;border-radius:8px;padding:12px;border:1px solid #eee;font-size:11px;"><div style="color:#3e68fc;font-weight:600;margin-bottom:4px;">📊 Sem</div><div style="color:#999;">Sem 1</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Top Navigation Only</h3>
+      <p>No sidebar at all. Navigation links (Home, Certificates) sit in the top bar. More horizontal space for content. Simple and familiar like a typical web app.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9ff;padding:16px;border-radius:8px;font-family:sans-serif;">
+      <!-- Option C mockup -->
+      <div style="background:white;border-bottom:1px solid #eee;height:44px;border-radius:6px 6px 0 0;display:flex;align-items:center;padding:0 16px;font-size:12px;">
+        <span style="color:#3e68fc;font-weight:700;">🎓 Souldem</span>
+        <span style="margin-left:auto;background:#f0f3ff;color:#3e68fc;border-radius:20px;padding:3px 12px;font-size:11px;border:1px solid #dde3ff;">Student ▾</span>
+      </div>
+      <div style="display:flex;height:196px;">
+        <div style="width:160px;background:white;border-right:1px solid #f0f0f0;padding:12px 0;border-radius:0 0 0 0;">
+          <div style="padding:8px 16px;background:#f0f3ff;border-right:3px solid #3e68fc;color:#3e68fc;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;">🏠 <span>Home</span></div>
+          <div style="padding:8px 16px;color:#888;font-size:12px;display:flex;align-items:center;gap:8px;">🏅 <span>Certificates</span></div>
+          <div style="padding:8px 16px;color:#e53e3e;font-size:12px;margin-top:auto;display:flex;align-items:center;gap:8px;position:absolute;bottom:20px;">🚪 <span>Logout</span></div>
+        </div>
+        <div style="flex:1;background:#f5f6ff;padding:12px;border-radius:0 0 6px 0;">
+          <div style="background:#fff3cd;border-radius:6px;height:30px;margin-bottom:10px;display:flex;align-items:center;padding:0 10px;font-size:10px;color:#856404;">⚠ Connect Aadhaar</div>
+          <div style="background:white;border-radius:8px;padding:10px;border:1px solid #eee;font-size:11px;margin-bottom:8px;"><span style="color:#3e68fc;font-weight:600;">Semester 1 Marksheet</span><br/><span style="color:#999;font-size:10px;">Issued · bafkrei…</span></div>
+          <div style="background:white;border-radius:8px;padding:10px;border:1px solid #eee;font-size:11px;"><span style="color:#888;">JMC Governance</span><br/><span style="color:#999;font-size:10px;">Pick subjects →</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Labeled Sidebar + Top Bar</h3>
+      <p>Full-width sidebar with text labels, active state highlight, no collapse toggle. Familiar app-shell feel. Logo + role switcher in top bar, logout at bottom of sidebar.</p>
+    </div>
+  </div>
+
+</div>

@@ -5,13 +5,12 @@ import Link from 'next/link';
 
 const LoginNavbar = () => {
   return (
-    <main className="flex justify-between  items-center w-full   drop-shadow-md  bg-white h-20 px-8">
-      <Link href="/governance">
-        <div className="flex justify-center items-center">
-          <Image src={logo} alt="Logo" />
-        </div>
+    <header className="flex items-center w-full h-14 bg-white px-6 shrink-0" style={{ borderBottom: '1px solid #eef0f6' }}>
+      <Link href="/" className="flex items-center opacity-90 hover:opacity-100 transition-opacity">
+        <Image src={logo} alt="Souldem" height={24} />
       </Link>
-    </main>
+    </header>
   );
 };
+
 export default LoginNavbar;

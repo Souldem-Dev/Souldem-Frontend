@@ -1,109 +1,83 @@
 import { NextResponse } from 'next/server';
 
-const matchesDynamicRoute = (pathname, route) => {
-  const routeParts = route.split('/').filter(Boolean);
-  const pathParts = pathname.split('/').filter(Boolean);
-
-  if (routeParts.length !== pathParts.length) {
-    return false;
-  }
-
-  return routeParts.every(
-    (part, index) => part.startsWith('[') || part === pathParts[index]
-  );
+const ROLE_HOME = {
+  hod:        '/user/hod',
+  mentor:     '/user/mentor',
+  grader:     '/user/grader',
+  student:    '/user/wallet',
+  university: '/university/governance',
 };
 
+// No auth required
+const PUBLIC_PATHS = [
+  '/university/login',
+  '/university/signup',
+  '/user/login',
+  '/user/signup',
+];
+
+// /user/* sections locked to one specific role
+const ROLE_PREFIXES = [
+  { prefix: '/user/hod',    role: 'hod' },
+  { prefix: '/user/mentor', role: 'mentor' },
+  { prefix: '/user/grader', role: 'grader' },
+];
+
 export function middleware(request) {
-  const jwt = request.cookies.get('jwt');
+  const jwt        = request.cookies.get('jwt')?.value;
+  const activeRole = request.cookies.get('activeRole')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicRoutes = [
-    '/university/login',
-    '/university/signup',
-    '/user/login',
-    '/user/signup',
-  ];
-
-  const universityProtectedRoutes = [
-    '/university/governance',
-    '/university/governance/invite/[govAdd]/[govName]/[cName]',
-    '/university/governance/marksEntryToggle/[govAdd]/[govName]/[cName]',
-    '/university/certificates',
-    '/university/certificates/certificateCreate',
-  ];
-
-  const userProtectedRoutes = [
-    '/user/grader',
-    '/user/grader/marksDatabase/[govAdd]/[govName]/[cName]',
-    '/user/wallet',
-    '/user/wallet/certificate',
-    '/user/wallet/addSubjects/[govAdd]/[govName]/[cName]',
-    '/user/wallet/marksheet/[cid]/[cName]/[gName]',
-    '/user/mentor',
-    '/user/mentor/invite/[govAdd]/[govName]/[cName]',
-    '/user/mentor/approval/[govAdd]/[govName]/[cName]',
-    '/user/mentor/mint/[mentorAdd]/[mentorSig]/[userAdd]/[govAdd]/[receiptNo]/[semNo]/[nonce]',
-    '/user/hod',
-    '/user/hod/invite/[govAdd]/[govName]/[cName]',
-    '/user/aadhaarIntr',
-  ];
-
-  // Handle public routes
-  if (publicRoutes.includes(pathname)) {
-    if (jwt) {
-      if (pathname.startsWith('/university')) {
-        return NextResponse.redirect(
-          new URL('/university/governance', request.url)
-        );
-      } else if (pathname.startsWith('/user')) {
-        return NextResponse.redirect(new URL('/user/wallet', request.url));
-      }
-    } else {
-      return NextResponse.next(); // Allow access to public routes if not logged in
-    }
-  }
-
-  // Handle protected university routes
-  if (
-    universityProtectedRoutes.some((route) =>
-      matchesDynamicRoute(pathname, route)
-    )
-  ) {
-    if (!jwt) {
-      return NextResponse.redirect(new URL('/university/login', request.url));
-    }
-    return NextResponse.next(); // Allow access to protected university routes if logged in
-  }
-
-  // Handle protected user routes
-  if (
-    userProtectedRoutes.some((route) => matchesDynamicRoute(pathname, route))
-  ) {
-    if (!jwt) {
-      return NextResponse.redirect(new URL('/user/login', request.url));
-    }
-    return NextResponse.next(); // Allow access to protected user routes if logged in
-  }
-
-  // Handle other university routes
-  if (pathname.startsWith('/university')) {
-    if (jwt) {
+  // ── Public routes ──────────────────────────────────────────────────────────
+  if (PUBLIC_PATHS.some(p => pathname === p || pathname.startsWith(p + '/'))) {
+    if (jwt && activeRole) {
       return NextResponse.redirect(
-        new URL('/university/governance', request.url)
+        new URL(ROLE_HOME[activeRole] ?? '/user/login', request.url)
       );
     }
-    return NextResponse.next(); // Allow access to other university routes if not logged in
+    return NextResponse.next();
   }
 
-  // Handle other user routes
-  if (pathname.startsWith('/user')) {
-    if (jwt) {
-      return NextResponse.redirect(new URL('/user/wallet', request.url));
+  // ── University routes ──────────────────────────────────────────────────────
+  if (pathname.startsWith('/university')) {
+    if (!jwt) return NextResponse.redirect(new URL('/university/login', request.url));
+    if (activeRole !== 'university') {
+      // Mentor/student hitting /university/* via back button → send them home
+      return NextResponse.redirect(
+        new URL(ROLE_HOME[activeRole] ?? '/user/login', request.url)
+      );
     }
-    return NextResponse.next(); // Allow access to other user routes if not logged in
+    return NextResponse.next();
   }
 
-  // Allow access if no conditions are met
+  // ── User routes ────────────────────────────────────────────────────────────
+  if (pathname.startsWith('/user')) {
+    if (!jwt) return NextResponse.redirect(new URL('/user/login', request.url));
+
+    // Pre-feature session (no activeRole cookie) → force re-login to set it
+    if (!activeRole) return NextResponse.redirect(new URL('/user/login', request.url));
+
+    // University user navigating to /user/* → send back
+    if (activeRole === 'university') {
+      return NextResponse.redirect(new URL('/university/governance', request.url));
+    }
+
+    // Role-locked sections (/user/hod, /user/mentor, /user/grader)
+    for (const { prefix, role } of ROLE_PREFIXES) {
+      if (pathname === prefix || pathname.startsWith(prefix + '/')) {
+        if (activeRole !== role) {
+          return NextResponse.redirect(
+            new URL(ROLE_HOME[activeRole] ?? '/user/wallet', request.url)
+          );
+        }
+        return NextResponse.next();
+      }
+    }
+
+    // /user/wallet, /user/aadhaarIntr, etc. — any non-university role is fine
+    return NextResponse.next();
+  }
+
   return NextResponse.next();
 }
 

@@ -113,7 +113,7 @@ const Page = () => {
           </Button>
 
           <Link href="/resetPass" className="text-blue">
-            Forgetten Password?
+            Forgotten Password?
           </Link>
 
           <Link

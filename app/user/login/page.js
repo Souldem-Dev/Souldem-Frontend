@@ -38,8 +38,42 @@ const Page = () => {
 
         Cookies.set('jwt', token, { expires: 1 });
 
-        router.push('/user/wallet');
         toast.success('Login successful');
+
+        const base = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const [hodRes, mentorRes, graderRes, studentRes] = await Promise.allSettled([
+          axios.get(`${base}become/joinedGov/hod/${publickey}`),
+          axios.get(`${base}become/joinedGov/mentor/${publickey}`),
+          axios.get(`${base}become/joinedGov/grader/${publickey}`),
+          axios.get(`${base}become/joinedGov/student/${publickey}`),
+        ]);
+
+        const hasHod     = hodRes.status     === 'fulfilled' && hodRes.value.data?.length     > 0;
+        const hasMentor  = mentorRes.status  === 'fulfilled' && mentorRes.value.data?.length  > 0;
+        const hasGrader  = graderRes.status  === 'fulfilled' && graderRes.value.data?.length  > 0;
+        const hasStudent = studentRes.status === 'fulfilled' && studentRes.value.data?.length > 0;
+
+        // Build list of every role this user actually holds
+        const allRoles = [];
+        if (hasHod)     allRoles.push('hod');
+        if (hasMentor)  allRoles.push('mentor');
+        if (hasGrader)  allRoles.push('grader');
+        if (hasStudent) allRoles.push('student');
+
+        localStorage.setItem('allRoles', JSON.stringify(allRoles));
+
+        // Primary role drives the initial redirect
+        let primaryRole = 'student';
+        if (hasHod)         primaryRole = 'hod';
+        else if (hasMentor) primaryRole = 'mentor';
+        else if (hasGrader) primaryRole = 'grader';
+
+        Cookies.set('activeRole', primaryRole, { expires: 1 });
+
+        if (hasHod)         router.push('/user/hod');
+        else if (hasMentor) router.push('/user/mentor');
+        else if (hasGrader) router.push('/user/grader');
+        else                router.push('/user/wallet');
       }
     } catch (error) {
       if (error.response) {
@@ -113,7 +147,7 @@ const Page = () => {
           </Button>
 
           <Link href="/resetPass" className="text-blue">
-            Forgetten Password?
+            Forgotten Password?
           </Link>
 
           <Link

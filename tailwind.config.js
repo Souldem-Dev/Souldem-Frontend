@@ -41,6 +41,18 @@ module.exports = {
         purpleLight: '#A98CE3',
         tealLight: '#8CE3CE',
         purpleDark: '#A98CE3',
+        // Landing page design system
+        ink: '#0A0E1A',
+        'ink-800': '#0F1628',
+        'ink-700': '#151D35',
+        'ink-600': '#1C2644',
+        'ink-500': '#253058',
+        'surface': '#111827',
+        'arc': '#3E68FC',
+        'arc-light': '#6B8EFF',
+        'arc-dim': '#1E326E',
+        'ghost': 'rgba(255,255,255,0.05)',
+        'ghost-border': 'rgba(255,255,255,0.08)',
       },
       backdropBlur: {
         xs: '2px',

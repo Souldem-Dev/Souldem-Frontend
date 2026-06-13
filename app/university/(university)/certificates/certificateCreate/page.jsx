@@ -1,24 +1,33 @@
 import React from 'react';
-
+import Link from 'next/link';
 import CreateForm from '@/components/certificates/CreateForm';
-import { Award } from 'lucide-react';
+import { Award, ChevronLeft } from 'lucide-react';
 
-const page = () => {
+export default function CertificateCreatePage() {
   return (
-    <div className=" mx-6 md:mx-12 my-4 w-full	">
-      <div className="flex  mb-8 items-center">
-        <Award className="text-blue " />
-        <h1 className="font-light text-blue  text-2xl md:text-3xl">
-          Create Certificate Template
-        </h1>
+    <div className="p-6 md:p-8 w-full flex flex-col gap-5">
+
+      {/* Header */}
+      <div className="relative rounded-2xl overflow-hidden p-6 text-white" style={{ background: 'linear-gradient(135deg,#3E68FC 0%,#5b51f5 100%)' }}>
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        <div className="relative flex items-center gap-4">
+          <Link href="/university/certificates" className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.15)' }}>
+            <ChevronLeft size={18} />
+          </Link>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.2)' }}>
+            <Award size={18} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs uppercase tracking-widest font-medium mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>University</p>
+            <h1 className="text-xl font-bold text-white leading-tight">Configure Certificate Template</h1>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              These settings are applied to all marksheets and provisional certificates your institution issues.
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Add the search and filter dropdown here */}
-
-      {/* Form */}
       <CreateForm />
     </div>
   );
-};
-
-export default page;
+}

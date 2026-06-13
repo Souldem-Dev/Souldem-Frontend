@@ -1,13 +1,14 @@
-import Footer from '@/components/Footer';
-import GovSidebar from '@/components/governance/GovSidebar';
 import Navbar from '@/components/Navbar';
-export default function GovernanceLayout({ children }) {
-  return (
-    <main className="bg-[#FBFBFD] ">
-      <Navbar />
-      <div className="flex">{children}</div>
+import GovSidebar from '@/components/governance/GovSidebar';
 
-      <Footer />
-    </main>
+export default function GraderLayout({ children }) {
+  return (
+    <div className="flex flex-col h-screen bg-[#f5f7ff]">
+      <Navbar />
+      <div className="flex flex-1 overflow-hidden">
+        <GovSidebar />
+        <main className="flex-1 overflow-y-auto">{children}</main>
+      </div>
+    </div>
   );
 }

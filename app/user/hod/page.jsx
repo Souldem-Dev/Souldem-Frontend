@@ -1,61 +1,113 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
+import { Users, ChevronRight, BookMarked, UserPlus } from 'lucide-react';
 
-import CardUser from '@/components/governance/CardUser';
-import { Home } from 'lucide-react';
-import Image from 'next/image';
-import EmptyGov from '@/app/assets/Governance/EmptyGov.svg';
-import SearchFilter from '@/components/hod/SearchFilter';
-
-const page = () => {
-  let [joinedGov, setJoinedGov] = useState([]);
-  useEffect(() => {
-    axios
-      .get(
-        process.env.NEXT_PUBLIC_BACKEND_URL +
-          'become/joinedGov/hod/' +
-          localStorage.getItem('userPublicAddress')
-      )
-      .then((res) => {
-        setJoinedGov(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  return (
-    <div className=" mx-6 md:mx-12 my-4 w-full	">
-      <div className="flex mb-8 items-center">
-        <Home className="text-blue" />
-
-        <h1 className="font-light text-blue  text-3xl">Dashboard</h1>
-      </div>
-
-      {/* Add the search and filter dropdown here */}
-      <SearchFilter />
-      {/* <Image src={EmptyGov} alt="EmptyGov" className="mx-auto m-20" /> */}
-
-      {/* card mapping */}
-
-      {/* <Card data={data} /> */}
-      {joinedGov.length != 0 ? (
-        <CardUser
-          data={joinedGov}
-          url={'http://localhost:3000/user/hod/invite'}
-        />
-      ) : (
-        <div className="flex flex-col items-center justify-center">
-          <Image
-            src={EmptyGov}
-            alt="No Governance Joined"
-            className="h-64 w-64"
-          />
-          <p className="text-center text-gray-500 mt-4">No Governance Joined</p>
-        </div>
-      )}
-    </div>
-  );
+const safeEncode = (v) => {
+  try { return encodeURIComponent(decodeURIComponent(v || '')); }
+  catch { return encodeURIComponent(v || ''); }
 };
 
-export default page;
+export default function HodDashboard() {
+  const [govs,    setGovs]    = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [email,   setEmail]   = useState('');
+
+  useEffect(() => {
+    const add  = localStorage.getItem('userPublicAddress');
+    const mail = localStorage.getItem('userEmail') || '';
+    setEmail(mail);
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}become/joinedGov/hod/${add}`)
+      .then((res) => setGovs(res.data || []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const displayName = email.split('@')[0] || 'HOD';
+
+  return (
+    <div className="p-6 md:p-8 w-full flex flex-col gap-5">
+
+      {/* Hero */}
+      <div className="relative rounded-2xl overflow-hidden p-6 text-white w-full" style={{ background: 'linear-gradient(135deg,#3E68FC 0%,#5b51f5 100%)' }}>
+        <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        <div className="relative flex items-center gap-5">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold shrink-0 select-none" style={{ background: 'rgba(255,255,255,0.2)' }}>
+            {displayName.charAt(0).toUpperCase()}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs uppercase tracking-widest font-medium mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>Head of Department</p>
+            <h1 className="text-2xl font-bold leading-tight truncate text-white">{displayName}</h1>
+            <p className="text-sm truncate" style={{ color: 'rgba(255,255,255,0.55)' }}>{email}</p>
+          </div>
+        </div>
+        <div className="relative mt-6 pt-5" style={{ borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+          <div className="text-center w-fit">
+            <p className="text-3xl font-bold text-white">{loading ? '—' : govs.length}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>Governances</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Governance list */}
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">My Governances</p>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => <div key={i} className="h-44 rounded-2xl animate-pulse bg-white" />)}
+          </div>
+        ) : govs.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: 'rgba(62,104,252,0.06)' }}>
+              <BookMarked size={24} style={{ color: 'rgba(62,104,252,0.3)' }} />
+            </div>
+            <p className="text-sm font-medium text-gray-500">No governances joined yet</p>
+            <p className="text-xs text-gray-400 mt-1">You'll appear here once a university adds you to a governance</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {govs.map((g, i) => {
+              const accent = ['#3E68FC','#7c3aed','#0891b2','#0f766e'][i % 4];
+              return (
+                <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-all">
+                  <div className="h-1.5 w-full" style={{ background: accent }} />
+                  <div className="p-5 flex flex-col gap-4 flex-1">
+                    <div className="flex items-start gap-3">
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${accent}15` }}>
+                        <BookMarked size={18} style={{ color: accent }} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-bold text-gray-800 text-sm leading-snug truncate">{decodeURIComponent(g.gName || '')}</p>
+                        <p className="text-xs text-gray-400 mt-0.5 truncate">{decodeURIComponent(g.cName || '')}</p>
+                        <p className="text-xs font-mono text-gray-300 mt-1 truncate">{g.governAdd}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-auto pt-3" style={{ borderTop: '1px solid #f3f4f6' }}>
+                      <Link
+                        href={`/user/hod/subjects/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: accent }}
+                      >
+                        <BookMarked size={12} />Subjects
+                      </Link>
+                      <Link
+                        href={`/user/hod/invite/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-colors"
+                        style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
+                      >
+                        <UserPlus size={12} />Invite
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
