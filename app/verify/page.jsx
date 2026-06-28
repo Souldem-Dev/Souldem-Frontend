@@ -1,11 +1,11 @@
 import VerifyBox from '@/components/verify/VerifyBox';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 const page = () => {
   return (
-    <div className="mt-20 mx-12 w-full">
+    <Suspense>
       <VerifyBox />
-    </div>
+    </Suspense>
   );
 };
 
