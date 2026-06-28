@@ -308,7 +308,7 @@ const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, templa
 
             {/* Totals row */}
             <tr style={{ background: '#eef0f8', fontWeight: 700 }}>
-              <td colSpan={3} style={{ ...cell, textAlign: 'right', fontSize: 10.5 }}>TOTAL</td>
+              <td colSpan={2} style={{ ...cell, textAlign: 'right', fontSize: 10.5 }}>TOTAL</td>
               <td style={{ ...cell, textAlign: 'center', fontWeight: 800 }}>{totalInternal}</td>
               <td style={{ ...cell, textAlign: 'center', fontWeight: 800 }}>{totalExternal}</td>
               <td style={{ ...cell, textAlign: 'center', fontWeight: 800 }}>{grandTotal}</td>
