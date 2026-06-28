@@ -71,7 +71,7 @@ export default function ApprovalPage() {
             studentsEmail:   selected.email,
             currentSemester: parseInt(semester),
             receiptNumber:   receiptNo,
-            governAdd,
+            governAdd:       govAdd,
           },
           userMail,
           cName,

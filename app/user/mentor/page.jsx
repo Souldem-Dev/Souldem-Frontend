@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { Users, ChevronRight, GraduationCap, ArrowRight } from 'lucide-react';
+import { Users, ChevronRight, GraduationCap, UserPlus } from 'lucide-react';
 
 const safeEncode = (v) => {
   try { return encodeURIComponent(decodeURIComponent(v || '')); }
@@ -72,29 +72,47 @@ export default function MentorDashboard() {
             {govs.map((g, i) => {
               const accent = ['#3E68FC','#7c3aed','#0891b2','#0f766e'][i % 4];
               return (
-                <Link
+                <div
                   key={i}
-                  href={`/user/mentor/invite/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
                   className="group bg-white rounded-2xl border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-all"
                 >
                   <div className="h-1.5 w-full" style={{ background: accent }} />
                   <div className="p-5 flex flex-col gap-4 flex-1">
-                    <div className="flex items-start justify-between">
-                      <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: `${accent}15` }}>
+                    <div className="flex items-start gap-3">
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${accent}15` }}>
                         <GraduationCap size={18} style={{ color: accent }} />
                       </div>
-                      <ChevronRight size={16} className="text-gray-200 group-hover:text-blue transition-colors mt-1" />
+                      <div className="min-w-0">
+                        <p className="font-bold text-gray-800 text-sm leading-snug truncate">{decodeURIComponent(g.gName || '')}</p>
+                        <p className="text-xs text-gray-400 mt-0.5 truncate">{decodeURIComponent(g.cName || '')}</p>
+                        <p className="text-xs font-mono text-gray-300 mt-1 truncate">{g.governAdd}</p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-800 text-sm leading-snug">{decodeURIComponent(g.gName || '')}</p>
-                      <p className="text-xs text-gray-400 mt-1">{decodeURIComponent(g.cName || '')}</p>
-                    </div>
-                    <div className="pt-3 flex items-center justify-between" style={{ borderTop: '1px solid #f3f4f6' }}>
-                      <p className="text-xs font-mono text-gray-300 truncate max-w-[70%]">{g.governAdd}</p>
-                      <span className="text-xs font-semibold shrink-0" style={{ color: accent }}>Manage →</span>
+                    <div className="flex gap-2 mt-auto pt-3" style={{ borderTop: '1px solid #f3f4f6' }}>
+                      <Link
+                        href={`/user/mentor/students/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-white"
+                        style={{ background: accent }}
+                      >
+                        <Users size={12} />Students
+                      </Link>
+                      <Link
+                        href={`/user/mentor/approval/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-colors"
+                        style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
+                      >
+                        <GraduationCap size={12} />Approve
+                      </Link>
+                      <Link
+                        href={`/user/mentor/invite/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold transition-colors"
+                        style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
+                      >
+                        <UserPlus size={12} />
+                      </Link>
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

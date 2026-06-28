@@ -53,7 +53,8 @@ const Page = () => {
         </div>
 
         <div className="relative p-8">
-          <Image src={logo} alt="Souldem" height={28} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="Souldem" style={{ height: 28, width: 'auto' }} />
         </div>
 
         <div className="relative flex-1 flex flex-col items-center justify-center px-12 text-center">
@@ -80,7 +81,8 @@ const Page = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
         {/* Mobile logo */}
         <div className="lg:hidden mb-8">
-          <Image src={logo} alt="Souldem" height={26} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="Souldem" style={{ height: 26, width: 'auto' }} />
         </div>
 
         <div className="w-full max-w-sm">

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { Award, Link2, ChevronRight, MoveUpRight, AlertTriangle, CheckCircle2, BookOpen } from 'lucide-react';
+import { Award, UserCircle, ChevronRight, MoveUpRight, AlertTriangle, CheckCircle2, BookOpen } from 'lucide-react';
 
 const safeEncode = (v) => {
   try { return encodeURIComponent(decodeURIComponent(v || '')); }
@@ -10,12 +10,11 @@ const safeEncode = (v) => {
 };
 
 export default function StudentDashboard() {
-  const [profile, setProfile]             = useState(null);
-  const [email, setEmail]                 = useState('');
-  const [aadhaarLinked, setAadhaarLinked] = useState(false);
-  const [certs, setCerts]                 = useState([]);
-  const [govs, setGovs]                   = useState([]);
-  const [loading, setLoading]             = useState(true);
+  const [studentProfile, setStudentProfile] = useState(null);
+  const [email, setEmail]                   = useState('');
+  const [certs, setCerts]                   = useState([]);
+  const [govs, setGovs]                     = useState([]);
+  const [loading, setLoading]               = useState(true);
 
   useEffect(() => {
     const add  = localStorage.getItem('userPublicAddress');
@@ -24,19 +23,22 @@ export default function StudentDashboard() {
     const base = process.env.NEXT_PUBLIC_BACKEND_URL;
     Promise.allSettled([
       axios.get(`${base}become/joinedGov/student/${add}`),
-      axios.get(`${base}aadhaar/isAadhaarIntegWithSDEM/${mail}`),
+      axios.get(`${base}profile/${mail}`),
       axios.get(`${base}marksheets/getMintedCerts/${add}`),
-      axios.get(`${base}aadhaar/detail/${mail}`),
-    ]).then(([govsRes, aadhaarRes, certsRes, profileRes]) => {
-      if (govsRes.status === 'fulfilled')    setGovs(govsRes.value.data || []);
-      if (aadhaarRes.status === 'fulfilled') setAadhaarLinked(true);
-      if (certsRes.status === 'fulfilled')   setCerts(certsRes.value.data || []);
-      if (profileRes.status === 'fulfilled') setProfile(profileRes.value.data);
+    ]).then(([govsRes, profileRes, certsRes]) => {
+      if (govsRes.status    === 'fulfilled') setGovs(govsRes.value.data || []);
+      if (profileRes.status === 'fulfilled') setStudentProfile(profileRes.value.data);
+      if (certsRes.status   === 'fulfilled') setCerts(certsRes.value.data || []);
       setLoading(false);
     });
   }, []);
 
-  const displayName = profile?.name || email.split('@')[0] || 'Student';
+  const profileFields   = ['name', 'fatherName', 'dob', 'gender', 'address'];
+  const filledCount     = profileFields.filter(k => studentProfile?.[k]).length;
+  const profileComplete = filledCount === profileFields.length;
+  const completion      = Math.round((filledCount / profileFields.length) * 100);
+
+  const displayName = studentProfile?.name || email.split('@')[0] || 'Student';
   const latestCert  = certs[0] || null;
 
   if (loading) {
@@ -57,18 +59,20 @@ export default function StudentDashboard() {
   return (
     <div className="p-6 md:p-8 w-full flex flex-col gap-5">
 
-      {/* Aadhaar warning — full width */}
-      {!aadhaarLinked && (
+      {/* Profile incomplete banner */}
+      {!profileComplete && (
         <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5">
           <AlertTriangle size={15} className="text-amber-500 shrink-0" />
-          <p className="text-sm text-amber-800">Aadhaar not linked — required for certificate minting.</p>
-          <Link href="/user/aadhaarIntr" className="ml-auto text-sm font-semibold text-blue whitespace-nowrap hover:underline">
-            Link now →
+          <p className="text-sm text-amber-800">
+            Your profile is {completion}% complete — required for certificate minting.
+          </p>
+          <Link href="/user/profile" className="ml-auto text-sm font-semibold text-blue whitespace-nowrap hover:underline">
+            Complete now →
           </Link>
         </div>
       )}
 
-      {/* Profile hero — full width */}
+      {/* Profile hero */}
       <div className="relative rounded-2xl overflow-hidden p-6 text-white w-full" style={{ background: 'linear-gradient(135deg, #3E68FC 0%, #5b51f5 100%)' }}>
         <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
         <div className="absolute bottom-0 left-1/3 w-40 h-40 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.04)' }} />
@@ -83,13 +87,13 @@ export default function StudentDashboard() {
             <p className="text-sm truncate" style={{ color: 'rgba(255,255,255,0.55)' }}>{email}</p>
           </div>
           <div className="shrink-0">
-            {aadhaarLinked ? (
+            {profileComplete ? (
               <span className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full" style={{ background: 'rgba(74,222,128,0.2)', border: '1px solid rgba(74,222,128,0.3)', color: '#86efac' }}>
-                <CheckCircle2 size={12} /> Aadhaar Verified
+                <CheckCircle2 size={12} /> Profile Complete
               </span>
             ) : (
               <span className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full" style={{ background: 'rgba(251,191,36,0.2)', border: '1px solid rgba(251,191,36,0.3)', color: '#fde68a' }}>
-                <AlertTriangle size={12} /> Aadhaar Not Linked
+                <AlertTriangle size={12} /> {completion}% Complete
               </span>
             )}
           </div>
@@ -115,7 +119,7 @@ export default function StudentDashboard() {
       {/* Main 2-col grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        {/* Left col — latest cert (spans 2) */}
+        {/* Left col */}
         <div className="lg:col-span-2 flex flex-col gap-5">
 
           <div>
@@ -207,24 +211,24 @@ export default function StudentDashboard() {
             <ChevronRight size={16} className="shrink-0 text-gray-200 group-hover:text-blue transition-colors" />
           </Link>
 
-          {aadhaarLinked ? (
+          {profileComplete ? (
             <div className="bg-white rounded-2xl p-5 border border-green-100 flex items-center gap-4">
               <div className="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
                 <CheckCircle2 size={20} className="text-green-500" />
               </div>
               <div>
-                <p className="font-semibold text-sm text-gray-800">Aadhaar</p>
-                <p className="text-xs text-green-600">Verified ✓</p>
+                <p className="font-semibold text-sm text-gray-800">Profile</p>
+                <p className="text-xs text-green-600">Complete ✓</p>
               </div>
             </div>
           ) : (
-            <Link href="/user/aadhaarIntr" className="group bg-white rounded-2xl p-5 border border-amber-100 hover:border-amber-300 hover:shadow-sm transition-all flex items-center gap-4">
+            <Link href="/user/profile" className="group bg-white rounded-2xl p-5 border border-amber-100 hover:border-amber-300 hover:shadow-sm transition-all flex items-center gap-4">
               <div className="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
-                <Link2 size={20} className="text-amber-500" />
+                <UserCircle size={20} className="text-amber-500" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-sm text-gray-800">Link Aadhaar</p>
-                <p className="text-xs text-amber-500">Required for minting</p>
+                <p className="font-semibold text-sm text-gray-800">Complete Profile</p>
+                <p className="text-xs text-amber-500">{filledCount}/5 fields filled</p>
               </div>
               <ChevronRight size={16} className="shrink-0 text-gray-200 group-hover:text-amber-400 transition-colors" />
             </Link>

@@ -12,8 +12,9 @@ const GRADS = [
 ];
 
 export default function CertificatesPage() {
-  const [certs, setCerts]     = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [certs,             setCerts]             = useState([]);
+  const [provisionalCerts,  setProvisionalCerts]  = useState([]);
+  const [loading,           setLoading]           = useState(true);
 
   useEffect(() => {
     const publicAdd = localStorage.getItem('userPublicAddress');
@@ -23,6 +24,10 @@ export default function CertificatesPage() {
       .then((res) => setCerts(res.data || []))
       .catch(() => {})
       .finally(() => setLoading(false));
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/getProvisionalCert/${publicAdd}`)
+      .then((res) => setProvisionalCerts(res.data || []))
+      .catch(() => {});
   }, []);
 
   return (
@@ -94,6 +99,55 @@ export default function CertificatesPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {provisionalCerts.length > 0 && (
+        <div className="mt-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(202,138,4,0.12)' }}>
+              <Award size={20} style={{ color: '#ca8a04' }} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">Provisional Certificate</h2>
+              <p className="text-sm text-gray-400">Issued pending award of original degree</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {provisionalCerts.map((cert) => (
+              <div key={cert.govAdd} className="relative rounded-2xl p-5 text-white overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #92400e 0%, #ca8a04 100%)' }}>
+                <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.07)' }} />
+                <div className="relative">
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="min-w-0">
+                      <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.6)' }}>{cert.collegeName}</p>
+                      <h3 className="font-bold text-base mt-0.5 text-white">Provisional Certificate</h3>
+                      <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>{cert.governName}</p>
+                    </div>
+                    <Link
+                      href={`/provisional/${cert.ipfsCid}/${encodeURIComponent(cert.collegeName)}/${encodeURIComponent(cert.governName)}`}
+                      className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                      style={{ background: 'rgba(255,255,255,0.2)' }}>
+                      <MoveUpRight size={14} />
+                    </Link>
+                  </div>
+                  <p className="text-xs font-mono truncate mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                    {String(cert.ipfsCid).slice(0, 28)}…
+                  </p>
+                  <div className="pt-3 flex items-center justify-between" style={{ borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+                    <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Souldem · On-chain</span>
+                    <Link
+                      href={`/provisional/${cert.ipfsCid}/${encodeURIComponent(cert.collegeName)}/${encodeURIComponent(cert.governName)}`}
+                      className="flex items-center gap-1.5 text-xs px-3 py-1 rounded-full text-white font-medium transition-colors"
+                      style={{ background: 'rgba(255,255,255,0.2)' }}>
+                      <Download size={11} /> Download
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

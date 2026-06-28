@@ -5,7 +5,7 @@ import { Plus, Minus } from 'lucide-react';
 const faqs = [
   {
     q: 'What blockchain networks does Souldem support?',
-    a: 'Souldem currently supports Polygon and Ethereum mainnet. Polygon is used for cost-efficient, high-speed credential issuance, while Ethereum provides the highest level of decentralization and trust for premium credentials.',
+    a: 'Souldem currently supports Polygon and Ethereum. Polygon is used for cost-efficient, high-speed credential issuance, while Ethereum provides the highest level of decentralisation and trust for premium credentials.',
   },
   {
     q: 'How long does it take to issue a credential?',
@@ -16,69 +16,41 @@ const faqs = [
     a: 'Yes. Verification is completely open and requires no sign-up. Any verifier can scan a QR code or enter a credential hash at our public verification portal — zero friction, zero gatekeeping.',
   },
   {
-    q: 'Is student data stored on the blockchain?',
-    a: 'Personal data is never stored on-chain. Only cryptographic hashes of credential documents are written to the blockchain. The actual documents are stored on IPFS with student-controlled access permissions.',
+    q: 'Is student personal data stored on the blockchain?',
+    a: 'No. Personal data is never stored on-chain. Only cryptographic hashes of credential documents are written to the blockchain. Actual documents are stored on IPFS with student-controlled access permissions.',
   },
   {
-    q: 'How does Souldem handle universities with existing student management systems?',
-    a: 'Souldem offers API integrations and a governance layer that sits alongside existing systems. Universities don\'t need to replace their current infrastructure — Souldem adds a blockchain verification layer on top.',
+    q: 'How does Souldem work alongside existing university systems?',
+    a: "Souldem's governance layer sits alongside existing systems. Universities don't need to replace current infrastructure — Souldem adds a blockchain verification layer on top of existing processes.",
   },
   {
     q: 'What happens if a student disputes a record?',
-    a: 'Mentors can re-issue corrected marksheets with the original record kept as an immutable audit trail. Every edit is signed and timestamped on-chain, so corrections are transparent and disputes can be traced fairly.',
+    a: 'Mentors can re-issue corrected marksheets with the original kept as an immutable audit trail. Every correction is signed and timestamped on-chain, so disputes can be traced transparently.',
   },
 ];
 
 const FaqItem = ({ q, a, isOpen, onToggle }) => (
   <div
     style={{
-      border: '1px solid',
-      borderColor: isOpen ? 'rgba(62,104,252,0.35)' : 'rgba(255,255,255,0.07)',
-      borderRadius: '12px',
-      background: isOpen ? 'rgba(62,104,252,0.05)' : 'rgba(255,255,255,0.02)',
-      transition: 'all 0.2s ease',
+      border: '1.5px solid',
+      borderColor: isOpen ? '#c7d2fe' : '#e5e7eb',
+      borderRadius: 14,
+      background: isOpen ? '#f8faff' : '#fff',
+      transition: 'all 0.2s',
       overflow: 'hidden',
     }}
   >
     <button
       onClick={onToggle}
-      style={{
-        width: '100%',
-        background: 'none',
-        border: 'none',
-        padding: '20px 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '16px',
-        cursor: 'pointer',
-        textAlign: 'left',
-      }}
+      style={{ width: '100%', background: 'none', border: 'none', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, cursor: 'pointer', textAlign: 'left' }}
     >
-      <span style={{ color: '#fff', fontWeight: 500, fontSize: '15px', lineHeight: '1.5' }}>
-        {q}
-      </span>
-      <span
-        style={{
-          flexShrink: 0,
-          width: '28px',
-          height: '28px',
-          borderRadius: '50%',
-          background: isOpen ? 'rgba(62,104,252,0.2)' : 'rgba(255,255,255,0.05)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: isOpen ? '#6B8EFF' : 'rgba(255,255,255,0.4)',
-          transition: 'all 0.2s',
-        }}
-      >
+      <span style={{ color: '#0f172a', fontWeight: 600, fontSize: 15, lineHeight: 1.5 }}>{q}</span>
+      <span style={{ flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: isOpen ? '#eef2ff' : '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isOpen ? '#3E68FC' : '#9ca3af', transition: 'all 0.2s' }}>
         {isOpen ? <Minus size={14} /> : <Plus size={14} />}
       </span>
     </button>
     {isOpen && (
-      <div style={{ padding: '0 24px 20px', color: 'rgba(255,255,255,0.5)', fontSize: '14px', lineHeight: '1.7' }}>
-        {a}
-      </div>
+      <div style={{ padding: '0 24px 20px', color: '#6b7280', fontSize: 14, lineHeight: 1.8 }}>{a}</div>
     )}
   </div>
 );
@@ -87,62 +59,32 @@ const Faq = () => {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section
-      style={{ background: '#0A0E1A' }}
-      className="py-24 md:py-32"
-    >
+    <section style={{ background: '#fff', padding: '80px 0 96px' }}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row gap-16 md:gap-24">
-          {/* Left: heading */}
+
+          {/* Left */}
           <div className="md:w-5/12 flex-shrink-0">
-            <span
-              style={{
-                background: 'rgba(62,104,252,0.12)',
-                border: '1px solid rgba(62,104,252,0.25)',
-                color: '#6B8EFF',
-              }}
-              className="inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6"
-            >
+            <span style={{ display: 'inline-block', background: '#eef2ff', border: '1px solid #c7d2fe', color: '#4338ca', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '6px 16px', borderRadius: 999, marginBottom: 20 }}>
               FAQ
             </span>
-            <h2
-              style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.03em', color: '#fff' }}
-              className="text-4xl md:text-5xl font-bold mb-4"
-            >
+            <h2 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.15 }}>
               Questions
               <br />
-              <span
-                style={{
-                  background: 'linear-gradient(135deg, #3E68FC, #6B8EFF)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                answered.
-              </span>
+              <span style={{ color: '#3E68FC' }}>answered.</span>
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.4)', lineHeight: '1.7' }} className="text-base">
+            <p style={{ color: '#6b7280', lineHeight: 1.7, fontSize: 15 }}>
               Can't find what you're looking for? Reach out to our team — we respond within one business day.
             </p>
-            <button
-              style={{
-                marginTop: '24px',
-                border: '1px solid rgba(62,104,252,0.35)',
-                color: '#6B8EFF',
-                background: 'transparent',
-                borderRadius: '10px',
-                padding: '11px 22px',
-                fontSize: '14px',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
+            <a
+              href="/helpdesk"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 24, border: '1.5px solid #e5e7eb', color: '#374151', background: '#fff', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }}
             >
-              Contact Support
-            </button>
+              Contact Support →
+            </a>
           </div>
 
-          {/* Right: accordion */}
+          {/* Right */}
           <div className="md:w-7/12 flex flex-col gap-3">
             {faqs.map((item, i) => (
               <FaqItem

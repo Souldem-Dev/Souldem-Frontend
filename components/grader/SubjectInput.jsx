@@ -47,16 +47,19 @@ const SubjectInput = ({ govAdd }) => {
   const [marksType,        setMarksType]        = useState('internal');
   const [formData,         setFormData]         = useState(null);
   const [loading,          setLoading]          = useState(true);
+  const [totalSemesters,   setTotalSemesters]   = useState(null);
   const nonceRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
       axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}subMap/catalogue/${govAdd}`),
       axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}subMap/getAllRandomNum/${govAdd}`),
+      axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}marksheets/totalSemesters/${govAdd}`),
     ])
-      .then(([catRes, nonceRes]) => {
+      .then(([catRes, nonceRes, semRes]) => {
         setSubjects(catRes.data?.subjects || []);
         setAllNonces((nonceRes.data || []).map((s) => s.randomNum));
+        setTotalSemesters(semRes.data?.totalSemesters || null);
       })
       .catch(() => toast.error('Failed to load data'))
       .finally(() => setLoading(false));
@@ -183,14 +186,25 @@ const SubjectInput = ({ govAdd }) => {
           <label style={{ fontSize: '11px', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 6 }}>
             <GraduationCap size={10} /> Semester
           </label>
-          <input
-            type="number"
-            min="1"
-            placeholder="e.g. 3"
-            value={semNo}
-            onChange={(e) => { setSemNo(e.target.value); setFormData(null); }}
-            style={inputStyle}
-          />
+          {!totalSemesters ? (
+            <select disabled style={inputStyle}>
+              <option>Loading…</option>
+            </select>
+          ) : (
+            <div style={{ position: 'relative' }}>
+              <select
+                value={semNo}
+                onChange={(e) => { setSemNo(e.target.value); setFormData(null); }}
+                style={{ ...inputStyle, paddingRight: 36, appearance: 'none', WebkitAppearance: 'none' }}
+              >
+                <option value="" disabled>Select semester</option>
+                {Array.from({ length: totalSemesters }, (_, i) => i + 1).map(n => (
+                  <option key={n} value={String(n)}>Semester {n}</option>
+                ))}
+              </select>
+              <ChevronDown size={15} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', pointerEvents: 'none' }} />
+            </div>
+          )}
         </div>
 
         {/* Marks type toggle */}

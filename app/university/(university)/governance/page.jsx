@@ -4,7 +4,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Plus, UserPlus, ToggleRight, Building2, ChevronRight, X, Loader2 } from 'lucide-react';
+import { Plus, UserPlus, ToggleRight, Building2, X, Loader2, Users } from 'lucide-react';
 
 const safeEncode = (v) => {
   try { return encodeURIComponent(decodeURIComponent(v || '')); }
@@ -13,20 +13,37 @@ const safeEncode = (v) => {
 
 
 export default function GovernancePage() {
-  const [govs,         setGovs]         = useState([]);
-  const [univName,     setUnivName]     = useState('');
-  const [loading,      setLoading]      = useState(true);
-  const [showModal,    setShowModal]    = useState(false);
-  const [creating,     setCreating]     = useState(false);
-  const [form, setForm] = useState({ governanceName: '', batch: '', semester: '' });
+  const [govs,            setGovs]            = useState([]);
+  const [univName,        setUnivName]        = useState('');
+  const [logoUrl,         setLogoUrl]         = useState('');
+  const [loading,         setLoading]         = useState(true);
+  const [showModal,       setShowModal]       = useState(false);
+  const [creating,        setCreating]        = useState(false);
+  const [form,            setForm]            = useState({ governanceName: '', batch: '', semester: '' });
+  const [details, setDetails] = useState({ universityName: '', address: '', affiliatedTo: '', institutionType: '' });
 
   const fetchData = async () => {
     try {
-      const pk = localStorage.getItem('publicAddress');
-      const { data: info } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getData/${pk}`);
-      setUnivName(info.name || '');
-      const { data: govData } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}factory/getGovernanceAddress/${info.collegeAddress}`);
-      setGovs(govData || []);
+      const pk   = localStorage.getItem('publicAddress');
+      const mail = localStorage.getItem('email');
+      const base = process.env.NEXT_PUBLIC_BACKEND_URL;
+      const [factoryRes, profileRes] = await Promise.allSettled([
+        axios.get(`${base}factory/getData/${pk}`),
+        axios.get(`${base}university/profile/${mail}`),
+      ]);
+      const info = factoryRes.status === 'fulfilled' ? factoryRes.value.data : {};
+      const prof = profileRes.status === 'fulfilled' ? profileRes.value.data : {};
+      const name = prof.universityName || info.name || '';
+      setUnivName(name);
+      setDetails({ universityName: name, address: prof.address || '', affiliatedTo: prof.affiliatedTo || '', institutionType: prof.institutionType || '' });
+      if (prof.logoIpfs) {
+        const gw = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
+        setLogoUrl(prof.logoIpfs.startsWith('data:') ? prof.logoIpfs : `https://${gw}/ipfs/${prof.logoIpfs}`);
+      }
+      if (info.collegeAddress) {
+        const { data: govData } = await axios.get(`${base}factory/getGovernanceAddress/${info.collegeAddress}`);
+        setGovs(govData || []);
+      }
     } catch (e) {
       toast.error('Failed to fetch governances');
     } finally {
@@ -34,7 +51,7 @@ export default function GovernancePage() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+useEffect(() => { fetchData(); }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -73,35 +90,51 @@ export default function GovernancePage() {
     }
   };
 
-  const displayName = univName || localStorage?.getItem?.('email')?.split('@')[0] || 'University';
-
   return (
     <div className="p-6 md:p-8 w-full flex flex-col gap-5">
 
       {/* Hero */}
-      <div className="relative rounded-2xl overflow-hidden p-6 text-white" style={{ background: 'linear-gradient(135deg, #3E68FC 0%, #5b51f5 100%)' }}>
-        <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
-        <div className="relative flex items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.2)' }}>
-            <Building2 size={24} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs uppercase tracking-widest font-medium mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>University</p>
-            <h1 className="text-2xl font-bold leading-tight truncate text-white">{univName || '—'}</h1>
-          </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-            style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}
-          >
-            <Plus size={16} /> New Governance
-          </button>
-        </div>
+      <div className="relative rounded-2xl overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #3E68FC 0%, #5b51f5 100%)' }}>
+        <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.04)' }} />
 
-        <div className="relative mt-6 pt-5" style={{ borderTop: '1px solid rgba(255,255,255,0.15)' }}>
-          <div className="text-center w-fit">
-            <p className="text-3xl font-bold text-white">{loading ? '—' : govs.length}</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>Governances</p>
+        <div className="relative p-6 pb-5">
+          <div className="flex items-start gap-4">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.25)' }}>
+              {logoUrl
+                ? <img src={logoUrl} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <Building2 size={26} />}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs uppercase tracking-widest font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.55)' }}>University</p>
+              <h1 className="text-xl font-bold leading-tight text-white">{univName || '—'}</h1>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {details.institutionType && (
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold" style={{ background: 'rgba(255,255,255,0.2)' }}>
+                    {details.institutionType}
+                  </span>
+                )}
+                {details.affiliatedTo && (
+                  <span className="px-2.5 py-0.5 rounded-full text-xs" style={{ background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.85)' }}>
+                    Affiliated to {details.affiliatedTo}
+                  </span>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={() => setShowModal(true)}
+              className="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
+              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.25)' }}
+            >
+              <Plus size={16} /> New Governance
+            </button>
+          </div>
+
+          <div className="mt-5 pt-4 flex gap-8" style={{ borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+            <div>
+              <p className="text-2xl font-bold text-white">{loading ? '—' : govs.length}</p>
+              <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>Governances</p>
+            </div>
           </div>
         </div>
       </div>
@@ -156,11 +189,18 @@ export default function GovernancePage() {
                         <UserPlus size={13} /> Invite
                       </Link>
                       <Link
-                        href={`/university/governance/marksEntryToggle/${govAdd}/${safeEncode(govName)}/${safeEncode(univName)}`}
+                        href={`/university/governance/students/${govAdd}/${safeEncode(govName)}/${safeEncode(univName)}`}
                         className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-colors"
                         style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
                       >
-                        <ToggleRight size={13} /> Marks Toggle
+                        <Users size={13} /> Students
+                      </Link>
+                      <Link
+                        href={`/university/governance/marksEntryToggle/${govAdd}/${safeEncode(govName)}/${safeEncode(univName)}`}
+                        className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold transition-colors"
+                        style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
+                      >
+                        <ToggleRight size={13} />
                       </Link>
                     </div>
                   </div>

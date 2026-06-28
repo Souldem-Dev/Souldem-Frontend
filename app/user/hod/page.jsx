@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { Users, ChevronRight, BookMarked, UserPlus } from 'lucide-react';
+import { Users, ChevronRight, BookMarked, UserPlus, GraduationCap } from 'lucide-react';
 
 const safeEncode = (v) => {
   try { return encodeURIComponent(decodeURIComponent(v || '')); }
@@ -94,11 +94,18 @@ export default function HodDashboard() {
                         <BookMarked size={12} />Subjects
                       </Link>
                       <Link
-                        href={`/user/hod/invite/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        href={`/user/hod/students/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
                         className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-colors"
                         style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
                       >
-                        <UserPlus size={12} />Invite
+                        <GraduationCap size={12} />Students
+                      </Link>
+                      <Link
+                        href={`/user/hod/invite/${g.governAdd}/${safeEncode(g.gName)}/${safeEncode(g.cName)}`}
+                        className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold transition-colors"
+                        style={{ border: `1px solid ${accent}40`, color: accent, background: `${accent}08` }}
+                      >
+                        <UserPlus size={12} />
                       </Link>
                     </div>
                   </div>

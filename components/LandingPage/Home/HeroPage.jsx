@@ -1,181 +1,108 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, Zap, Globe } from 'lucide-react';
+import { Building2, GraduationCap, CheckCircle2, ShieldCheck, Zap, Globe2 } from 'lucide-react';
 
 const HeroPage = () => {
   return (
-    <section
-      style={{
-        background: 'linear-gradient(160deg, #0A0E1A 0%, #0F1628 50%, #0A0E1A 100%)',
-        minHeight: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-      className="flex items-center pt-16"
-    >
-      {/* Ambient glow blobs */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '10%',
-          right: '5%',
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(62,104,252,0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '0%',
-          left: '-10%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(107,142,255,0.07) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
+    <section style={{ paddingTop: 64 }}>
 
-      {/* Subtle grid pattern */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Announcement bar */}
+      <div style={{ background: '#1e3a8a', padding: '10px 0' }}>
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap items-center justify-between gap-2">
+          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 500 }}>
+            🎓 Blockchain-Verified Academic Credential System for Indian Universities
+          </p>
+          <div className="flex items-center gap-2">
+            <span style={{ background: '#22c55e', width: 7, height: 7, borderRadius: '50%', display: 'inline-block' }} />
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12 }}>Live on Polygon Testnet</p>
+          </div>
+        </div>
+      </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32">
-        <div className="max-w-4xl">
-          {/* Pill badge */}
-          <div className="inline-flex items-center gap-2 mb-8">
-            <span
-              style={{
-                background: 'rgba(62,104,252,0.15)',
-                border: '1px solid rgba(62,104,252,0.3)',
-                color: '#6B8EFF',
-              }}
-              className="text-xs font-semibold px-4 py-1.5 rounded-full tracking-widest uppercase"
-            >
-              Blockchain · Education · Web3
-            </span>
+      {/* Hero */}
+      <div style={{ background: 'linear-gradient(160deg, #eef2ff 0%, #ffffff 55%, #f0f5ff 100%)', position: 'relative', overflow: 'hidden' }}>
+        {/* Subtle pattern */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(#c7d2fe 1px, transparent 1px)', backgroundSize: '32px 32px', opacity: 0.35, pointerEvents: 'none' }} />
+
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 flex flex-col items-center text-center">
+
+          {/* Badge */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#fff', border: '1.5px solid #c7d2fe', borderRadius: 999, padding: '7px 18px', marginBottom: 28, boxShadow: '0 1px 6px rgba(99,102,241,0.1)' }}>
+            <ShieldCheck size={13} style={{ color: '#3E68FC' }} />
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#3730a3', letterSpacing: '0.07em', textTransform: 'uppercase' }}>Tamper-Proof · Instant · Blockchain-Backed</span>
           </div>
 
           {/* Headline */}
-          <h1
-            style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
-              lineHeight: '1.08',
-              letterSpacing: '-0.03em',
-            }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6"
-          >
-            Academic Records
+          <h1 style={{ fontSize: 'clamp(38px, 6vw, 74px)', fontWeight: 800, color: '#0f172a', lineHeight: 1.07, letterSpacing: '-0.03em', maxWidth: 820, margin: '0 0 22px' }}>
+            Academic Records{' '}
+            <span style={{ color: '#3E68FC' }}>You Can Trust.</span>
             <br />
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #3E68FC 0%, #6B8EFF 60%, #a5bfff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Reimagined.
-            </span>
+            <span style={{ color: '#1e3a8a' }}>Forever.</span>
           </h1>
 
-          {/* Subheadline */}
-          <p
-            style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '560px', lineHeight: '1.7' }}
-            className="text-lg md:text-xl mb-10"
-          >
-            Souldem brings tamper-proof, blockchain-verified credentials to universities — so every degree earned is a degree trusted, forever.
+          <p style={{ color: '#4b5563', maxWidth: 560, lineHeight: 1.8, fontSize: 18, marginBottom: 40 }}>
+            Souldem brings blockchain-verified degrees and marksheets to every university — so employers, institutions, and students all share one source of truth.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-4 mb-16">
+          <div className="flex flex-wrap justify-center gap-4 mb-14">
             <Link
               href="/university/login"
-              style={{
-                background: 'linear-gradient(135deg, #3E68FC 0%, #6B8EFF 100%)',
-                boxShadow: '0 0 32px rgba(62,104,252,0.4), 0 4px 16px rgba(0,0,0,0.3)',
-              }}
-              className="inline-flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-xl text-base hover:opacity-90 transition-opacity"
+              style={{ background: 'linear-gradient(135deg,#1e3a8a,#2d52b8)', color: '#fff', padding: '15px 32px', borderRadius: 12, fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 9, boxShadow: '0 4px 18px rgba(30,58,138,0.28)' }}
             >
-              Launch App
-              <ArrowRight size={16} />
+              <Building2 size={17} /> University Portal
             </Link>
             <Link
-              href="/features"
-              style={{
-                border: '1px solid rgba(255,255,255,0.12)',
-                color: 'rgba(255,255,255,0.75)',
-              }}
-              className="inline-flex items-center gap-2 font-medium px-7 py-3.5 rounded-xl text-base hover:bg-white/5 transition-all"
+              href="/user/login"
+              style={{ background: '#fff', color: '#1e3a8a', padding: '15px 32px', borderRadius: 12, fontWeight: 700, fontSize: 15, border: '2px solid #c7d2fe', display: 'flex', alignItems: 'center', gap: 9, boxShadow: '0 1px 6px rgba(0,0,0,0.05)' }}
             >
-              Explore Features
+              <GraduationCap size={17} /> Student Portal
             </Link>
           </div>
 
-          {/* Trust indicators */}
-          <div className="flex flex-wrap gap-6">
+          {/* Trust checkmarks */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-16">
             {[
-              { icon: ShieldCheck, label: 'Tamper-Proof Records' },
-              { icon: Zap, label: 'Instant Verification' },
-              { icon: Globe, label: 'Polygon & Ethereum' },
-            ].map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                }}
-                className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg"
-              >
-                <Icon size={15} style={{ color: '#6B8EFF' }} />
-                <span style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm font-medium">
-                  {label}
-                </span>
+              'No paperwork required',
+              'Instant employer verification',
+              '100% tamper-proof records',
+              'Student-owned credentials',
+            ].map(t => (
+              <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <CheckCircle2 size={15} style={{ color: '#059669', flexShrink: 0 }} />
+                <span style={{ fontSize: 13.5, color: '#374151', fontWeight: 500 }}>{t}</span>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Stats row */}
-        <div
-          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
-          className="mt-20 pt-10 grid grid-cols-2 md:grid-cols-4 gap-8"
-        >
-          {[
-            { value: '50K+', label: 'Credentials Issued' },
-            { value: '120+', label: 'Universities Onboarded' },
-            { value: '99.9%', label: 'Uptime Guarantee' },
-            { value: '< 2s', label: 'Verification Speed' },
-          ].map(({ value, label }) => (
-            <div key={label}>
-              <div
-                style={{
-                  fontFamily: 'Georgia, serif',
-                  background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-                className="text-3xl md:text-4xl font-bold mb-1"
-              >
-                {value}
+          {/* Stats bar */}
+          <div style={{ width: '100%', maxWidth: 860, background: 'linear-gradient(135deg,#1e3a8a 0%,#1e40af 100%)', borderRadius: 20, padding: '28px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 20, boxShadow: '0 8px 32px rgba(30,58,138,0.22)' }}>
+            {[
+              { value: '50,000+', label: 'Credentials Issued' },
+              { value: '120+',    label: 'Universities' },
+              { value: '< 2 sec', label: 'Verification Speed' },
+              { value: '100%',    label: 'Tamper-Proof' },
+            ].map(({ value, label }) => (
+              <div key={label} style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: 30, fontWeight: 800, color: '#fff', lineHeight: 1.1, fontFamily: 'Georgia, serif' }}>{value}</p>
+                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', marginTop: 5, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
               </div>
-              <div style={{ color: 'rgba(255,255,255,0.4)' }} className="text-sm">
-                {label}
+            ))}
+          </div>
+
+          {/* Powered by */}
+          <div className="flex items-center gap-6 mt-10 flex-wrap justify-center">
+            {[
+              { icon: ShieldCheck, label: 'EIP-712 Signed' },
+              { icon: Zap,         label: 'Polygon Network' },
+              { icon: Globe2,      label: 'IPFS Storage' },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icon size={14} style={{ color: '#6366f1' }} />
+                <span style={{ fontSize: 13, color: '#6b7280', fontWeight: 500 }}>{label}</span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

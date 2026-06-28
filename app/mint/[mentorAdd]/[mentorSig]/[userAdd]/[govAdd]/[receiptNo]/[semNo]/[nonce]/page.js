@@ -34,7 +34,7 @@ function Page() {
           mentorSignature: params.mentorSig,
           _ipfsCID:        res.data.ipfsCid,
           relayerSig:      res.data.signature,
-          degreeIpfs:      '',
+          degreeIpfs:      res.data.provisionalCid || '',
         });
       })
       .then(resp => { if (resp) setStatus('minted'); })

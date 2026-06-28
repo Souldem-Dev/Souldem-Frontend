@@ -3,47 +3,48 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { Home, CheckSquare, LogOut, GraduationCap } from 'lucide-react';
+import { Home, CheckSquare, LogOut, GraduationCap, UserCircle, ChevronRight } from 'lucide-react';
 
 const ROLE_NAV = {
   hod: [
-    { href: '/user/hod',  icon: Home, label: 'Home' },
+    { href: '/user/hod', icon: Home, label: 'Dashboard' },
   ],
   mentor: [
-    { href: '/user/mentor', icon: Home, label: 'Home' },
+    { href: '/user/mentor', icon: Home, label: 'Dashboard' },
   ],
   grader: [
-    { href: '/user/grader', icon: Home, label: 'Home' },
+    { href: '/user/grader', icon: Home, label: 'Dashboard' },
   ],
   university: [
     { href: '/university/governance',   icon: Home,        label: 'Governance'   },
     { href: '/university/certificates', icon: CheckSquare, label: 'Certificates' },
+    { href: '/university/profile',      icon: UserCircle,  label: 'Profile'      },
   ],
 };
 
-function Tooltip({ label, children }) {
-  return (
-    <div className="relative group flex">
-      {children}
-      <span className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-gray-900 text-white text-xs px-2.5 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-50 shadow-lg">
-        {label}
-      </span>
-    </div>
-  );
-}
+const ROLE_LABELS = {
+  university: 'University Portal',
+  hod:        'Head of Dept.',
+  mentor:     'Mentor Portal',
+  grader:     'Grader Portal',
+};
 
 const GovSidebar = () => {
   const pathname = usePathname();
   const router   = useRouter();
-  const [role, setRole] = useState('');
+  const [role,  setRole]  = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
-    setRole(Cookies.get('activeRole') || '');
+    const r = Cookies.get('activeRole') || '';
+    setRole(r);
+    setEmail(localStorage.getItem('email') || localStorage.getItem('userEmail') || '');
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('userPublicAddress');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('email');
     localStorage.removeItem('jwt');
     localStorage.removeItem('allRoles');
     Cookies.remove('jwt');
@@ -52,43 +53,85 @@ const GovSidebar = () => {
   };
 
   const nav = ROLE_NAV[role] || [];
-
   const isActive = (href) =>
     href.split('/').length === 3
       ? pathname === href || pathname.startsWith(href + '/')
       : pathname.startsWith(href);
 
+  const initials = (email.split('@')[0] || 'U').charAt(0).toUpperCase();
+
   return (
-    <aside className="hidden md:flex flex-col items-center w-14 shrink-0 min-h-[calc(100vh-56px)] py-5 gap-1.5" style={{ background: '#3E68FC' }}>
-      <div className="mb-4 w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)' }}>
-        <GraduationCap size={20} className="text-white" />
+    <aside className="hidden md:flex flex-col w-56 shrink-0 bg-white border-r border-gray-100" style={{ minHeight: 'calc(100vh - 64px)' }}>
+
+      {/* Brand area */}
+      <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid #f1f5f9' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg,#1e3a8a,#3E68FC)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 2px 8px rgba(30,58,138,0.3)' }}>
+            <GraduationCap size={17} color="#fff" />
+          </div>
+          <div>
+            <p style={{ fontSize: 15, fontWeight: 800, color: '#0f172a', fontFamily: 'Georgia, serif', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              SOUL<span style={{ color: '#3E68FC' }}>DEM</span>
+            </p>
+            <p style={{ fontSize: 10, color: '#9ca3af', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: 1 }}>
+              {ROLE_LABELS[role] || 'Portal'}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {nav.map(({ href, icon: Icon, label }) => (
-        <Tooltip key={href} label={label}>
-          <Link
-            href={href}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              isActive(href)
-                ? 'bg-white/25 text-white'
-                : 'text-white/55 hover:text-white hover:bg-white/15'
-            }`}
-          >
-            <Icon size={19} />
-          </Link>
-        </Tooltip>
-      ))}
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, color: '#d1d5db', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 10px 8px' }}>
+          Menu
+        </p>
+        {nav.map(({ href, icon: Icon, label }) => {
+          const active = isActive(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 12px', borderRadius: 10,
+                fontSize: 14, fontWeight: active ? 600 : 500,
+                color: active ? '#1e3a8a' : '#64748b',
+                background: active ? '#eef2ff' : 'transparent',
+                textDecoration: 'none', transition: 'all 0.15s',
+                border: active ? '1px solid #c7d2fe' : '1px solid transparent',
+              }}
+            >
+              <Icon size={16} style={{ flexShrink: 0 }} />
+              <span style={{ flex: 1 }}>{label}</span>
+              {active && <ChevronRight size={13} style={{ color: '#3E68FC' }} />}
+            </Link>
+          );
+        })}
+      </nav>
 
-      <div className="flex-1" />
-
-      <Tooltip label="Logout">
+      {/* User footer */}
+      <div style={{ borderTop: '1px solid #f1f5f9', padding: '12px 10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', marginBottom: 4 }}>
+          <div style={{ width: 32, height: 32, borderRadius: 9, background: 'linear-gradient(135deg,#3E68FC,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+            {initials}
+          </div>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {email.split('@')[0] || 'User'}
+            </p>
+            <p style={{ fontSize: 11, color: '#9ca3af', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</p>
+          </div>
+        </div>
         <button
           onClick={handleLogout}
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-white/45 hover:text-white hover:bg-red-500/25 transition-all"
+          style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', borderRadius: 10, fontSize: 13, fontWeight: 500, color: '#64748b', background: 'none', border: 'none', cursor: 'pointer', transition: 'all 0.15s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.color = '#ef4444'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#64748b'; }}
         >
-          <LogOut size={19} />
+          <LogOut size={15} />
+          Sign out
         </button>
-      </Tooltip>
+      </div>
     </aside>
   );
 };

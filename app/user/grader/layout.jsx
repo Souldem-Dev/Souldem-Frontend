@@ -3,7 +3,7 @@ import GovSidebar from '@/components/governance/GovSidebar';
 
 export default function GraderLayout({ children }) {
   return (
-    <div className="flex flex-col h-screen bg-[#f5f7ff]">
+    <div className="flex flex-col h-screen" style={{ background: '#f8faff' }}>
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <GovSidebar />

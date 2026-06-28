@@ -1,155 +1,86 @@
 'use client';
 import React from 'react';
-import Image from 'next/image';
-import case1 from '@/app/assets/LandingPage/Home/usecases/case1.svg';
-import case2 from '@/app/assets/LandingPage/Home/usecases/case2.svg';
-import case3 from '@/app/assets/LandingPage/Home/usecases/case3.svg';
-import case4 from '@/app/assets/LandingPage/Home/usecases/case4.svg';
-import case5 from '@/app/assets/LandingPage/Home/usecases/case5.svg';
-import case6 from '@/app/assets/LandingPage/Home/usecases/case6.svg';
-import { ArrowRight } from 'lucide-react';
+import { UserPlus, BookOpen, Award, Search } from 'lucide-react';
 
-const benefits = [
+const steps = [
   {
-    img: case1,
-    title: 'Enhanced Security',
-    desc: 'Academic records are stored on immutable blockchains, eliminating the risk of tampering or credential fraud.',
+    num: '01',
+    icon: UserPlus,
+    title: 'University Registers',
+    desc: 'University admin signs up, deploys their smart contract on-chain, and creates a governance for each course batch.',
+    color: '#1e3a8a',
   },
   {
-    img: case2,
-    title: 'Streamlined Verification',
-    desc: 'Employers and institutions verify credentials in seconds — no emails, no phone calls, no waiting.',
+    num: '02',
+    icon: BookOpen,
+    title: 'Students Onboarded',
+    desc: 'Students join the governance via signed invite. Mentors and HODs are assigned roles through EIP-712 signed transactions.',
+    color: '#2563eb',
   },
   {
-    img: case3,
-    title: 'Student-Owned Access',
-    desc: 'Students hold their own credentials and can share verified records with anyone, anywhere, at any time.',
+    num: '03',
+    icon: Award,
+    title: 'Records Issued On-Chain',
+    desc: 'Marksheets and provisional certificates are minted as IPFS-anchored, blockchain-verified credentials by authorised staff.',
+    color: '#3E68FC',
   },
   {
-    img: case4,
-    title: 'Decentralized Storage',
-    desc: 'Records live on IPFS and public blockchains — no single point of failure, always accessible.',
-  },
-  {
-    img: case5,
-    title: 'Real-Time Updates',
-    desc: 'Academic record changes propagate on-chain instantly, ensuring the most current information at all times.',
-  },
-  {
-    img: case6,
-    title: 'Paperless & Sustainable',
-    desc: 'Replace physical documents with cryptographic proofs — reducing waste and administrative overhead.',
+    num: '04',
+    icon: Search,
+    title: 'Verified Instantly',
+    desc: 'Employers, institutions, or anyone can verify any credential in under 2 seconds — no login, no calls, no paperwork.',
+    color: '#6366f1',
   },
 ];
 
-const Carousel = () => {
+const HowItWorks = () => {
   return (
-    <section
-      style={{ background: '#0A0E1A' }}
-      className="py-24 md:py-32"
-    >
+    <section style={{ background: '#f8faff', padding: '80px 0 96px' }}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
+
         {/* Header */}
         <div className="text-center mb-16">
-          <span
-            style={{
-              background: 'rgba(62,104,252,0.12)',
-              border: '1px solid rgba(62,104,252,0.25)',
-              color: '#6B8EFF',
-            }}
-            className="inline-block text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6"
-          >
-            Why Souldem
+          <span style={{ display: 'inline-block', background: '#eef2ff', border: '1px solid #c7d2fe', color: '#4338ca', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '6px 16px', borderRadius: 999, marginBottom: 16 }}>
+            How It Works
           </span>
-          <h2
-            style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.03em', color: '#fff' }}
-            className="text-4xl md:text-5xl font-bold"
-          >
-            Benefits that speak
-            <br />
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #3E68FC, #6B8EFF)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              for themselves
-            </span>
+          <h2 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', margin: '0 0 12px' }}>
+            From Registration to Verification
           </h2>
+          <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
+            Four simple steps to transform your institution's credential system.
+          </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {benefits.map((b, i) => (
-            <div
-              key={b.title}
-              style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: '16px',
-                padding: '28px',
-                transition: 'border-color 0.2s, background 0.2s',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(62,104,252,0.35)';
-                e.currentTarget.style.background = 'rgba(62,104,252,0.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
-                e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-              }}
-            >
-              <div
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '12px',
-                  background: 'rgba(62,104,252,0.12)',
-                  border: '1px solid rgba(62,104,252,0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '20px',
-                  overflow: 'hidden',
-                }}
-              >
-                <Image src={b.img} alt={b.title} className="w-7 h-7 object-contain" />
-              </div>
+        {/* Steps */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {steps.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <div key={s.num} style={{ position: 'relative' }}>
+                {/* Connector line */}
+                {i < steps.length - 1 && (
+                  <div className="hidden lg:block" style={{ position: 'absolute', top: 36, left: 'calc(50% + 48px)', width: 'calc(100% - 48px)', height: 2, background: 'linear-gradient(90deg, #c7d2fe, #e0e7ff)', zIndex: 0 }} />
+                )}
 
-              <h3
-                style={{ color: '#fff', letterSpacing: '-0.01em' }}
-                className="text-lg font-semibold mb-2"
-              >
-                {b.title}
-              </h3>
-              <p style={{ color: 'rgba(255,255,255,0.45)', lineHeight: '1.65' }} className="text-sm mb-5">
-                {b.desc}
-              </p>
-              <button
-                style={{
-                  color: '#6B8EFF',
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  cursor: 'pointer',
-                }}
-              >
-                Find out more <ArrowRight size={13} />
-              </button>
-            </div>
-          ))}
+                <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 20, padding: '28px 24px', position: 'relative', zIndex: 1, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', height: '100%' }}>
+                  {/* Number + icon row */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                    <div style={{ width: 52, height: 52, borderRadius: 14, background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 14px ${s.color}35` }}>
+                      <Icon size={22} color="#fff" />
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: '#d1d5db', letterSpacing: '0.05em' }}>{s.num}</span>
+                  </div>
+
+                  <h3 style={{ fontSize: 17, fontWeight: 700, color: '#0f172a', marginBottom: 10, lineHeight: 1.3 }}>{s.title}</h3>
+                  <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.7 }}>{s.desc}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 };
 
-export default Carousel;
+export default HowItWorks;
