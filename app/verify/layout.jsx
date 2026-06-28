@@ -1,14 +1,10 @@
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
-import StudentSidebar from '@/components/student/StudentSidebar';
+import LandingNavbar from '@/components/LandingPage/Navbar';
 
-export default function StudentLayout({ children }) {
+export default function VerifyLayout({ children }) {
   return (
-    <main className="bg-[#F9FBFC] ">
-      <Navbar />
-      <div className="flex">{children}</div>
-
-      <Footer />
+    <main className="bg-[#F9FBFC] min-h-screen">
+      <LandingNavbar />
+      {children}
     </main>
   );
 }
