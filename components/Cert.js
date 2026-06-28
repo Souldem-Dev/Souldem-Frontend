@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { QRCodeCanvas } from 'react-qr-code';
+import { QRCode } from 'react-qr-code';
 
 const MIN_ROWS = 7;
 const DISCLAIMER = 'This marksheet is issued via Souldem to blockchain for testing purpose only';
@@ -411,7 +411,7 @@ const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, templa
               </div>
               {verifyUrl && (
                 <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                  <QRCodeCanvas value={verifyUrl} size={52} fgColor={accent} bgColor="transparent" />
+                  <QRCode value={verifyUrl} size={52} fgColor={accent} bgColor="transparent" />
                   <p style={{ margin: 0, fontSize: 6.5, color: '#888', textAlign: 'center', letterSpacing: 0.3 }}>Scan to verify</p>
                 </div>
               )}
