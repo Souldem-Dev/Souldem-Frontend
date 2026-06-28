@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { QRCodeSVG } from 'react-qr-code';
+import { QRCodeCanvas } from 'react-qr-code';
 
 const DISCLAIMER = 'This certificate is issued via Souldem to blockchain for testing purpose only';
 const BORDER = '1px solid #444';
@@ -51,8 +51,8 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
   const accent   = template?.provisionalColor || template?.marksheetColor || '#1a3c8f';
   const gw       = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
 
-  const resolveIpfs = (cid) =>
-    !cid ? null : cid.startsWith('data:') ? cid : `https://${gw}/ipfs/${cid}`;
+  const resolveIpfs = (hash) =>
+    !hash ? null : hash.startsWith('data:') ? hash : `https://${gw}/ipfs/${hash}`;
 
   const photoUrl = resolveIpfs(studentProfile?.photoIpfs);
   const logoUrl  = resolveIpfs(template?.logoIpfs);
@@ -216,7 +216,7 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
             </div>
             {verifyUrl && (
               <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                <QRCodeSVG value={verifyUrl} size={52} fgColor={accent} bgColor="transparent" />
+                <QRCodeCanvas value={verifyUrl} size={52} fgColor={accent} bgColor="transparent" />
                 <p style={{ margin: 0, fontSize: 6.5, color: '#888', textAlign: 'center', letterSpacing: 0.3 }}>Scan to verify</p>
               </div>
             )}

@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 
 const page = () => {
   return (
-    <Suspense>
+    <Suspense fallback={null}>
       <VerifyBox />
     </Suspense>
   );
