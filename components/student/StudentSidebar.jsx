@@ -49,7 +49,7 @@ const StudentSidebar = () => {
               SOUL<span style={{ color: '#3E68FC' }}>DEM</span>
             </p>
             <p style={{ fontSize: 10, color: '#9ca3af', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: 1 }}>
-              Student Portal
+              User Portal
             </p>
           </div>
         </div>

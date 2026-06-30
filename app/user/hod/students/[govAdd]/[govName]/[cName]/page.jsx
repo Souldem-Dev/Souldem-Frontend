@@ -2,6 +2,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { ChevronLeft, Users } from 'lucide-react';
 import StudentProgressTable from '@/components/governance/StudentProgressTable';
+import StudentNonceTable    from '@/components/governance/StudentNonceTable';
 
 export default function HodStudentsPage() {
   const params  = useParams();
@@ -29,6 +30,12 @@ export default function HodStudentsPage() {
       </div>
 
       <StudentProgressTable
+        govAdd={params.govAdd}
+        govName={govName}
+        cName={cName}
+      />
+
+      <StudentNonceTable
         govAdd={params.govAdd}
         govName={govName}
         cName={cName}

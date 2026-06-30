@@ -1,54 +1,46 @@
 'use client';
 import React, { useRef, useState, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { QRCode } from 'react-qr-code';
 
 const DISCLAIMER = 'This certificate is issued via Souldem to blockchain for testing purpose only';
 const BORDER = '1px solid #444';
 
+const A4_W_PX = 794;
+const A4_H_PX = 1123;
+
 export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, template = {}, cName, gName, cid = null }) {
   const certRef = useRef();
-  const [pdfLoading,       setPdfLoading]       = useState(false);
   const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState(null);
   const [resolvedLogoUrl,  setResolvedLogoUrl]  = useState(null);
+  const [scale,            setScale]            = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      const avail = window.innerWidth - 32;
+      setScale(avail < A4_W_PX ? avail / A4_W_PX : 1);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   const handlePrint = useReactToPrint({
     content: () => certRef.current,
     pageStyle: `
       @page { size: A4 portrait; margin: 0; }
       @media print {
-        body { margin: 0; }
+        html, body { margin: 0; padding: 0; width: 210mm; height: 297mm; }
+        body > div {
+          width: 210mm !important;
+          height: 297mm !important;
+          transform: none !important;
+          overflow: hidden !important;
+        }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       }
     `,
   });
-
-  const handleDownloadPdf = async () => {
-    if (pdfLoading) return;
-    setPdfLoading(true);
-    try {
-      const el = certRef.current;
-      el.querySelectorAll('img').forEach(img => img.setAttribute('crossorigin', 'anonymous'));
-      const canvas = await html2canvas(el, {
-        scale: 2, useCORS: true, allowTaint: true,
-        logging: false, scrollX: 0, scrollY: 0, backgroundColor: '#ffffff',
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const A4_W = 794, A4_H = 1123;
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [A4_W, A4_H], hotfixes: ['px_scaling'] });
-      const ratio = Math.min(A4_W / canvas.width, A4_H / canvas.height);
-      const w = canvas.width * ratio, h = canvas.height * ratio;
-      pdf.addImage(imgData, 'PNG', (A4_W - w) / 2, (A4_H - h) / 2, w, h);
-      pdf.save(`provisional-${studentProfile.souldemId || ipfsData.souldemId || 'certificate'}.pdf`);
-    } catch (err) {
-      console.error('PDF export failed:', err);
-      window.print();
-    } finally {
-      setPdfLoading(false);
-    }
-  };
 
   const accent = template?.provisionalColor || template?.marksheetColor || '#1a3c8f';
   const gw     = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
@@ -97,17 +89,21 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
 
       {/* Action buttons */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-        <button onClick={handleDownloadPdf} disabled={pdfLoading}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600, color: '#fff', background: pdfLoading ? '#9ca3af' : `linear-gradient(135deg,${accent},${accent}cc)`, border: 'none', cursor: pdfLoading ? 'default' : 'pointer', transition: 'background 0.2s' }}>
-          {pdfLoading ? '⏳ Generating…' : '↓ Download PDF'}
-        </button>
         <button onClick={handlePrint}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600, color: '#374151', background: '#fff', border: '1px solid #e5e7eb', cursor: 'pointer' }}>
-          🖨 Print
+          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 24px', borderRadius: 12, fontSize: 14, fontWeight: 600, color: '#fff', background: `linear-gradient(135deg,${accent},${accent}cc)`, border: 'none', cursor: 'pointer' }}>
+          🖨 Print / Save as PDF
         </button>
       </div>
 
-      {/* A4 Document */}
+      {/* Clip wrapper: collapses to the visual (scaled) size on mobile */}
+      <div style={{
+        width: `${A4_W_PX * scale}px`,
+        height: `${A4_H_PX * scale}px`,
+        overflow: 'hidden',
+        boxShadow: '0 4px 40px rgba(0,0,0,0.14)',
+      }}>
+        {/* Scale transform lives here so certRef stays at natural A4 size for print */}
+        <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
       <div ref={certRef} style={{
         width: '210mm', height: '297mm',
         background: '#ffffff', padding: '8mm 18mm',
@@ -116,7 +112,6 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
         border: `4px double ${accent}`,
         position: 'relative',
         display: 'flex', flexDirection: 'column', gap: 0,
-        boxShadow: '0 4px 40px rgba(0,0,0,0.14)',
         overflow: 'hidden',
       }}>
 
@@ -308,6 +303,8 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
           fontWeight: 900, whiteSpace: 'nowrap', pointerEvents: 'none', userSelect: 'none',
         }}>
           SOULDEM
+        </div>
+      </div>
         </div>
       </div>
     </div>

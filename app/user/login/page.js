@@ -103,7 +103,7 @@ const Page = () => {
             style={{ background: 'rgba(62,104,252,0.25)', border: '1px solid rgba(62,104,252,0.3)' }}>
             <GraduationCap size={36} className="text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-white leading-tight mb-3">Student<br />Portal</h2>
+          <h2 className="text-3xl font-bold text-white leading-tight mb-3">User<br />Portal</h2>
           <p className="text-sm max-w-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>
             Access your marksheets, track semester progress, and claim verified certificates — all on-chain.
           </p>

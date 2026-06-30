@@ -56,7 +56,7 @@ const HeroPage = () => {
               href="/user/login"
               style={{ background: '#fff', color: '#1e3a8a', padding: '15px 32px', borderRadius: 12, fontWeight: 700, fontSize: 15, border: '2px solid #c7d2fe', display: 'flex', alignItems: 'center', gap: 9, boxShadow: '0 1px 6px rgba(0,0,0,0.05)' }}
             >
-              <GraduationCap size={17} /> Student Portal
+              <GraduationCap size={17} /> User Portal
             </Link>
           </div>
 

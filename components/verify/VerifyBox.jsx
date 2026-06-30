@@ -135,7 +135,7 @@ export default function VerifyBox() {
                           ['Student',   result.studentName],
                           ['College',   result.collegeName],
                           ['Programme', result.governName],
-                          ['Semester',  result.semNo],
+                          ...(result.type === 'marksheet' ? [['Semester', result.semNo]] : []),
                           ['Contract',  result.governAdd, true],
                         ].map(([label, value, mono], i) => (
                           <div key={i} style={{ display: 'flex', padding: '13px 20px', borderTop: i > 0 ? '1px solid #f1f5f9' : 'none', gap: 12 }}>
@@ -145,7 +145,11 @@ export default function VerifyBox() {
                         ))}
                       </div>
                       <Link
-                        href={`/marksheet/${cid}/${encodeURIComponent(result.collegeName)}/${encodeURIComponent(result.governName)}`}
+                        href={
+                          result.type === 'provisional'
+                            ? `/provisional/${cid}/${encodeURIComponent(result.collegeName)}/${encodeURIComponent(result.governName)}`
+                            : `/marksheet/${cid}/${encodeURIComponent(result.collegeName)}/${encodeURIComponent(result.governName)}`
+                        }
                         style={{
                           display: 'inline-flex', alignItems: 'center', gap: 8,
                           padding: '12px 28px', borderRadius: 12,
@@ -154,7 +158,7 @@ export default function VerifyBox() {
                           boxShadow: `0 4px 16px rgba(62,104,252,0.30)`,
                         }}
                       >
-                        View Full Marksheet
+                        {result.type === 'provisional' ? 'View Provisional Certificate' : 'View Full Marksheet'}
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
                       </Link>
                     </>
@@ -269,7 +273,9 @@ export default function VerifyBox() {
                   {certs.map((c, i) => (
                     <Link
                       key={i}
-                      href={`/marksheet/${c.ipfsCid}/${encodeURIComponent(c.collegeName)}/${encodeURIComponent(c.governName)}`}
+                      href={c.semNo === 'Provisional' || c.type === 'provisional'
+                        ? `/provisional/${c.ipfsCid}/${encodeURIComponent(c.collegeName)}/${encodeURIComponent(c.governName)}`
+                        : `/marksheet/${c.ipfsCid}/${encodeURIComponent(c.collegeName)}/${encodeURIComponent(c.governName)}`}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 16,
                         background: '#fff', borderRadius: 16, padding: '18px 20px',

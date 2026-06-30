@@ -31,7 +31,7 @@ const audiences = [
       'Share instantly with employers',
       'Credentials are yours — for life',
     ],
-    cta: 'Student Portal →',
+    cta: 'User Portal →',
     href: '/user/login',
     light: false,
   },
