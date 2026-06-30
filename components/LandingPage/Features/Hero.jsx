@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import hero from '@/app/assets/LandingPage/Features/hero.svg';
 import { CirclePlay } from 'lucide-react';
-import heroMobile from '@/app/assets/LandingPage/features/HeroMobile.svg';
+import heroMobile from '@/app/assets/LandingPage/Features/HeroMobile.svg';
 import Aero from '@/app/assets/LandingPage/Aero.svg';
 
 const Hero = () => {
