@@ -1,7 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import CreateForm from '@/components/certificates/CreateForm';
+import dynamic from 'next/dynamic';
 import { Award, ChevronLeft } from 'lucide-react';
+
+const CreateForm = dynamic(() => import('@/components/certificates/CreateForm'), { ssr: false });
 
 export default function CertificateCreatePage() {
   return (

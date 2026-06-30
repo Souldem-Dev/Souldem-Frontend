@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { Award, UserCircle, ChevronRight, MoveUpRight, AlertTriangle, CheckCircle2, BookOpen } from 'lucide-react';
+import { Award, UserCircle, ChevronRight, MoveUpRight, AlertTriangle, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 const safeEncode = (v) => {
   try { return encodeURIComponent(decodeURIComponent(v || '')); }
@@ -76,13 +76,19 @@ export default function StudentDashboard() {
       <div className="relative rounded-2xl overflow-hidden p-6 text-white w-full" style={{ background: 'linear-gradient(135deg, #3E68FC 0%, #5b51f5 100%)' }}>
         <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
         <div className="absolute bottom-0 left-1/3 w-40 h-40 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.04)' }} />
+        {/* Role watermark */}
+        <div className="absolute -bottom-6 -right-6 pointer-events-none" style={{ opacity: 0.07 }}>
+          <GraduationCap size={140} />
+        </div>
 
         <div className="relative flex items-center gap-5">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-bold shrink-0 select-none" style={{ background: 'rgba(255,255,255,0.2)' }}>
-            {displayName.charAt(0).toUpperCase()}
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.2)' }}>
+            <GraduationCap size={32} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs uppercase tracking-widest font-medium mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>Student</p>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-2" style={{ background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
+              <GraduationCap size={11} /> STUDENT
+            </span>
             <h1 className="text-2xl font-bold leading-tight truncate text-white">{displayName}</h1>
             <p className="text-sm truncate" style={{ color: 'rgba(255,255,255,0.55)' }}>{email}</p>
           </div>

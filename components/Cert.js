@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -28,7 +28,9 @@ const labelCell = {
 
 const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, template = {}, cid = null }) => {
   const certRef = useRef();
-  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfLoading,        setPdfLoading]        = useState(false);
+  const [resolvedPhotoUrl,  setResolvedPhotoUrl]  = useState(null);
+  const [resolvedLogoUrl,   setResolvedLogoUrl]   = useState(null);
 
   const handlePrint = useReactToPrint({
     content: () => certRef.current,
@@ -81,11 +83,18 @@ const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, templa
   const accent   = template?.marksheetColor || '#1a3c8f';
   const gw       = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
 
-  const resolveIpfs = (hash) =>
-    !hash ? null : hash.startsWith('data:') ? hash : `https://${gw}/ipfs/${hash}`;
+  // Backend stores images as JSON { type, data: "data:image/..." } on Pinata — unwrap async
+  const unwrapIpfs = (hash, setter) => {
+    if (!hash) { setter(null); return; }
+    if (hash.startsWith('data:')) { setter(hash); return; }
+    fetch(`https://${gw}/ipfs/${hash}`)
+      .then(r => r.json())
+      .then(json => setter(json?.data || `https://${gw}/ipfs/${hash}`))
+      .catch(() => setter(`https://${gw}/ipfs/${hash}`));
+  };
 
-  const photoUrl  = resolveIpfs(studentProfile?.photoIpfs);
-  const logoUrl   = resolveIpfs(template?.logoIpfs);
+  useEffect(() => { unwrapIpfs(studentProfile?.photoIpfs, setResolvedPhotoUrl); }, [studentProfile?.photoIpfs, gw]);
+  useEffect(() => { unwrapIpfs(template?.logoIpfs,        setResolvedLogoUrl);  }, [template?.logoIpfs,        gw]);
 
   const today    = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
   const verifyUrl = cid
@@ -185,8 +194,8 @@ const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, templa
 
           {/* Left: university logo */}
           <div style={{ width: 72, height: 72, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {logoUrl ? (
-              <img src={logoUrl} alt="University Logo"
+            {resolvedLogoUrl ? (
+              <img src={resolvedLogoUrl} alt="University Logo"
                 style={{ width: 72, height: 72, objectFit: 'contain', borderRadius: 4 }} />
             ) : (
               <div style={{ width: 72, height: 72, border: `1.5px solid ${accent}40`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `${accent}10` }}>
@@ -214,8 +223,8 @@ const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, templa
 
           {/* Right: photo + serial */}
           <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            {photoUrl ? (
-              <img src={photoUrl} alt="Student"
+            {resolvedPhotoUrl ? (
+              <img src={resolvedPhotoUrl} alt="Student"
                 style={{ width: 70, height: 84, objectFit: 'cover', border: `2px solid ${accent}` }} />
             ) : (
               <div style={{ width: 70, height: 84, border: '1px dashed #aaa', background: '#f9f9f9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#aaa', textAlign: 'center' }}>
@@ -429,8 +438,8 @@ const Cert = ({ governAdd, marks = [], cName, gName, studentProfile = {}, templa
 
           <div style={{ textAlign: 'center' }}>
             <div style={{ width: 64, height: 64, borderRadius: '50%', border: `2px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px', background: `${accent}10` }}>
-              {logoUrl
-                ? <img src={logoUrl} alt="seal" style={{ width: 52, height: 52, objectFit: 'contain', borderRadius: '50%' }} />
+              {resolvedLogoUrl
+                ? <img src={resolvedLogoUrl} alt="seal" style={{ width: 52, height: 52, objectFit: 'contain', borderRadius: '50%' }} />
                 : <span style={{ fontSize: 20, color: accent }}>✦</span>}
             </div>
             <p style={{ margin: 0, fontSize: 9, color: '#666' }}>Official Seal</p>

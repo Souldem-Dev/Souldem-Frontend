@@ -43,7 +43,14 @@ export default function UniversityProfilePage() {
         if (res.data.logoIpfs) {
           const p  = res.data.logoIpfs;
           const gw = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
-          setLogoPreview(p.startsWith('data:') ? p : `https://${gw}/ipfs/${p}`);
+          if (p.startsWith('data:')) {
+            setLogoPreview(p);
+          } else {
+            fetch(`https://${gw}/ipfs/${p}`)
+              .then(r => r.json())
+              .then(json => setLogoPreview(json?.data || `https://${gw}/ipfs/${p}`))
+              .catch(() => setLogoPreview(`https://${gw}/ipfs/${p}`));
+          }
         }
       })
       .catch(() => {})

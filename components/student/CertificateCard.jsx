@@ -13,9 +13,8 @@ const CertificateCards = ({ certificates }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 w-10/12 gap-x-4  gap-y-4 justify-center my-4">
       {certificates.map((cert, index) => (
-        <Link href={"/marksheet/"+cert.ipfsCid+"/"+cert.collegeName+"/"+cert.governName}>
+        <Link key={cert.id} href={"/marksheet/"+cert.ipfsCid+"/"+cert.collegeName+"/"+cert.governName}>
         <div
-          key={cert.id}
           className={`w-full h-40 flex flex-col justify-around p-2  rounded-xl drop-shadow-md glassmorphism ${
             colors[index % colors.length]
           }`}

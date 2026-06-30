@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -10,7 +10,9 @@ const BORDER = '1px solid #444';
 
 export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, template = {}, cName, gName, cid = null }) {
   const certRef = useRef();
-  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfLoading,       setPdfLoading]       = useState(false);
+  const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState(null);
+  const [resolvedLogoUrl,  setResolvedLogoUrl]  = useState(null);
 
   const handlePrint = useReactToPrint({
     content: () => certRef.current,
@@ -48,14 +50,20 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
     }
   };
 
-  const accent   = template?.provisionalColor || template?.marksheetColor || '#1a3c8f';
-  const gw       = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
+  const accent = template?.provisionalColor || template?.marksheetColor || '#1a3c8f';
+  const gw     = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
 
-  const resolveIpfs = (hash) =>
-    !hash ? null : hash.startsWith('data:') ? hash : `https://${gw}/ipfs/${hash}`;
+  const unwrapIpfs = (hash, setter) => {
+    if (!hash) { setter(null); return; }
+    if (hash.startsWith('data:')) { setter(hash); return; }
+    fetch(`https://${gw}/ipfs/${hash}`)
+      .then(r => r.json())
+      .then(json => setter(json?.data || `https://${gw}/ipfs/${hash}`))
+      .catch(() => setter(`https://${gw}/ipfs/${hash}`));
+  };
 
-  const photoUrl = resolveIpfs(studentProfile?.photoIpfs);
-  const logoUrl  = resolveIpfs(template?.logoIpfs);
+  useEffect(() => { unwrapIpfs(studentProfile?.photoIpfs, setResolvedPhotoUrl); }, [studentProfile?.photoIpfs, gw]);
+  useEffect(() => { unwrapIpfs(template?.logoIpfs,        setResolvedLogoUrl);  }, [template?.logoIpfs,        gw]);
 
   const today        = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
   const verifyUrl = cid
@@ -127,8 +135,8 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
           {/* Logo */}
           <div style={{ flexShrink: 0, width: 64, height: 64, borderRadius: '50%', border: `2px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', background: `${accent}10` }}>
-            {logoUrl
-              ? <img src={logoUrl} alt="University Logo" style={{ width: 54, height: 54, objectFit: 'contain', borderRadius: '50%' }} />
+            {resolvedLogoUrl
+              ? <img src={resolvedLogoUrl} alt="University Logo" style={{ width: 54, height: 54, objectFit: 'contain', borderRadius: '50%' }} />
               : <span style={{ fontSize: 22, color: accent }}>✦</span>}
           </div>
 
@@ -147,8 +155,8 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
 
           {/* Photo */}
           <div style={{ flexShrink: 0 }}>
-            {photoUrl ? (
-              <img src={photoUrl} alt="Student"
+            {resolvedPhotoUrl ? (
+              <img src={resolvedPhotoUrl} alt="Student"
                 crossOrigin="anonymous"
                 style={{ width: 70, height: 85, objectFit: 'cover', border: `2px solid ${accent}` }} />
             ) : (
@@ -246,8 +254,8 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
         <div style={{ margin: '0 4mm 10px', border: `1px solid ${accent}22`, borderRadius: 4, background: `${accent}04`, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 18 }}>
           {/* Big seal */}
           <div style={{ flexShrink: 0, width: 72, height: 72, borderRadius: '50%', border: `2px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
-            {logoUrl
-              ? <img src={logoUrl} alt="seal" style={{ width: 60, height: 60, objectFit: 'contain', borderRadius: '50%' }} />
+            {resolvedLogoUrl
+              ? <img src={resolvedLogoUrl} alt="seal" style={{ width: 60, height: 60, objectFit: 'contain', borderRadius: '50%' }} />
               : <span style={{ fontSize: 26, color: accent }}>✦</span>}
           </div>
           <div style={{ flex: 1, fontFamily: 'Arial, sans-serif' }}>
@@ -277,8 +285,8 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
           {/* Official seal */}
           <div style={{ textAlign: 'center' }}>
             <div style={{ width: 56, height: 56, borderRadius: '50%', border: `2px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 4px', background: `${accent}10` }}>
-              {logoUrl
-                ? <img src={logoUrl} alt="seal" style={{ width: 46, height: 46, objectFit: 'contain', borderRadius: '50%' }} />
+              {resolvedLogoUrl
+                ? <img src={resolvedLogoUrl} alt="seal" style={{ width: 46, height: 46, objectFit: 'contain', borderRadius: '50%' }} />
                 : <span style={{ fontSize: 18, color: accent }}>✦</span>}
             </div>
             <p style={{ margin: 0, fontSize: 8.5, color: '#666', fontFamily: 'Arial, sans-serif' }}>Official Seal</p>

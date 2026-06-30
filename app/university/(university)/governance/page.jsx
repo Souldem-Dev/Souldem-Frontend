@@ -4,7 +4,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Plus, UserPlus, ToggleRight, Building2, X, Loader2, Users } from 'lucide-react';
+import { Plus, UserPlus, ToggleRight, Building2, X, Loader2, Users, Landmark } from 'lucide-react';
 
 const safeEncode = (v) => {
   try { return encodeURIComponent(decodeURIComponent(v || '')); }
@@ -37,8 +37,16 @@ export default function GovernancePage() {
       setUnivName(name);
       setDetails({ universityName: name, address: prof.address || '', affiliatedTo: prof.affiliatedTo || '', institutionType: prof.institutionType || '' });
       if (prof.logoIpfs) {
+        const p  = prof.logoIpfs;
         const gw = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
-        setLogoUrl(prof.logoIpfs.startsWith('data:') ? prof.logoIpfs : `https://${gw}/ipfs/${prof.logoIpfs}`);
+        if (p.startsWith('data:')) {
+          setLogoUrl(p);
+        } else {
+          fetch(`https://${gw}/ipfs/${p}`)
+            .then(r => r.json())
+            .then(json => setLogoUrl(json?.data || `https://${gw}/ipfs/${p}`))
+            .catch(() => setLogoUrl(`https://${gw}/ipfs/${p}`));
+        }
       }
       if (info.collegeAddress) {
         const { data: govData } = await axios.get(`${base}factory/getGovernanceAddress/${info.collegeAddress}`);
@@ -97,16 +105,22 @@ useEffect(() => { fetchData(); }, []);
       <div className="relative rounded-2xl overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #3E68FC 0%, #5b51f5 100%)' }}>
         <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.05)' }} />
         <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'rgba(255,255,255,0.04)' }} />
+        {/* Role watermark */}
+        <div className="absolute -bottom-6 -right-6 pointer-events-none" style={{ opacity: 0.07 }}>
+          <Landmark size={140} />
+        </div>
 
         <div className="relative p-6 pb-5">
           <div className="flex items-start gap-4">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.25)' }}>
               {logoUrl
                 ? <img src={logoUrl} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                : <Building2 size={26} />}
+                : <Landmark size={26} />}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs uppercase tracking-widest font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.55)' }}>University</p>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-2" style={{ background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
+                <Landmark size={11} /> UNIVERSITY
+              </span>
               <h1 className="text-xl font-bold leading-tight text-white">{univName || '—'}</h1>
               <div className="flex flex-wrap gap-2 mt-2">
                 {details.institutionType && (

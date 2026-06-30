@@ -7,7 +7,7 @@ export default function GovernanceLayout({ children }) {
   return (
     <main className="bg-[#FBFBFD] h-max   ">
       <LoginNavbar />
-      <div className="flex">{children}</div>
+      <div className="flex justify-center w-full">{children}</div>
 
       <Footer />
     </main>

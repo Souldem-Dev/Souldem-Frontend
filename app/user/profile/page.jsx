@@ -40,9 +40,17 @@ export default function ProfilePage() {
           address:    res.data.address    || '',
         });
         if (res.data.photoIpfs) {
-          const p = res.data.photoIpfs;
+          const p  = res.data.photoIpfs;
           const gw = process.env.NEXT_PUBLIC_PINATA_GATEWAY || 'gateway.pinata.cloud';
-          setPhotoPreview(p.startsWith('data:') ? p : `https://${gw}/ipfs/${p}`);
+          if (p.startsWith('data:')) {
+            setPhotoPreview(p);
+          } else {
+            // Backend stores photos as JSON { type, data: "data:image/..." } on Pinata — unwrap
+            fetch(`https://${gw}/ipfs/${p}`)
+              .then(r => r.json())
+              .then(json => setPhotoPreview(json?.data || `https://${gw}/ipfs/${p}`))
+              .catch(() => setPhotoPreview(`https://${gw}/ipfs/${p}`));
+          }
         }
       })
       .catch(() => {})
@@ -77,6 +85,10 @@ export default function ProfilePage() {
       const email = localStorage.getItem('userEmail');
       try {
         await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}profile/uploadPhoto`, { email, photoBase64: base64 });
+        // Re-fetch profile to sync photoIpfs CID in state (for certificates) but keep base64 as preview
+        // — IPFS gateway URLs are not immediately accessible after upload
+        const updated = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}profile/${email}`);
+        if (updated.data) setProfile(updated.data);
         toast.success('Photo updated!');
       } catch {
         toast.error('Photo upload failed');
@@ -124,21 +136,28 @@ export default function ProfilePage() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px 24px', marginTop: -44 }}>
             <div style={{ position: 'relative' }}>
               <div
-                onClick={() => fileRef.current?.click()}
+                onClick={() => !uploadingPhoto && fileRef.current?.click()}
                 style={{
                   width: 88, height: 88, borderRadius: '50%',
                   border: '3px solid #fff',
                   background: 'linear-gradient(135deg,#3E68FC,#5b51f5)',
-                  overflow: 'hidden', cursor: 'pointer',
+                  overflow: 'hidden', cursor: uploadingPhoto ? 'default' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 4px 16px rgba(62,104,252,0.25)',
+                  position: 'relative',
                 }}
               >
                 {photoPreview
                   ? <img src={photoPreview} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   : <span style={{ fontSize: 28, fontWeight: 800, color: '#fff', userSelect: 'none' }}>{initials}</span>
                 }
+                {uploadingPhoto && (
+                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 24, height: 24, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  </div>
+                )}
               </div>
+              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={uploadingPhoto}
