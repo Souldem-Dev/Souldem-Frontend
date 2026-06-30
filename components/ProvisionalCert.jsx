@@ -10,19 +10,23 @@ const A4_W_PX = 794;
 const A4_H_PX = 1123;
 
 export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, template = {}, cName, gName, cid = null }) {
-  const certRef = useRef();
+  const certRef  = useRef();
+  const outerRef = useRef();
   const [resolvedPhotoUrl, setResolvedPhotoUrl] = useState(null);
   const [resolvedLogoUrl,  setResolvedLogoUrl]  = useState(null);
   const [scale,            setScale]            = useState(1);
 
   useEffect(() => {
-    const update = () => {
-      const avail = window.innerWidth - 32;
+    const update = (w) => {
+      const avail = w - 8;
       setScale(avail < A4_W_PX ? avail / A4_W_PX : 1);
     };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    const ro = new ResizeObserver(([entry]) => update(entry.contentRect.width));
+    if (outerRef.current) {
+      ro.observe(outerRef.current);
+      update(outerRef.current.offsetWidth);
+    }
+    return () => ro.disconnect();
   }, []);
 
   const handlePrint = useReactToPrint({
@@ -85,7 +89,7 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
   };
 
   return (
-    <div style={{ background: '#f5f7ff', minHeight: '100vh', padding: '32px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div ref={outerRef} style={{ background: '#f5f7ff', minHeight: '100vh', padding: '32px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
       {/* Action buttons */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
@@ -95,15 +99,22 @@ export default function ProvisionalCert({ ipfsData = {}, studentProfile = {}, te
         </button>
       </div>
 
-      {/* Clip wrapper: collapses to the visual (scaled) size on mobile */}
+      {/* Clip wrapper: physical footprint = A4 * scale */}
       <div style={{
+        position: 'relative',
         width: `${A4_W_PX * scale}px`,
         height: `${A4_H_PX * scale}px`,
         overflow: 'hidden',
         boxShadow: '0 4px 40px rgba(0,0,0,0.14)',
+        flexShrink: 0,
       }}>
-        {/* Scale transform lives here so certRef stays at natural A4 size for print */}
-        <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+        {/* Absolutely positioned so it doesn't affect layout flow;
+            explicit A4 size ensures scale() has the right origin to work from */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0,
+          width: `${A4_W_PX}px`, height: `${A4_H_PX}px`,
+          transform: `scale(${scale})`, transformOrigin: 'top left',
+        }}>
       <div ref={certRef} style={{
         width: '210mm', height: '297mm',
         background: '#ffffff', padding: '8mm 18mm',
